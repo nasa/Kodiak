@@ -1,4 +1,4 @@
 Kodiak
 ======
 
-Library for rigurous verification of non-linear arithmetic
+Library for rigorous verification of non-linear arithmetic
