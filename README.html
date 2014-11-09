@@ -26,7 +26,7 @@
 <li>Type <code>make kodiak</code></li>
 <li>Run self-containing executable through the binary program <code>bin/kodiak</code></li>
 </ol>
-<p>If any of the libraries was installed in non standard directories, modify the file <code>src/Makefile</code> and <code>src/python</code> accordingly.</p>
+<p>If any of the libraries was installed in non standard directories, modify the files <code>src/Makefile</code> and <code>python/Makefile</code> accordingly.</p>
 <h2 id="commands-for-standalone-interface">Commands for Standalone Interface</h2>
 <h3 id="exiting-the-interactive-interface">Exiting the Interactive Interface</h3>
 <p>To quit interactive mode type <code>quit</code> or press <code>ctrl+c</code>.</p>
@@ -52,7 +52,6 @@ file test.kdk # this is also a comment</code></pre>
 <p>When writing data files, each expression must be followed by a ; semicolon i.e.<br /><code>var x in [0,1]; var y in [1,5];</code></p>
 <h3 id="supported-problem-types">Supported Problem Types</h3>
 <h4 id="paving-problems">Paving problems</h4>
-<p>N.B. include short description about pavings?</p>
 <p>Paving problems only require variables, which can be defined with <em>var</em> keyword, i.e.:<br /><code>var var_name in [13, 42]</code></p>
 <p>The lower and upper bounds can be any integer in range [-2147483648, 2147483647] on a 64-bit machine.</p>
 <p>There are also options to set bounds to precise and approximate representation of floating point number to <strong>Kodiak</strong>:<br />Precise bounds can be set using one the following commands:<br />* <em>rat(n,m)</em>, to input rational numbers.<br />* <em>dec(n,m)</em>, to input decimal numbers.<br />Where both n and m are integers.</p>

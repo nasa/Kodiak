@@ -104,7 +104,6 @@ When writing data files, each expression must be followed by a ; semicolon i.e.
 ###Supported Problem Types
 
 ####Paving problems  
-N.B. include short description about pavings?
 
 Paving problems only require variables, which can be defined with *var* keyword, i.e.:  
 `var var_name in [13, 42]`  
