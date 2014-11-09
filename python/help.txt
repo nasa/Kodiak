@@ -1,0 +1,148 @@
+Python interface for Kodiak library
+
+To quit this interactive help mode press q
+
+To quit interactive mode of Kodiak library type `quit` or press `ctrl+c`  
+
+######################################## Commands #############################
+
+Read a file, file name can be specified as relative or absolute path:
+file <file_name>
+
+######################################## Settings #############################
+
+Setting the name of the problem
+
+set name = name
+
+If true solver print all the debugging information
+
+set debug = true|false
+
+When safe input is true approx values are not allowed
+
+set safe input = true | false
+
+Set solver to use Bernstein Polynomial where possible
+
+set bp = true|false
+
+Set paving mode to Standard, First or Full
+
+set paving mode = std|first|full
+
+Set precision for all variables
+
+set precision = nat
+
+Set resolution for all variables
+
+set resolution = real
+
+Set resolution for specific variable
+
+set resolution name = real
+
+Set variable selection for Branch and Bound algorithm
+
+set selectvar = nat
+
+Set maximum depth for algorithms
+
+set depth = nat
+
+
+Print the output of the solver to file
+
+set output = FILE_NAME
+
+
+Cleans the state of the program, so new problems can be entered
+
+reset
+
+
+Resets the output back to console
+
+reset output
+
+###Problem definition
+
+Numerical declarations
+
+num_decl = whole number, approx(real), rat(nat, nat), dec(nat,nat), hex_constant
+
+
+Declaring variables
+
+var name in [num_decl, num_decl]
+
+Declaring parameters
+
+param name in [num_decl, num_decl]
+
+Declaring constants
+
+const name = num_decl
+
+Mathematical expression
+
+math_exp = sin(approx(-1.1))*sqrt(rat(3,2))^3-x
+
+
+Setting objective function for MinMax problems
+
+objfn math_exp
+
+Adding differential equations for bifurcation problems
+
+dfeq math_exp
+
+Adding constraints for all types of problems
+
+cnstr math_exp bool_op math_exp
+
+Let expressions used to define problems
+
+objfn let name = math_exp in math_exp
+cnstr let name = math_exp in math_exp
+dfeq let name = math_exp in math_exp
+
+Nested let expressions
+
+objfn|dfeq|cnstr = let name = math_exp, name = math_exp in math_exp
+
+
+############################# Supported boolean operators #####################
+
+Less than `<`  
+More than `>`  
+Less than or equal `<=`  
+More than or equal `>=`  
+Equal `=`  
+
+
+############################# Supported mathematical operations ###############
+	
+
+Standard mathematical operator are supported `+ - * / ^`  
+
+Square root `sqrt(math_exp)`  
+Square or num_decl^2 `sq(math_exp)`  
+Sine `sin(math_exp)`  
+Cosine `cos(math_exp)`  
+Tangent `tan(math_exp)`
+Arc Sine `asin(math_exp)`  
+Arc Cosine `acos(math_exp)`  
+Arc Tangent `atan(math_exp)`  
+Absolute value `abs(math_exp)`  
+Natural logarithm `ln(math_exp)`  
+Exponential `exp(math_exp)`  
+
+################################### Solve commands ############################
+Finding a paving for problem `pave`  
+Finding a bifurcation for problem `bifurcation`
+Finding an equilibrium for probelm `equilibrium`  
+Find minimum and maximum for the set differential equation `minmax`  
+Find minimum for the set differential equation `min`  
+Find maximum for the set differential equation `max`  

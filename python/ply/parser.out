@@ -1,0 +1,626 @@
+Created by PLY version 3.4 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    GTE
+    COMMENT
+    NEWLINE
+    LT
+    GT
+    LTE
+    EQ
+
+Grammar
+
+Rule 0     S' -> statement
+Rule 1     statement -> expression
+Rule 2     expression -> expression ENDSTATEMENT expression
+Rule 3     expression -> expression ENDSTATEMENT
+Rule 4     expression -> VAR NAME IN interval
+Rule 5     expression -> POLY NAME EQUALS numexpression
+Rule 6     numexpression -> NUMBER
+Rule 7     numexpression -> numexpression PLUS numexpression
+Rule 8     numexpression -> numexpression MINUS numexpression
+Rule 9     numexpression -> numexpression TIMES numexpression
+Rule 10    numexpression -> numexpression DIVIDE numexpression
+Rule 11    numexpression -> numexpression POWER numexpression
+Rule 12    numexpression -> MINUS numexpression
+Rule 13    numexpression -> LPAREN numexpression RPAREN
+Rule 14    interval -> LBRACKET numexpression COMMA numexpression RBRACKET
+
+Terminals, with rules where they appear
+
+COMMA                : 14
+COMMENT              : 
+DIVIDE               : 10
+ENDSTATEMENT         : 2 3
+EQ                   : 
+EQUALS               : 5
+GT                   : 
+GTE                  : 
+IN                   : 4
+LBRACKET             : 14
+LPAREN               : 13
+LT                   : 
+LTE                  : 
+MINUS                : 8 12
+NAME                 : 4 5
+NEWLINE              : 
+NUMBER               : 6
+PLUS                 : 7
+POLY                 : 5
+POWER                : 11
+RBRACKET             : 14
+RPAREN               : 13
+TIMES                : 9
+VAR                  : 4
+error                : 
+
+Nonterminals, with rules where they appear
+
+expression           : 1 2 2 3
+interval             : 4
+numexpression        : 5 7 7 8 8 9 9 10 10 11 11 12 13 14 14
+statement            : 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . statement
+    (1) statement -> . expression
+    (2) expression -> . expression ENDSTATEMENT expression
+    (3) expression -> . expression ENDSTATEMENT
+    (4) expression -> . VAR NAME IN interval
+    (5) expression -> . POLY NAME EQUALS numexpression
+
+    VAR             shift and go to state 3
+    POLY            shift and go to state 1
+
+    expression                     shift and go to state 4
+    statement                      shift and go to state 2
+
+state 1
+
+    (5) expression -> POLY . NAME EQUALS numexpression
+
+    NAME            shift and go to state 5
+
+
+state 2
+
+    (0) S' -> statement .
+
+
+
+state 3
+
+    (4) expression -> VAR . NAME IN interval
+
+    NAME            shift and go to state 6
+
+
+state 4
+
+    (1) statement -> expression .
+    (2) expression -> expression . ENDSTATEMENT expression
+    (3) expression -> expression . ENDSTATEMENT
+
+    $end            reduce using rule 1 (statement -> expression .)
+    ENDSTATEMENT    shift and go to state 7
+
+
+state 5
+
+    (5) expression -> POLY NAME . EQUALS numexpression
+
+    EQUALS          shift and go to state 8
+
+
+state 6
+
+    (4) expression -> VAR NAME . IN interval
+
+    IN              shift and go to state 9
+
+
+state 7
+
+    (2) expression -> expression ENDSTATEMENT . expression
+    (3) expression -> expression ENDSTATEMENT .
+    (2) expression -> . expression ENDSTATEMENT expression
+    (3) expression -> . expression ENDSTATEMENT
+    (4) expression -> . VAR NAME IN interval
+    (5) expression -> . POLY NAME EQUALS numexpression
+
+    ENDSTATEMENT    reduce using rule 3 (expression -> expression ENDSTATEMENT .)
+    $end            reduce using rule 3 (expression -> expression ENDSTATEMENT .)
+    VAR             shift and go to state 3
+    POLY            shift and go to state 1
+
+    expression                     shift and go to state 10
+
+state 8
+
+    (5) expression -> POLY NAME EQUALS . numexpression
+    (6) numexpression -> . NUMBER
+    (7) numexpression -> . numexpression PLUS numexpression
+    (8) numexpression -> . numexpression MINUS numexpression
+    (9) numexpression -> . numexpression TIMES numexpression
+    (10) numexpression -> . numexpression DIVIDE numexpression
+    (11) numexpression -> . numexpression POWER numexpression
+    (12) numexpression -> . MINUS numexpression
+    (13) numexpression -> . LPAREN numexpression RPAREN
+
+    NUMBER          shift and go to state 12
+    MINUS           shift and go to state 14
+    LPAREN          shift and go to state 13
+
+    numexpression                  shift and go to state 11
+
+state 9
+
+    (4) expression -> VAR NAME IN . interval
+    (14) interval -> . LBRACKET numexpression COMMA numexpression RBRACKET
+
+    LBRACKET        shift and go to state 16
+
+    interval                       shift and go to state 15
+
+state 10
+
+    (2) expression -> expression ENDSTATEMENT expression .
+    (2) expression -> expression . ENDSTATEMENT expression
+    (3) expression -> expression . ENDSTATEMENT
+
+  ! shift/reduce conflict for ENDSTATEMENT resolved as shift
+    $end            reduce using rule 2 (expression -> expression ENDSTATEMENT expression .)
+    ENDSTATEMENT    shift and go to state 7
+
+  ! ENDSTATEMENT    [ reduce using rule 2 (expression -> expression ENDSTATEMENT expression .) ]
+
+
+state 11
+
+    (5) expression -> POLY NAME EQUALS numexpression .
+    (7) numexpression -> numexpression . PLUS numexpression
+    (8) numexpression -> numexpression . MINUS numexpression
+    (9) numexpression -> numexpression . TIMES numexpression
+    (10) numexpression -> numexpression . DIVIDE numexpression
+    (11) numexpression -> numexpression . POWER numexpression
+
+    ENDSTATEMENT    reduce using rule 5 (expression -> POLY NAME EQUALS numexpression .)
+    $end            reduce using rule 5 (expression -> POLY NAME EQUALS numexpression .)
+    PLUS            shift and go to state 19
+    MINUS           shift and go to state 20
+    TIMES           shift and go to state 18
+    DIVIDE          shift and go to state 21
+    POWER           shift and go to state 17
+
+
+state 12
+
+    (6) numexpression -> NUMBER .
+
+    PLUS            reduce using rule 6 (numexpression -> NUMBER .)
+    MINUS           reduce using rule 6 (numexpression -> NUMBER .)
+    TIMES           reduce using rule 6 (numexpression -> NUMBER .)
+    DIVIDE          reduce using rule 6 (numexpression -> NUMBER .)
+    POWER           reduce using rule 6 (numexpression -> NUMBER .)
+    ENDSTATEMENT    reduce using rule 6 (numexpression -> NUMBER .)
+    $end            reduce using rule 6 (numexpression -> NUMBER .)
+    RPAREN          reduce using rule 6 (numexpression -> NUMBER .)
+    COMMA           reduce using rule 6 (numexpression -> NUMBER .)
+    RBRACKET        reduce using rule 6 (numexpression -> NUMBER .)
+
+
+state 13
+
+    (13) numexpression -> LPAREN . numexpression RPAREN
+    (6) numexpression -> . NUMBER
+    (7) numexpression -> . numexpression PLUS numexpression
+    (8) numexpression -> . numexpression MINUS numexpression
+    (9) numexpression -> . numexpression TIMES numexpression
+    (10) numexpression -> . numexpression DIVIDE numexpression
+    (11) numexpression -> . numexpression POWER numexpression
+    (12) numexpression -> . MINUS numexpression
+    (13) numexpression -> . LPAREN numexpression RPAREN
+
+    NUMBER          shift and go to state 12
+    MINUS           shift and go to state 14
+    LPAREN          shift and go to state 13
+
+    numexpression                  shift and go to state 22
+
+state 14
+
+    (12) numexpression -> MINUS . numexpression
+    (6) numexpression -> . NUMBER
+    (7) numexpression -> . numexpression PLUS numexpression
+    (8) numexpression -> . numexpression MINUS numexpression
+    (9) numexpression -> . numexpression TIMES numexpression
+    (10) numexpression -> . numexpression DIVIDE numexpression
+    (11) numexpression -> . numexpression POWER numexpression
+    (12) numexpression -> . MINUS numexpression
+    (13) numexpression -> . LPAREN numexpression RPAREN
+
+    NUMBER          shift and go to state 12
+    MINUS           shift and go to state 14
+    LPAREN          shift and go to state 13
+
+    numexpression                  shift and go to state 23
+
+state 15
+
+    (4) expression -> VAR NAME IN interval .
+
+    ENDSTATEMENT    reduce using rule 4 (expression -> VAR NAME IN interval .)
+    $end            reduce using rule 4 (expression -> VAR NAME IN interval .)
+
+
+state 16
+
+    (14) interval -> LBRACKET . numexpression COMMA numexpression RBRACKET
+    (6) numexpression -> . NUMBER
+    (7) numexpression -> . numexpression PLUS numexpression
+    (8) numexpression -> . numexpression MINUS numexpression
+    (9) numexpression -> . numexpression TIMES numexpression
+    (10) numexpression -> . numexpression DIVIDE numexpression
+    (11) numexpression -> . numexpression POWER numexpression
+    (12) numexpression -> . MINUS numexpression
+    (13) numexpression -> . LPAREN numexpression RPAREN
+
+    NUMBER          shift and go to state 12
+    MINUS           shift and go to state 14
+    LPAREN          shift and go to state 13
+
+    numexpression                  shift and go to state 24
+
+state 17
+
+    (11) numexpression -> numexpression POWER . numexpression
+    (6) numexpression -> . NUMBER
+    (7) numexpression -> . numexpression PLUS numexpression
+    (8) numexpression -> . numexpression MINUS numexpression
+    (9) numexpression -> . numexpression TIMES numexpression
+    (10) numexpression -> . numexpression DIVIDE numexpression
+    (11) numexpression -> . numexpression POWER numexpression
+    (12) numexpression -> . MINUS numexpression
+    (13) numexpression -> . LPAREN numexpression RPAREN
+
+    NUMBER          shift and go to state 12
+    MINUS           shift and go to state 14
+    LPAREN          shift and go to state 13
+
+    numexpression                  shift and go to state 25
+
+state 18
+
+    (9) numexpression -> numexpression TIMES . numexpression
+    (6) numexpression -> . NUMBER
+    (7) numexpression -> . numexpression PLUS numexpression
+    (8) numexpression -> . numexpression MINUS numexpression
+    (9) numexpression -> . numexpression TIMES numexpression
+    (10) numexpression -> . numexpression DIVIDE numexpression
+    (11) numexpression -> . numexpression POWER numexpression
+    (12) numexpression -> . MINUS numexpression
+    (13) numexpression -> . LPAREN numexpression RPAREN
+
+    NUMBER          shift and go to state 12
+    MINUS           shift and go to state 14
+    LPAREN          shift and go to state 13
+
+    numexpression                  shift and go to state 26
+
+state 19
+
+    (7) numexpression -> numexpression PLUS . numexpression
+    (6) numexpression -> . NUMBER
+    (7) numexpression -> . numexpression PLUS numexpression
+    (8) numexpression -> . numexpression MINUS numexpression
+    (9) numexpression -> . numexpression TIMES numexpression
+    (10) numexpression -> . numexpression DIVIDE numexpression
+    (11) numexpression -> . numexpression POWER numexpression
+    (12) numexpression -> . MINUS numexpression
+    (13) numexpression -> . LPAREN numexpression RPAREN
+
+    NUMBER          shift and go to state 12
+    MINUS           shift and go to state 14
+    LPAREN          shift and go to state 13
+
+    numexpression                  shift and go to state 27
+
+state 20
+
+    (8) numexpression -> numexpression MINUS . numexpression
+    (6) numexpression -> . NUMBER
+    (7) numexpression -> . numexpression PLUS numexpression
+    (8) numexpression -> . numexpression MINUS numexpression
+    (9) numexpression -> . numexpression TIMES numexpression
+    (10) numexpression -> . numexpression DIVIDE numexpression
+    (11) numexpression -> . numexpression POWER numexpression
+    (12) numexpression -> . MINUS numexpression
+    (13) numexpression -> . LPAREN numexpression RPAREN
+
+    NUMBER          shift and go to state 12
+    MINUS           shift and go to state 14
+    LPAREN          shift and go to state 13
+
+    numexpression                  shift and go to state 28
+
+state 21
+
+    (10) numexpression -> numexpression DIVIDE . numexpression
+    (6) numexpression -> . NUMBER
+    (7) numexpression -> . numexpression PLUS numexpression
+    (8) numexpression -> . numexpression MINUS numexpression
+    (9) numexpression -> . numexpression TIMES numexpression
+    (10) numexpression -> . numexpression DIVIDE numexpression
+    (11) numexpression -> . numexpression POWER numexpression
+    (12) numexpression -> . MINUS numexpression
+    (13) numexpression -> . LPAREN numexpression RPAREN
+
+    NUMBER          shift and go to state 12
+    MINUS           shift and go to state 14
+    LPAREN          shift and go to state 13
+
+    numexpression                  shift and go to state 29
+
+state 22
+
+    (13) numexpression -> LPAREN numexpression . RPAREN
+    (7) numexpression -> numexpression . PLUS numexpression
+    (8) numexpression -> numexpression . MINUS numexpression
+    (9) numexpression -> numexpression . TIMES numexpression
+    (10) numexpression -> numexpression . DIVIDE numexpression
+    (11) numexpression -> numexpression . POWER numexpression
+
+    RPAREN          shift and go to state 30
+    PLUS            shift and go to state 19
+    MINUS           shift and go to state 20
+    TIMES           shift and go to state 18
+    DIVIDE          shift and go to state 21
+    POWER           shift and go to state 17
+
+
+state 23
+
+    (12) numexpression -> MINUS numexpression .
+    (7) numexpression -> numexpression . PLUS numexpression
+    (8) numexpression -> numexpression . MINUS numexpression
+    (9) numexpression -> numexpression . TIMES numexpression
+    (10) numexpression -> numexpression . DIVIDE numexpression
+    (11) numexpression -> numexpression . POWER numexpression
+
+    PLUS            reduce using rule 12 (numexpression -> MINUS numexpression .)
+    MINUS           reduce using rule 12 (numexpression -> MINUS numexpression .)
+    TIMES           reduce using rule 12 (numexpression -> MINUS numexpression .)
+    DIVIDE          reduce using rule 12 (numexpression -> MINUS numexpression .)
+    POWER           reduce using rule 12 (numexpression -> MINUS numexpression .)
+    ENDSTATEMENT    reduce using rule 12 (numexpression -> MINUS numexpression .)
+    $end            reduce using rule 12 (numexpression -> MINUS numexpression .)
+    RPAREN          reduce using rule 12 (numexpression -> MINUS numexpression .)
+    COMMA           reduce using rule 12 (numexpression -> MINUS numexpression .)
+    RBRACKET        reduce using rule 12 (numexpression -> MINUS numexpression .)
+
+  ! PLUS            [ shift and go to state 19 ]
+  ! MINUS           [ shift and go to state 20 ]
+  ! TIMES           [ shift and go to state 18 ]
+  ! DIVIDE          [ shift and go to state 21 ]
+  ! POWER           [ shift and go to state 17 ]
+
+
+state 24
+
+    (14) interval -> LBRACKET numexpression . COMMA numexpression RBRACKET
+    (7) numexpression -> numexpression . PLUS numexpression
+    (8) numexpression -> numexpression . MINUS numexpression
+    (9) numexpression -> numexpression . TIMES numexpression
+    (10) numexpression -> numexpression . DIVIDE numexpression
+    (11) numexpression -> numexpression . POWER numexpression
+
+    COMMA           shift and go to state 31
+    PLUS            shift and go to state 19
+    MINUS           shift and go to state 20
+    TIMES           shift and go to state 18
+    DIVIDE          shift and go to state 21
+    POWER           shift and go to state 17
+
+
+state 25
+
+    (11) numexpression -> numexpression POWER numexpression .
+    (7) numexpression -> numexpression . PLUS numexpression
+    (8) numexpression -> numexpression . MINUS numexpression
+    (9) numexpression -> numexpression . TIMES numexpression
+    (10) numexpression -> numexpression . DIVIDE numexpression
+    (11) numexpression -> numexpression . POWER numexpression
+
+    PLUS            reduce using rule 11 (numexpression -> numexpression POWER numexpression .)
+    MINUS           reduce using rule 11 (numexpression -> numexpression POWER numexpression .)
+    TIMES           reduce using rule 11 (numexpression -> numexpression POWER numexpression .)
+    DIVIDE          reduce using rule 11 (numexpression -> numexpression POWER numexpression .)
+    POWER           reduce using rule 11 (numexpression -> numexpression POWER numexpression .)
+    ENDSTATEMENT    reduce using rule 11 (numexpression -> numexpression POWER numexpression .)
+    $end            reduce using rule 11 (numexpression -> numexpression POWER numexpression .)
+    RPAREN          reduce using rule 11 (numexpression -> numexpression POWER numexpression .)
+    COMMA           reduce using rule 11 (numexpression -> numexpression POWER numexpression .)
+    RBRACKET        reduce using rule 11 (numexpression -> numexpression POWER numexpression .)
+
+  ! PLUS            [ shift and go to state 19 ]
+  ! MINUS           [ shift and go to state 20 ]
+  ! TIMES           [ shift and go to state 18 ]
+  ! DIVIDE          [ shift and go to state 21 ]
+  ! POWER           [ shift and go to state 17 ]
+
+
+state 26
+
+    (9) numexpression -> numexpression TIMES numexpression .
+    (7) numexpression -> numexpression . PLUS numexpression
+    (8) numexpression -> numexpression . MINUS numexpression
+    (9) numexpression -> numexpression . TIMES numexpression
+    (10) numexpression -> numexpression . DIVIDE numexpression
+    (11) numexpression -> numexpression . POWER numexpression
+
+    PLUS            reduce using rule 9 (numexpression -> numexpression TIMES numexpression .)
+    MINUS           reduce using rule 9 (numexpression -> numexpression TIMES numexpression .)
+    TIMES           reduce using rule 9 (numexpression -> numexpression TIMES numexpression .)
+    DIVIDE          reduce using rule 9 (numexpression -> numexpression TIMES numexpression .)
+    ENDSTATEMENT    reduce using rule 9 (numexpression -> numexpression TIMES numexpression .)
+    $end            reduce using rule 9 (numexpression -> numexpression TIMES numexpression .)
+    RPAREN          reduce using rule 9 (numexpression -> numexpression TIMES numexpression .)
+    COMMA           reduce using rule 9 (numexpression -> numexpression TIMES numexpression .)
+    RBRACKET        reduce using rule 9 (numexpression -> numexpression TIMES numexpression .)
+    POWER           shift and go to state 17
+
+  ! POWER           [ reduce using rule 9 (numexpression -> numexpression TIMES numexpression .) ]
+  ! PLUS            [ shift and go to state 19 ]
+  ! MINUS           [ shift and go to state 20 ]
+  ! TIMES           [ shift and go to state 18 ]
+  ! DIVIDE          [ shift and go to state 21 ]
+
+
+state 27
+
+    (7) numexpression -> numexpression PLUS numexpression .
+    (7) numexpression -> numexpression . PLUS numexpression
+    (8) numexpression -> numexpression . MINUS numexpression
+    (9) numexpression -> numexpression . TIMES numexpression
+    (10) numexpression -> numexpression . DIVIDE numexpression
+    (11) numexpression -> numexpression . POWER numexpression
+
+    PLUS            reduce using rule 7 (numexpression -> numexpression PLUS numexpression .)
+    MINUS           reduce using rule 7 (numexpression -> numexpression PLUS numexpression .)
+    ENDSTATEMENT    reduce using rule 7 (numexpression -> numexpression PLUS numexpression .)
+    $end            reduce using rule 7 (numexpression -> numexpression PLUS numexpression .)
+    RPAREN          reduce using rule 7 (numexpression -> numexpression PLUS numexpression .)
+    COMMA           reduce using rule 7 (numexpression -> numexpression PLUS numexpression .)
+    RBRACKET        reduce using rule 7 (numexpression -> numexpression PLUS numexpression .)
+    TIMES           shift and go to state 18
+    DIVIDE          shift and go to state 21
+    POWER           shift and go to state 17
+
+  ! TIMES           [ reduce using rule 7 (numexpression -> numexpression PLUS numexpression .) ]
+  ! DIVIDE          [ reduce using rule 7 (numexpression -> numexpression PLUS numexpression .) ]
+  ! POWER           [ reduce using rule 7 (numexpression -> numexpression PLUS numexpression .) ]
+  ! PLUS            [ shift and go to state 19 ]
+  ! MINUS           [ shift and go to state 20 ]
+
+
+state 28
+
+    (8) numexpression -> numexpression MINUS numexpression .
+    (7) numexpression -> numexpression . PLUS numexpression
+    (8) numexpression -> numexpression . MINUS numexpression
+    (9) numexpression -> numexpression . TIMES numexpression
+    (10) numexpression -> numexpression . DIVIDE numexpression
+    (11) numexpression -> numexpression . POWER numexpression
+
+    PLUS            reduce using rule 8 (numexpression -> numexpression MINUS numexpression .)
+    MINUS           reduce using rule 8 (numexpression -> numexpression MINUS numexpression .)
+    ENDSTATEMENT    reduce using rule 8 (numexpression -> numexpression MINUS numexpression .)
+    $end            reduce using rule 8 (numexpression -> numexpression MINUS numexpression .)
+    RPAREN          reduce using rule 8 (numexpression -> numexpression MINUS numexpression .)
+    COMMA           reduce using rule 8 (numexpression -> numexpression MINUS numexpression .)
+    RBRACKET        reduce using rule 8 (numexpression -> numexpression MINUS numexpression .)
+    TIMES           shift and go to state 18
+    DIVIDE          shift and go to state 21
+    POWER           shift and go to state 17
+
+  ! TIMES           [ reduce using rule 8 (numexpression -> numexpression MINUS numexpression .) ]
+  ! DIVIDE          [ reduce using rule 8 (numexpression -> numexpression MINUS numexpression .) ]
+  ! POWER           [ reduce using rule 8 (numexpression -> numexpression MINUS numexpression .) ]
+  ! PLUS            [ shift and go to state 19 ]
+  ! MINUS           [ shift and go to state 20 ]
+
+
+state 29
+
+    (10) numexpression -> numexpression DIVIDE numexpression .
+    (7) numexpression -> numexpression . PLUS numexpression
+    (8) numexpression -> numexpression . MINUS numexpression
+    (9) numexpression -> numexpression . TIMES numexpression
+    (10) numexpression -> numexpression . DIVIDE numexpression
+    (11) numexpression -> numexpression . POWER numexpression
+
+    PLUS            reduce using rule 10 (numexpression -> numexpression DIVIDE numexpression .)
+    MINUS           reduce using rule 10 (numexpression -> numexpression DIVIDE numexpression .)
+    TIMES           reduce using rule 10 (numexpression -> numexpression DIVIDE numexpression .)
+    DIVIDE          reduce using rule 10 (numexpression -> numexpression DIVIDE numexpression .)
+    ENDSTATEMENT    reduce using rule 10 (numexpression -> numexpression DIVIDE numexpression .)
+    $end            reduce using rule 10 (numexpression -> numexpression DIVIDE numexpression .)
+    RPAREN          reduce using rule 10 (numexpression -> numexpression DIVIDE numexpression .)
+    COMMA           reduce using rule 10 (numexpression -> numexpression DIVIDE numexpression .)
+    RBRACKET        reduce using rule 10 (numexpression -> numexpression DIVIDE numexpression .)
+    POWER           shift and go to state 17
+
+  ! POWER           [ reduce using rule 10 (numexpression -> numexpression DIVIDE numexpression .) ]
+  ! PLUS            [ shift and go to state 19 ]
+  ! MINUS           [ shift and go to state 20 ]
+  ! TIMES           [ shift and go to state 18 ]
+  ! DIVIDE          [ shift and go to state 21 ]
+
+
+state 30
+
+    (13) numexpression -> LPAREN numexpression RPAREN .
+
+    PLUS            reduce using rule 13 (numexpression -> LPAREN numexpression RPAREN .)
+    MINUS           reduce using rule 13 (numexpression -> LPAREN numexpression RPAREN .)
+    TIMES           reduce using rule 13 (numexpression -> LPAREN numexpression RPAREN .)
+    DIVIDE          reduce using rule 13 (numexpression -> LPAREN numexpression RPAREN .)
+    POWER           reduce using rule 13 (numexpression -> LPAREN numexpression RPAREN .)
+    ENDSTATEMENT    reduce using rule 13 (numexpression -> LPAREN numexpression RPAREN .)
+    $end            reduce using rule 13 (numexpression -> LPAREN numexpression RPAREN .)
+    RPAREN          reduce using rule 13 (numexpression -> LPAREN numexpression RPAREN .)
+    COMMA           reduce using rule 13 (numexpression -> LPAREN numexpression RPAREN .)
+    RBRACKET        reduce using rule 13 (numexpression -> LPAREN numexpression RPAREN .)
+
+
+state 31
+
+    (14) interval -> LBRACKET numexpression COMMA . numexpression RBRACKET
+    (6) numexpression -> . NUMBER
+    (7) numexpression -> . numexpression PLUS numexpression
+    (8) numexpression -> . numexpression MINUS numexpression
+    (9) numexpression -> . numexpression TIMES numexpression
+    (10) numexpression -> . numexpression DIVIDE numexpression
+    (11) numexpression -> . numexpression POWER numexpression
+    (12) numexpression -> . MINUS numexpression
+    (13) numexpression -> . LPAREN numexpression RPAREN
+
+    NUMBER          shift and go to state 12
+    MINUS           shift and go to state 14
+    LPAREN          shift and go to state 13
+
+    numexpression                  shift and go to state 32
+
+state 32
+
+    (14) interval -> LBRACKET numexpression COMMA numexpression . RBRACKET
+    (7) numexpression -> numexpression . PLUS numexpression
+    (8) numexpression -> numexpression . MINUS numexpression
+    (9) numexpression -> numexpression . TIMES numexpression
+    (10) numexpression -> numexpression . DIVIDE numexpression
+    (11) numexpression -> numexpression . POWER numexpression
+
+    RBRACKET        shift and go to state 33
+    PLUS            shift and go to state 19
+    MINUS           shift and go to state 20
+    TIMES           shift and go to state 18
+    DIVIDE          shift and go to state 21
+    POWER           shift and go to state 17
+
+
+state 33
+
+    (14) interval -> LBRACKET numexpression COMMA numexpression RBRACKET .
+
+    ENDSTATEMENT    reduce using rule 14 (interval -> LBRACKET numexpression COMMA numexpression RBRACKET .)
+    $end            reduce using rule 14 (interval -> LBRACKET numexpression COMMA numexpression RBRACKET .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for ENDSTATEMENT in state 10 resolved as shift
