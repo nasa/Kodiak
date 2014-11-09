@@ -1,0 +1,149 @@
+<h1 id="kodiak">Kodiak</h1>
+<p>Kodiak is a C++ Library that implements a generic branch and bound algorithm for rigorous numerical approximations. Kodiak supports the following enclosure methods:</p>
+<ul>
+<li>Interval arithmetic (via the FLIB++ library).</li>
+<li>Bernstein polynomials.</li>
+</ul>
+<h2 id="building-kodiak-c-library">Building Kodiak C++ Library</h2>
+<ol style="list-style-type: decimal">
+<li>Install <a href="http://www.boost.org/users/download/">BOOST</a>.</li>
+<li>Install <a href="http://www2.math.uni-wuppertal.de/~xsc/software/filib.html">FILIB++</a>. This library has to be configured with the following options before making and installing it: <code>./configure CFLAGS=-fPIC CPPFLAGS=-fPIC CXXFLAGS=-fPIC</code></li>
+<li>Type <code>make src</code>.</li>
+<li>Examples of the use of the library are found in the directory <code>examples</code>. For building the examples, type <code>make examples</code>.</li>
+</ol>
+<p>Mantas Markevicius, from University of York, UK, implemented a standalone interface for Kodiak in Python.</p>
+<h2 id="building-kodiaks-python-interface">Building Kodiak's Python Interface</h2>
+<ol style="list-style-type: decimal">
+<li>Build Kodiak C++ library.</li>
+<li>Install <a href="http://cython.org/#download">Cython</a>.</li>
+<li>Type <code>make python</code></li>
+<li>Run standalone interface through the command <code>python python/kodiak.py</code>.</li>
+</ol>
+<h2 id="building-kodiaks-self-containing-executable">Building Kodiak's Self-Containing Executable</h2>
+<ol style="list-style-type: decimal">
+<li>Install Kodiak's Python interface.</li>
+<li>Install PyInstalled <a href="http://www.pyinstaller.org/">PyInstaller</a>.</li>
+<li>Type <code>make kodiak</code></li>
+<li>Run self-containing executable through the binary program <code>bin/kodiak</code></li>
+</ol>
+<p>If any of the libraries was installed in non standard directories, modify the file <code>src/Makefile</code> and <code>src/python</code> accordingly.</p>
+<h2 id="commands-for-standalone-interface">Commands for Standalone Interface</h2>
+<h3 id="exiting-the-interactive-interface">Exiting the Interactive Interface</h3>
+<p>To quit interactive mode type <code>quit</code> or press <code>ctrl+c</code>.</p>
+<h3 id="program-arguments">Program arguments</h3>
+<p>Program can be called with a file as arguments. In this case, it will evaluate each files and print the output:<br /><code>./kodiak &lt;file&gt;</code><br />The same commands can be used if running from source:<br /><code>python kodiak.py &lt;file&gt;</code></p>
+<p>Files can be specified with an absolute or a relative path.<br />i.e. to solve a problem contained in a file <em>bar.kdk</em> which is in <em>/home/foo/</em> folder: <code>./kodiak /home/foo/bar.kdk</code></p>
+<p>Files <strong>must</strong> have a <code>.kdk</code> file extension.</p>
+<p>Passing multiple files as arguments:<br /><code>./kodiak &lt;file&gt; &lt;file&gt;</code><br />You can add as many as you like.</p>
+<p>Program can be given a flag to specify an output file, if the file already exists results are appended to it:<br /><code>./kodiak -o &lt;output_file&gt;</code></p>
+<p>To read files and write the output to a different file:<br /><code>./kodiak -o &lt;output_file&gt; &lt;file&gt; ...</code></p>
+<p>Safe mode flag can be set to false the using command line arguments:<br /><code>./kodiak -u</code></p>
+<p>To save the syntactically correct input to a file:<br /><code>./kodiak -s &lt;save_file&gt;</code></p>
+<p>To run in queit mode, with no output to console:<br /><code>./kodiak -q</code></p>
+<p>To continue executing after processing input files:<br /><code>./kodiak &lt;file&gt; .. -c</code></p>
+<p>To start <em>Kodiak</em> in debug mode: <code>./kodiak -d</code></p>
+<p>For more help on the command line arguments type:<br /><code>./kodiak -h</code></p>
+<p>All the aforementioned flags can be combined, i.e.:<br /><code>./kodiak -o foo -d -s bar -u -c foobar.kdk</code></p>
+<h3 id="interactive-mode-commands-or-data-file-syntax">Interactive mode commands or data file syntax</h3>
+<p>To read a file, the file name can contain a relative path or an absolute path to file<br /><code>file &lt;file&gt;</code></p>
+<p>Anything after # on a line is considered a comment and ignored by the program</p>
+<pre><code># this is a comment
+file test.kdk # this is also a comment</code></pre>
+<p>When writing data files, each expression must be followed by a ; semicolon i.e.<br /><code>var x in [0,1]; var y in [1,5];</code></p>
+<h3 id="supported-problem-types">Supported Problem Types</h3>
+<h4 id="paving-problems">Paving problems</h4>
+<p>N.B. include short description about pavings?</p>
+<p>Paving problems only require variables, which can be defined with <em>var</em> keyword, i.e.:<br /><code>var var_name in [13, 42]</code></p>
+<p>The lower and upper bounds can be any integer in range [-2147483648, 2147483647] on a 64-bit machine.</p>
+<p>There are also options to set bounds to precise and approximate representation of floating point number to <strong>Kodiak</strong>:<br />Precise bounds can be set using one the following commands:<br />* <em>rat(n,m)</em>, to input rational numbers.<br />* <em>dec(n,m)</em>, to input decimal numbers.<br />Where both n and m are integers.</p>
+<p>Number in the hexadecimal floating point format are also accepted. The format follows the rules for C definition of hex floats. i.e. <code>0x1ap-2</code> for number 6.5.</p>
+<p>Approximate representation of numbers can be entered using a <em>approx(n)</em> command, but this is discouraged and to do this the safe mode of <strong>Kodiak</strong> has to be set to false.</p>
+<p>Constants, introduced with the <em>const</em> keyword, and global definitions introduced with the <em>def</em> keyword, are also supported.<br />The difference between constants and definitions is that constants can only contain a single number, while definitions can hold entire equations.</p>
+<p>However, pavings without any constraints are not very interesting. Constraints can be added with the <em>cnstr</em> keyword, i.e.:<br /><code>cnstr x^2 + y &lt; x</code></p>
+<p>More mathematical operations which can be used when defining equations can be found in the following sections of this document.</p>
+<p>To have more control over the search space you can specify the paving mode. Possible options are <em>first</em>, <em>std</em>, <em>full</em>.<br />The search mode can be set using the following command:<br /><code>set paving mode = first</code></p>
+<p>More options to control the search space are described in the settings section of this guide.</p>
+<p><strong>Kodiak</strong> can be told to solve the paving problem, when all the parameters are described, using the <em>pave</em> keyword.</p>
+<h4 id="bifurcation-problems">Bifurcation problems</h4>
+<p>N.B. include short description about bifurcations?</p>
+<p>Bifurcation problems require variables, just like paving problems, which can be defined with <em>var</em> keyword, i.e.:<br /><code>var var_name in [13, 42]</code></p>
+<p>But bifurcation problems also take parameters, which can be defined using <em>param</em> keyword, i.e.:<br /><code>param param_name in [-42, 42]</code><br />Describing parameters supports exactly the same commands as variable descriptions.</p>
+<p>Bifurcation problems also require differential expressions, which can be supplied to <strong>Kodiak</strong> using a <em>dfeq</em> keyword, i.e:<br /><code>dfeq x+sqrt(y)</code></p>
+<p>Constraints can also be supplied for bifurcation problems using the <em>cnstr</em> keyword, i.e. :<br /><code>cnstr x^2 + y &lt; x</code></p>
+<p><strong>Kodiak</strong> can be told to solve the paving problem, when all the parameters are described using the <em>bifurcation</em> keyword.</p>
+<p>To solve a special type of bifurcation problems, equilibrium problems, the solve command is <em>equilibrium</em>.</p>
+<h4 id="minimisation-and-maximisation-problems">Minimisation and Maximisation problems</h4>
+<p>N.B. include description about optimization problems.</p>
+<p>These types of problems take exactly the same arguments as paving problems.<br />You can assign variables, constants, definitions and constraints to optimization problems.</p>
+<p>You can issue solve commands <em>min</em> to solve a minimization problem, <em>max</em> to solve maximization problem and <em>minmax</em> to solve minimization and maximization.</p>
+<h3 id="plotting">Plotting</h3>
+<p>Both paving and bifurcation problems support plotting out the output using the <strong>gnuplot</strong> tool.</p>
+<p>To plot out the last solved problem type in <code>plot</code> with the variables names following it, i.e.<br /><code>plot x y z</code>, would produce a 3D plot of the paving with the projection of these variables. 2D plots are also supported.</p>
+<p>To avoid having to redo calculations each time you start <strong>Kodiak</strong>, you can save the last produced paving with <em>save paving</em> command.<br /><code>save paving foo</code> will save the last produced paving to the file <strong>foo.pav</strong> in the current directory.</p>
+<p>This paving can be loaded into <strong>Kodiak</strong> using <em>load paving</em> command, which is used like this:<br /><code>load paving foo</code>, would load the paving in file <strong>foo.pav</strong> into <strong>Kodiak</strong>.</p>
+<h3 id="settings">Settings</h3>
+<p>Set the name of the problem</p>
+<pre><code>set name = name</code></pre>
+<p>Print out extra information when solving problems.</p>
+<pre><code>set debug = true|false</code></pre>
+<p>When safe input is true approx values are not allowed, the default value is <em>true</em>.</p>
+<pre><code>set safe input = true | false</code></pre>
+<p>Set the solver to use Bernstein Polynomials where possible.</p>
+<pre><code>set bp = true|false</code></pre>
+<p>Set precision for all the variables.</p>
+<pre><code>set precision = natural_number  </code></pre>
+<p>Set resolution for all the variables .</p>
+<pre><code>set resolution = real_number  </code></pre>
+<p>Set resolution for specific variable.</p>
+<pre><code>set resolution name = real_number  </code></pre>
+<p>Set variable selection mode for Branch and Bound algorithm.</p>
+<pre><code>set selectvar = nat  </code></pre>
+<p>Set maximum depth for the Branch and Bound algorithm.</p>
+<pre><code>set depth = nat</code></pre>
+<p>Print the output of the solver to file</p>
+<pre><code>set output = FILE</code></pre>
+<p>Cleans the state of the program, so that new problems can be entered</p>
+<pre><code>reset</code></pre>
+<p>If output was set using -o flag or set output command, this flag resets output back to the console</p>
+<pre><code>reset output</code></pre>
+<h3 id="problem-definitions">Problem definitions</h3>
+<p>Numerical declarations</p>
+<pre><code>num_decl = natural number, approx(real), rat(nat, nat), dec(nat,nat), hex_constant</code></pre>
+<p>Declaring variables</p>
+<pre><code>var name in [num_decl, num_decl]</code></pre>
+<p>Declaring parameters</p>
+<pre><code>param name in [num_decl, num_decl]</code></pre>
+<p>Declaring constants</p>
+<pre><code>const name = num_decl</code></pre>
+<p>Mathematical expression</p>
+<pre><code>math_exp = sin(approx(-1.1))*sqrt(rat(3,2))^3-x</code></pre>
+<p>Setting objective function for MinMax problems</p>
+<pre><code>objfn math_exp</code></pre>
+<p>Adding differential equations for bifurcation problems</p>
+<pre><code>dfeq math_exp</code></pre>
+<p>Adding constraints for all types of problems</p>
+<pre><code>cnstr math_exp bool_op math_exp</code></pre>
+<p>Let expressions used to define problems</p>
+<pre><code>objfn let name = math_exp in math_exp
+cnstr let name = math_exp in math_exp
+dfeq let name = math_exp in math_exp</code></pre>
+<p>Nested let expressions</p>
+<pre><code>objfn|dfeq|cnstr = let name = math_exp, name = math_exp in math_exp</code></pre>
+<h4 id="supported-boolean-operators">Supported boolean operators</h4>
+<p>Less than <code>&lt;</code><br />More than <code>&gt;</code><br />Less than or equal <code>&lt;=</code><br />More than or equal <code>&gt;=</code><br />Equal <code>=</code></p>
+<h4 id="supported-mathematical-operations">Supported mathematical operations</h4>
+<p>Standard mathematical operator are supported <code>+ - * / ^</code></p>
+<p>Square root <code>sqrt(math_exp)</code><br />Square or num_decl^2 <code>sq(math_exp)</code><br />Sine <code>sin(math_exp)</code><br />Cosine <code>cos(math_exp)</code><br />Tangent <code>tan(math_exp)</code> Arc Sine <code>asin(math_exp)</code><br />Arc Cosine <code>acos(math_exp)</code><br />Arc Tangent <code>atan(math_exp)</code><br />Absolute value <code>abs(math_exp)</code><br />Natural logarithm <code>ln(math_exp)</code><br />Exponential <code>exp(math_exp)</code></p>
+<h3 id="solve-commands">Solve commands</h3>
+<p>Finding a paving for problem <code>pave</code><br />Finding a bifurcation for problem <code>bifurcation</code> Finding an equilibrium for probelm <code>equilibrium</code><br />Find minimum and maximum for the set differential equation <code>minmax</code><br />Find minimum for the set differential equation <code>min</code><br />Find maximum for the set differential equation <code>max</code></p>
+<h4 id="copyright-notices">Copyright notices:</h4>
+<p>Kodiak (See LICENSE.pdf)</p>
+<p>PLY (Python Lex-Yacc) Version 3.4</p>
+<p>Copyright (C) 2001-2011, David M. Beazley (Dabeaz LLC) All rights reserved.</p>
+<p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>
+<ul>
+<li>Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.<br /></li>
+<li>Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.<br /></li>
+<li>Neither the name of the David Beazley or Dabeaz LLC may be used to endorse or promote products derived from this software without specific prior written permission.</li>
+</ul>
+<p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
