@@ -39,8 +39,11 @@ standalone interface for Kodiak in Python.
 If any of the libraries was installed in non standard directories, modify the
 files `src/Makefile` and `python/Makefile` accordingly.
   
-Commands for Standalone Interface
+Standalone Interface
 -
+
+Examples of text files to be used with standalone interface are
+available in the directory `kdks`.
 
 ###Exiting the Interactive Interface
 To quit interactive mode type `quit` or press `ctrl+c`.

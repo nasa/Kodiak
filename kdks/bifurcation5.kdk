@@ -1,0 +1,5 @@
+define x = 5;
+var y in [0,1];
+dfeq y + x;
+cnstr y > 0;
+bifurcation;

@@ -1,0 +1,12 @@
+set name = Hopf1_ia;
+set bp = false;
+set resolution = 0;
+var x in [0,3];
+var y in [0,3];
+param alpha in [dec(1,-1),dec(1,-1)];
+param beta in [0,3];
+dfeq -x+alpha*y+x^2*y;
+dfeq beta-alpha*y-x^2*y;
+set precision = -3;
+set debug = false;
+bifurcation;

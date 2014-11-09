@@ -1,0 +1,16 @@
+set bp = false;
+set resolution = 0.001;
+var x in [0,8];
+var y in [0,8];
+var z in [0,29];
+
+param sigma in [3,3];
+param rho in [1,30];
+param beta in [1,2];
+dfeq sigma*(y-x);
+dfeq x*(rho-z)-y;
+dfeq x*y - beta*z;
+set debug = false;
+set resolution beta = 0.01;
+bifurcation;
+

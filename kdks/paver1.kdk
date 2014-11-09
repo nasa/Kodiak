@@ -1,0 +1,10 @@
+set bp = false;
+set resolution = 0;
+var x in [-3,3];
+var y in [-3,3];
+var z in [-3,3];
+cnstr 3*x + 2*y -z -1=0;
+cnstr 2*x-2*y+4*z+2=0;
+cnstr -x+rat(1,2)*y-z=0;
+set precision = -2;
+pave;

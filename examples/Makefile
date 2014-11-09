@@ -22,19 +22,19 @@ LDFLAGS = -L/usr/local/lib -L$(BOOST_ROOT)/lib -lprim -lboost_serialization-mt
 
 all: minmax paving bifurcation
 
-minmax: lib
+minmax: 
 	$(CC) $(CFLAGS) minmax.cpp $(KODIAK_LIB)/libKodiak.a $(LDFLAGS) -o minmax
 	@echo "**"
 	@echo "** minmax binary built"
 	@echo "**" 
 
-paving: lib
+paving: 
 	$(CC) $(CFLAGS) paving.cpp $(KODIAK_LIB)/libKodiak.a $(LDFLAGS) -o paving
 	@echo "**"
 	@echo "** paving binary built"
 	@echo "**" 
 
-bifurcation: lib
+bifurcation: 
 	$(CC) $(CFLAGS) bifurcation.cpp $(KODIAK_LIB)/libKodiak.a $(LDFLAGS) -o bifurcation
 	@echo "**"
 	@echo "** bifurcation binary built"
@@ -46,7 +46,4 @@ clean:
 	-rm callgrind.out*
 	-rm *.dat? *.dat *.gplot *.png *.pdf *.pav *out*
 
-lib: 
-	cd $(KODIAK_DIR)/src; make
-
-.PHONY: all lib clean minmax paving bifurcation
+.PHONY: all clean minmax paving bifurcation
