@@ -140,7 +140,6 @@ More options to control the search space are described in the settings section o
 **Kodiak** can be told to solve the paving problem, when all the parameters are described, using the *pave* keyword.
 
 ####Bifurcation problems  
-N.B. include short description about bifurcations?
 
 Bifurcation problems require variables, just like paving problems, which can be defined with *var* keyword, i.e.:   
 `var var_name in [13, 42]`  
@@ -160,7 +159,6 @@ Constraints can also be supplied for bifurcation problems using the *cnstr* keyw
 To solve a special type of bifurcation problems, equilibrium problems, the solve command is *equilibrium*.
 
 ####Minimisation and Maximisation problems  
-N.B. include description about optimization problems.  
 
 These types of problems take exactly the same arguments as paving problems.   
 You can assign variables, constants, definitions and constraints to optimization problems.  
