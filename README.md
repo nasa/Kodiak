@@ -44,8 +44,8 @@ The repository is located at:
 License
 -------
 
-The license for using the software is contained in the file
-LICENSE.pdf; see also the copyright notice at the end of this file.
+The Kodiak C++ Library is released under NASA's Open Source
+Agreement. See the file LICENSE.pdf; see also the copyright notice at the end of this file.
 
 Installation and Usage Options
 ------------------------------
