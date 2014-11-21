@@ -1,321 +1,460 @@
-Kodiak
-===
+*Kodiak*, a C++ Library for Rigorous Branch and Bound Computation
+=================================================================
 
-Kodiak is a C++ Library that implements a generic branch and bound
-algorithm for rigorous numerical approximations.  Kodiak supports the
-following enclosure methods:
+*Kodiak* is a C++ library that implements a generic branch and bound
+algorithm for rigorous numerical approximations. Particular instances
+of the branch and bound algorithm allow the user to refine and
+isolate solutions to systems of nonlinear equations and inequalities,
+global optimization problems, and bifurcation sets for systems of
+ODEs. Kodiak utilizes interval arithmetic (via the *filib++* library)
+and Bernstein enclosure (for polynomials and rational functions) as
+self-validating enclosure methods. Symbolic operations support
+procedures such as automatic partial differentiation.
 
-- Interval arithmetic (via the FLIB++ library).
-- Bernstein polynomials.
+### Authors
 
-##Building Kodiak C++ Library
-1. Install [BOOST](http://www.boost.org/users/download/).
-1. Install [FILIB++](http://www2.math.uni-wuppertal.de/~xsc/software/filib.html). This
-library has to be configured with the following options before making
-and installing it:
-`
-./configure CFLAGS=-fPIC CPPFLAGS=-fPIC CXXFLAGS=-fPIC
-`
-1. Type `make src`.
-1. Examples of the use of the library are found in the directory
-   `examples`. For building the examples, type `make examples`.
+Cesar A. Munoz (cesar.a.munoz@nasa.gov), NASA Langley Research Center
 
-Mantas Markevicius, from University of York, UK, implemented a
-standalone interface for Kodiak in Python.
+Andrew P. Smith (andrew.smith@nianet.org), National Institute of Aerospace
 
-##Building Kodiak's Python Interface
-1. Build Kodiak C++ library.
-1. Install [Cython](http://cython.org/#download).
-1. Type `make python`
-1. Run standalone interface through the command `python python/kodiak.py`.
+Mantas Markevicius (mm1080@york.ac.uk), University of York, UK
 
-##Building Kodiak's Self-Containing Executable
-1. Install Kodiak's Python interface.
-1. Install PyInstalled [PyInstaller](http://www.pyinstaller.org/).
-1. Type `make kodiak`
-1. Run self-containing executable through the binary program
-`bin/kodiak` 
+### Documentation
 
-If any of the libraries was installed in non standard directories, modify the
-files `src/Makefile` and `python/Makefile` accordingly.
-  
-Standalone Interface
--
+Currently, the main documentation is contained in this file.
+Publications concerning the library and associated algorithms are in
+preparation. There are also numerous comments in the source code.
 
-Examples of text files to be used with standalone interface are
-available in the directory `kdks`.
+### Support and Contribution
 
-###Exiting the Interactive Interface
-To quit interactive mode type `quit` or press `ctrl+c`.
+See the instructions in this file and the linked resources.
+For further assistance, or to report problems and bugs, please
+contact the authors. Contributions to the library are welcomed.
 
-###Program arguments
-Program can be called with a file as arguments. In this case, it will evaluate each files and print the output: 	
-`./kodiak <file>`  
-The same commands can be used if running from source:  
-`python kodiak.py <file>`
+Obtaining *Kodiak*
+------------------
 
-Files can be specified with an absolute or a relative path.  
-i.e. to solve a problem contained in a file *bar.kdk* which is in */home/foo/* folder: `./kodiak /home/foo/bar.kdk`
+The repository is located at:
+[https://github.com/nasa/Kodiak/](https://github.com/nasa/Kodiak/)
+
+License
+-------
+
+The license for using the software is contained in the file
+LICENSE.pdf; see also the copyright notice at the end of this file.
+
+Installation and Usage Options
+------------------------------
+
+*Kodiak* can either be installed from the source code, or, if
+available, a pre-built executable may be used instead.
+
+The software can then be run in one of the following ways:
+
+* Use the provided run-time interface, either interactively,
+  or from an input file
+  (either installation option)
+* Encode a problem in a C++ program file, then compile and run it
+  (only for installation from source code)
+
+The following section assumes that you are installing the software
+from the source code; if you already have a pre-built or compiled
+executable, you can skip ahead to the section on using the software.
+
+Installation
+------------
+
+### 1. Prerequisites
+
+It is recommended to run *Kodiak* on a Linux or Mac computer with the
+GNU C++ compiler; so far it has been successfully tested on Ubuntu Linux
+and Mac OS X. Use of Windows is not supported, although it ought to be
+feasible, and the authors would welcome any report of successfully
+running the software on Windows or any other system.
+
+The following software should firstly be installed, if not already
+present (please follow the links for instructions and support):
+
+* *Boost* libraries (required):  
+  [http://www.boost.org/users/download/](http://www.boost.org/users/download/)
+
+* *filib++* interval library (required):  
+  [http://www2.math.uni-wuppertal.de/\~xsc/software/filib.html](http://www2.math.uni-wuppertal.de/~xsc/software/filib.html)  
+  This library should be configured with the following options before making
+  and installing it:  
+  `
+  ./configure CFLAGS=-fPIC CPPFLAGS=-fPIC CXXFLAGS=-fPIC
+  `
+
+* Python language (recommended, necessary for the interface):  
+  [http://www.python.org/](http://www.python.org/)  
+  There is a good chance that Python is already installed.
+
+* *Cython*, a Python to C translator (recommended, necessary for the interface):  
+  [http://cython.org/#download](http://cython.org/#download)
+
+* *PyInstaller* package utility
+  (optional, necessary to build a standalone executable)  
+  [http://www.pyinstaller.org/](http://www.pyinstaller.org/)
+
+* *gnuplot* plotting software (optional, necessary for graphical output)  
+  [http://www.gnuplot.info/](http://www.gnuplot.info/)
+
+### 2. Build Library and Examples
+
+If necessary, unzip the zip file in order to extract the files.
+The following files and directories should be present:
+
+* In the working directory: this readme file (in various formats),
+  the license, and a makefile
+* `src`: source code for the library
+* `python`: code for the Python interface
+* `examples`: example C++ files  (`.cpp`) containing several problems
+* `kdks`: example text files (`.kdk`) for use with the interface
+
+If any of the prerequisite libraries were installed in non-standard
+directories, then the files `src/Makefile` and `python/Makefile`
+should be modified accordingly.
+
+Type `make lib` to compile the library. The `lib` directory and a
+static library file are created.
+
+Type `make examples` to compile the examples. An executable for
+each example is created in the `examples` directory.
+
+### 3. Build Interface (Recommended)
+
+Type `make python` to build the interface.
+
+The program and interface can be run with the command:  
+`python python/kodiak.py`
+
+### 4. Build Standalone Executable (Optional)
+
+Type `make kodiak` to build a self-contained executable.
+The `bin` directory and a binary file are created.
+
+It can be run with the command: `bin/kodiak`
+
+Using the Interface
+-------------------
+
+### Starting the Interface
+
+The program and interface can be run with the command:  
+`python python/kodiak.py`
+
+If using the standalone executable, instead type:  
+`bin/kodiak`
+
+You are now presented with a prompt and may issue commands (see below).
+
+### Exiting the Interface
+
+To quit type `quit` or press `ctrl+c`.
+
+### Program Arguments
+
+If not using the standalone executable, substitute  
+`python kodiak.py <arguments>` for  
+`bin/kodiak <arguments>` in the following:
+
+The program can be called with a file or files as argument(s):  
+`bin/kodiak <file>`  
+It will process each file and print the output.
+
+Files can be specified with an absolute or a relative path, e.g.,
+to solve a problem contained in a file `bar.kdk` which is in the
+`/home/foo/` directory:  
+`bin/kodiak /home/foo/bar.kdk`
 
 Files **must** have a `.kdk` file extension.  
 
-Passing multiple files as arguments:  
-`./kodiak <file> <file>`  
+To pass multiple files as arguments:  
+`bin/kodiak <file> <file> ...`  
 You can add as many as you like.  
 
-Program can be given a flag to specify an output file, if the file already exists results are appended to it:  
-`./kodiak -o <output_file>`  
+An output file can be specified; if the file already exists, results
+are appended to it:  
+`bin/kodiak -o <output_file>`  
 
 To read files and write the output to a different file:    
-`./kodiak -o <output_file> <file> ...`  
+`bin/kodiak -o <output_file> <file> ...`  
 
-Safe mode flag can be set to false the using command line arguments:  
-`./kodiak -u`
+To switch on unsafe input mode (permits floating-point approximations
+to real numbers):  
+`bin/kodiak -u`
 
-To save the syntactically correct input to a file:  
-`./kodiak -s <save_file>`
+To save the (syntactically correct) session input to a file:  
+`bin/kodiak -s <save_file>`
 
-To run in queit mode, with no output to console:  
-`./kodiak -q`  
+To run in quiet mode, with no output to console:  
+`bin/kodiak -q`  
 
-To continue executing after processing input files:  
-`./kodiak <file> .. -c`
+To continue the session after processing input files:  
+`bin/kodiak <file> ... -c`
 
-To start *Kodiak* in debug mode:
-`./kodiak -d`    
+To start *Kodiak* in debug mode:  
+`bin/kodiak -d`    
 
-For more help on the command line arguments type:  
-`./kodiak -h`
+For more help on the command line arguments:  
+`bin/kodiak -h`
 
-All the aforementioned flags can be combined, i.e.:  
-`./kodiak -o foo -d -s bar -u -c foobar.kdk`  
+All the aforementioned flags can be combined, e.g.:  
+`bin/kodiak -o foo -d -s bar -u -c foobar.kdk`
 
-###Interactive mode commands or data file syntax
+### Using Input Files
 
-To read a file, the file name can contain a relative path or an absolute path to file    
-`file <file>`
+Input files can be created with a text editor; as noted, the
+filename extension must be `.kdk`.
+There are numerous examples in the `kdks` directory.
 
-Anything after # on a line is considered a comment and ignored by the program    
+Anything after `#` on a line is a comment and is ignored by the program:  
 
     # this is a comment
     file test.kdk # this is also a comment
 
-
-When writing data files, each expression must be followed by a ; semicolon i.e.  
+Each expression must be followed by a semicolon, e.g.:  
 `var x in [0,1]; var y in [1,5];`
 
-###Supported Problem Types
+To read an input file (either from the prompt or from another input file),
+the filename can contain a relative path or an absolute path to the file:  
+`file <file>`
 
-####Paving problems  
+### Commands in Input Files and Interactive Mode
 
-Paving problems only require variables, which can be defined with *var* keyword, i.e.:  
-`var var_name in [13, 42]`  
+The commands listed below can equivalently be used either interactively,
+from the command prompt, or else (if followed by a semicolon) in an
+input file.
 
-The lower and upper bounds can be any integer in range [-2147483648, 2147483647] on a 64-bit machine.
+### Paving Problems (Systems of Equations and Inequalities)
 
-There are also options to set bounds to precise and approximate representation of floating point number to **Kodiak**:  
-Precise bounds can be set using one the following commands:  
-* *rat(n,m)*, to input rational numbers.  
-* *dec(n,m)*, to input decimal numbers.  
-Where both n and m are integers.
+Variables and their ranges can be declared with the `var` keyword, e.g.:  
+`var <var_name> in [13, 42]`
 
-Number in the hexadecimal floating point format are also accepted. The format follows the rules for C definition of hex floats.
-i.e. `0x1ap-2` for number 6.5.  
+The lower and upper bounds can be any integer in the range
+[-2147483648, 2147483647] on a 64-bit machine.
 
-Approximate representation of numbers can be entered using a *approx(n)* command, but this is discouraged and to do this 
-the safe mode of **Kodiak** has to be set to false.
+The bounds can also be set to either precise or approximate
+representations of floating-point numbers.
+Precise bounds can be set using one the following commands,
+where a and b are integers:  
+`rat(a,b)`, to input rational numbers  
+`dec(a,b)`, to input decimal numbers
 
-Constants, introduced with the *const* keyword, and global definitions introduced with the *def* keyword, are also supported.  
-The difference between constants and definitions is that constants can only contain a single number, while definitions can hold
-entire equations.    
+Numbers in the hexadecimal floating-point format are also accepted.
+The format follows the rules for the C definition of hex floats,
+e.g., `0x1ap-2` specifies the number 6.5.  
 
-However, pavings without any constraints are not very interesting. Constraints can be added with the *cnstr* keyword, i.e.:  
+Approximate representations of numbers in usual floating-point
+format can be entered using the `approx(a)` command,
+but this is discouraged and to do this 
+the safe mode of *Kodiak* has to be set to false.
+
+Constants, declared with the `const` keyword, and global definitions,
+with the `def` keyword, are also supported.
+The difference between them is that constants can only contain a
+single number, whereas definitions can hold entire equations.
+
+Pavings without any constraints are not very interesting.
+Constraints (either equality or inequality) can be added to the
+problem with the `cnstr` command, e.g.:  
 `cnstr x^2 + y < x`
 
-More mathematical operations which can be used when defining equations can be found in the following sections of this document.  
+A list of mathematical operations which can be used in formulae
+can be found later in this document.
 
-To have more control over the search space you can specify the paving mode. Possible options are *first*, *std*, *full*.  
-The search mode can be set using the following command:  
-`set paving mode = first`
+There are three possible options for the paving mode:
 
-More options to control the search space are described in the settings section of this guide.  
+* `first`: this produces the first sub-box found which is feasible
+* `std`: this paves the entirety of the feasible set
+* `full`: this paves both the feasible and infeasible sets
 
-**Kodiak** can be told to solve the paving problem, when all the parameters are described, using the *pave* keyword.
+The paving mode can be set as follows:  
+`set paving mode = <mode>`
 
-####Bifurcation problems  
+For further options to control the search space, see **Settings**,
+later in this guide.  
 
-Bifurcation problems require variables, just like paving problems, which can be defined with *var* keyword, i.e.:   
-`var var_name in [13, 42]`  
+Finally, to solve the paving problem, after it and the settings have
+been declared, use the `pave` command.
 
-But bifurcation problems also take parameters, which can be defined using *param* keyword, i.e.:  
-`param param_name in [-42, 42]`  
-Describing parameters supports exactly the same commands as variable descriptions.  
+### Bifurcation Problems (Bifurcation Analysis of ODEs)
 
-Bifurcation problems also require differential expressions, which can be supplied to **Kodiak** using a *dfeq* keyword, i.e:  
-`dfeq x+sqrt(y)`  
+Variables and their ranges can be declared as above, e.g.:  
+`var <var_name> in [13, 42]`
 
-Constraints can also be supplied for bifurcation problems using the *cnstr* keyword, i.e. :  
+Bifurcation problems also take parameters, which can be declared
+similarly using the `param` keyword, e.g.:  
+`param <param_name> in [-42, 42]`
+
+One or more ordinary differential equations are required.
+An ODE in the form \<expr\>=0 can be declared with `dfeq <expr>`, e.g.:  
+`dfeq x+sqrt(y)`
+
+Constraints can be declared as above, e.g.:  
 `cnstr x^2 + y < x`  
 
-**Kodiak** can be told to solve the paving problem, when all the parameters are described using the *bifurcation* keyword.
+To pave the equilibrium manifold, use the command `equilibrium`;
+to pave the bifurcation manifold (limit point and Hopf bifurcations),
+which is a subset thereof, use the command `bifurcation`.
 
-To solve a special type of bifurcation problems, equilibrium problems, the solve command is *equilibrium*.
+### Minimization and Maximization Problems (Global Optimization)
 
-####Minimisation and Maximisation problems  
+For optimization problems, variables, constants, definitions, and
+constraints can be declared, as above. In addition, an objective
+function is needed; it is declared with the `objfn` keyword, e.g.,
+`objfn sin(x)+2*y`
 
-These types of problems take exactly the same arguments as paving problems.   
-You can assign variables, constants, definitions and constraints to optimization problems.  
+The solve commands `min`, `max`, and `minmax` are used to find
+an enclosure for the minimum, the maximum, and both the minimum
+and maximum, respectively.
 
-You can issue solve commands *min* to solve a minimization problem, *max* to solve maximization problem and *minmax* to solve minimization and maximization.
+### Plotting  
 
-###Plotting  
-Both paving and bifurcation problems support plotting out the output using the **gnuplot** tool. 
- 
-To plot out the last solved problem type in `plot` with the variables names following it, i.e.   
-`plot x y z`, would produce a 3D plot of the paving with the projection of these variables. 2D plots are also supported.  
+Both paving and bifurcation problems support graphical output using
+the *gnuplot* software. The projection of a paving into the space
+of selected variables is depicted. To plot the last solved problem
+in 2D or 3D, issue the `plot` command with two or three variables, e.g.:  
+`plot x y z`
 
-To avoid having to redo calculations each time you start **Kodiak**, you can save the last produced paving with *save paving* command.  
-`save paving foo` will save the last produced paving to the file **foo.pav** in the current directory.  
+To avoid having to redo calculations each time you start *Kodiak*,
+you can save the most recently produced paving with the `save paving`
+command. For example, `save paving foo` will save the paving to the file
+`foo.pav` in the current directory.  
 
-This paving can be loaded into **Kodiak** using *load paving* command, which is used like this:  
-`load paving foo`, would load the paving in file **foo.pav** into **Kodiak**.  
+A paving can be loaded into *Kodiak* using the `load paving` command,
+e.g., `load paving foo` loads the paving in the file `foo.pav`.
 
-###Settings
-Set the name of the problem
-```
-set name = name
-```
-Print out extra information when solving problems.  
-```
-set debug = true|false
-```
-When safe input is true approx values are not allowed, the default value is *true*.  
-```
-set safe input = true | false
-```
-Set the solver to use Bernstein Polynomials where possible.  
-```
-set bp = true|false
-```
-Set precision for all the variables.
-```
-set precision = natural_number  
-```
-Set resolution for all the variables . 
-```
-set resolution = real_number  
-```
-Set resolution for specific variable.  
-```
-set resolution name = real_number  
-```
-Set variable selection mode for Branch and Bound algorithm.  
-```
-set selectvar = nat  
-```
-Set maximum depth for the Branch and Bound algorithm.  
-```
-set depth = nat
-```
+### Settings
 
-Print the output of the solver to file
-```
-set output = FILE
-```
+To set the name of the problem: `set name = <name>`
 
-Cleans the state of the program, so that new problems can be entered
-```
-reset
-```
+To print out extra diagnostic information when solving problems:
+`set debug = true|false` (default: `false`)
 
-If output was set using -o flag or set output command, this flag resets output back to the console
-```
-reset output
-```
+To switch off safe input: `set safe input = true|false` (default: `true`). 
+When safe input is on, approximate (i.e. floating-point) input values are
+not permitted.
 
-###Problem definitions
-Numerical declarations
-```
-num_decl = natural number, approx(real), rat(nat, nat), dec(nat,nat), hex_constant
-```
+To set the solver to use Bernstein enclosure in place of interval
+arithmetic where possible: `set bp = true|false` (default: `false`)
 
-Declaring variables
-```
-var name in [num_decl, num_decl]
-```
-Declaring parameters
-```
-param name in [num_decl, num_decl]
-```
-Declaring constants
-```
-const name = num_decl
-```
-Mathematical expression
-```
-math_exp = sin(approx(-1.1))*sqrt(rat(3,2))^3-x
-```
+To set a resolution for all variables: `set resolution = <real_number>`
+As a termination criterion, the resolution is a non-negative number
+that specifies the smallest range (box width) where a bisection is
+considered for that variable.
 
-Setting objective function for MinMax problems
-```
-objfn math_exp
-```
-Adding differential equations for bifurcation problems
-```
-dfeq math_exp
-```
-Adding constraints for all types of problems
-```
-cnstr math_exp bool_op math_exp
-```
-Let expressions used to define problems
-```
-objfn let name = math_exp in math_exp
-cnstr let name = math_exp in math_exp
-dfeq let name = math_exp in math_exp
-```
-Nested let expressions
-```
-objfn|dfeq|cnstr = let name = math_exp, name = math_exp in math_exp
-```
+To set a resolution for a specific variable:
+`set resolution <var_name> = <real_number>`
 
-####Supported boolean operators
-Less than `<`  
-More than `>`  
-Less than or equal `<=`  
-More than or equal `>=`  
-Equal `=`  
+To set a precision for all variables: `set precision = <integer>`.
+If the precision (typically a small negative integer) is set to n,
+then the tolerance for the "almost certainly true" category of boxes
+is set to 10^n. It is not required to use this setting and this
+category of boxes, although doing so can speed up some problems.
 
+To set the variable selection mode for branch and bound subdivision:
+`set selectvar = 0|1|2` (default: 1). This option is only used for
+minimization/maximization problems. If 0, round-robin is used to
+select a subdivision variable; if 1, a heuristic is applied to the
+objective function; if 2, a heuristic is applied to the constraint
+system.
 
-####Supported mathematical operations
-	
+To set the maximum depth (in the search tree) for the branch and
+bound algorithm: `set depth = <natural_number>`
 
-Standard mathematical operator are supported `+ - * / ^`  
+To print the output of the solver to a file:
+`set output = <file>`
 
-Square root `sqrt(math_exp)`  
-Square or num_decl^2 `sq(math_exp)`  
-Sine `sin(math_exp)`  
-Cosine `cos(math_exp)`  
-Tangent `tan(math_exp)`
-Arc Sine `asin(math_exp)`  
-Arc Cosine `acos(math_exp)`  
-Arc Tangent `atan(math_exp)`  
-Absolute value `abs(math_exp)`  
-Natural logarithm `ln(math_exp)`  
-Exponential `exp(math_exp)`  
+To clean the program state, so that new problems can be entered: `reset`
 
-###Solve commands
-Finding a paving for problem `pave`  
-Finding a bifurcation for problem `bifurcation`
-Finding an equilibrium for probelm `equilibrium`  
-Find minimum and maximum for the set differential equation `minmax`  
-Find minimum for the set differential equation `min`  
-Find maximum for the set differential equation `max`  
+If output was set using the `-o` flag or the `set output` command,
+to reset output back to the console: `reset output`
 
-####Copyright notices:
-Kodiak (See LICENSE.pdf)
+### Declaration and Expression Types
 
-PLY (Python Lex-Yacc)                   Version 3.4
+Numerical values:
+`<num_val> = <integer> | approx(<real>) |`  
+`rat(<integer>, <integer>) | dec(<integer>, <natural_number>) | <hex_constant>`
+
+Variable declarations: `var <name> in [<num_val>, <num_val>]`
+
+Parameter declarations: `param <name> in [<num_val>, <num_val>]`
+
+Constant declarations: `const <name> = <num_val>`
+
+Mathematical expressions: `<math_expr> = <num_val> | <var> |`  
+`<param> |
+<const> | <unary_operator>(<math_expr>) |`  
+`<math_expr> <binary_operator> <math_expr> |`  
+`let <name> = <math_expr> in <math_expr> |`  
+`let <name> = <math_expr>, <name> = <math_expr>, ... in`  
+`<math_expr>`
+
+Example: `sin(approx(-1.1)*y)*sqrt(rat(3,2))^3-x`
+
+Objective function (optimization problems): `objfn <math_expr>`
+
+Differential equation of the form \<math_expr\> = 0 (bifurcation problems):  
+`dfeq <math_expr>`
+
+Constraint: `cnstr <math_expr> <relational_operator> <math_expr>`
+
+### Supported Relational (Boolean) Operations
+
+`<`: less than  
+`>`: greater than  
+`<=`: less than or equal to  
+`>=`: greater than or equal to  
+`=`: equal to
+
+### Supported Mathematical Operations
+
+`+`, `-`, `*`, `/`: addition, subtraction, multiplication, division  
+`^`: exponentiation (to an integer power)  
+`sq`, `sqrt`: square, square root  
+`sin`, `cos`, `tan`: trigonometric functions  
+`asin`, `acos`, `atan`: inverse trigonometric functions  
+`abs`: absolute value  
+`ln`, `exp`: natural logarithm, exponential
+
+### Solve Commands
+
+`pave`: compute a paving for the feasible/infeasible set  
+`equilibrium`: compute a paving for the equilibrium set  
+`bifurcation`: compute a paving for the bifurcation set  
+`minmax`: compute an enclosure for the minimum and maximum  
+`min`: compute an enclosure for the minimum  
+`max`: compute an enclosure for the maximum
+
+Using the Library
+-----------------
+
+The *Kodiak* library can be used in your own C++ programs.
+A good way to start is to take one of the existing `.cpp`
+files in the `examples` directory and adapt to your purposes.
+You can either invoke the compiler directly with a link to the
+*filib++* and *Kodiak* libraries, or else add a new entry to
+the makefile there.
+
+The commands and keywords listed above have member function
+equivalents (see the source code), although some of the names
+vary slightly.
+For example, there is a difference between, e.g.,
+`sin` and `Sin`; the former is the operator for floating-point
+numbers and intervals, the latter is the operator for real
+expressions.
+In some cases, care must be taken with the order in which commands
+are issued. All variables should be declared before any variable
+resolutions are set.
+
+## Copyright Notices
+
+See the file LICENSE.pdf for the license and copyright of the
+*Kodiak* library.
+
+### PLY (Python Lex-Yacc) Version 3.4
 
 Copyright (C) 2001-2011,
 David M. Beazley (Dabeaz LLC)
@@ -346,3 +485,6 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+## Version
+
+*Kodiak* readme file, ver. Nov 2014
