@@ -1,24 +1,17 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta http-equiv="Content-Style-Type" content="text/css" />
-  <meta name="generator" content="pandoc" />
-  <title></title>
-</head>
-<body>
 <h1 id="kodiak-a-c-library-for-rigorous-branch-and-bound-computation"><em>Kodiak</em>, a C++ Library for Rigorous Branch and Bound Computation</h1>
 <p><em>Kodiak</em> is a C++ library that implements a generic branch and bound algorithm for rigorous numerical approximations. Particular instances of the branch and bound algorithm allow the user to refine and isolate solutions to systems of nonlinear equations and inequalities, global optimization problems, and bifurcation sets for systems of ODEs. Kodiak utilizes interval arithmetic (via the <em>filib++</em> library) and Bernstein enclosure (for polynomials and rational functions) as self-validating enclosure methods. Symbolic operations support procedures such as automatic partial differentiation.</p>
 <h3 id="authors">Authors</h3>
 <p>Cesar A. Munoz (cesar.a.munoz@nasa.gov), NASA Langley Research Center</p>
 <p>Andrew P. Smith (andrew.smith@nianet.org), National Institute of Aerospace</p>
+<p>Anthony Narkawicz, NASA Langley Research Center</p>
+<h3 id="contributors">Contributors</h3>
 <p>Mantas Markevicius (mm1080@york.ac.uk), University of York, UK</p>
 <h3 id="documentation">Documentation</h3>
 <p>Currently, the main documentation is contained in this file. Publications concerning the library and associated algorithms are in preparation. There are also numerous comments in the source code.</p>
 <h3 id="support-and-contribution">Support and Contribution</h3>
 <p>See the instructions in this file and the linked resources. For further assistance, or to report problems and bugs, please contact the authors. Contributions to the library are welcomed.</p>
 <h2 id="obtaining-kodiak">Obtaining <em>Kodiak</em></h2>
-<p>The repository is located at: <a href="https://github.com/nasa/Kodiak/">https://github.com/nasa/Kodiak/</a></p>
+<p>The repository is located at: <a href="https://github.com/nasa/Kodiak/" class="uri">https://github.com/nasa/Kodiak/</a></p>
 <h2 id="license">License</h2>
 <p>The license for using the software is contained in the file LICENSE.pdf; see also the copyright notice at the end of this file.</p>
 <h2 id="installation-and-usage-options">Installation and Usage Options</h2>
@@ -34,12 +27,12 @@
 <p>It is recommended to run <em>Kodiak</em> on a Linux or Mac computer with the GNU C++ compiler; so far it has been successfully tested on Ubuntu Linux and Mac OS X. Use of Windows is not supported, although it ought to be feasible, and the authors would welcome any report of successfully running the software on Windows or any other system.</p>
 <p>The following software should firstly be installed, if not already present (please follow the links for instructions and support):</p>
 <ul>
-<li><p><em>Boost</em> libraries (required):<br /> <a href="http://www.boost.org/users/download/">http://www.boost.org/users/download/</a></p></li>
-<li><p><em>filib++</em> interval library (required):<br /> <a href="http://www2.math.uni-wuppertal.de/~xsc/software/filib.html">http://www2.math.uni-wuppertal.de/~xsc/software/filib.html</a><br /> This library should be configured with the following options before making and installing it:<br /> <code>./configure CFLAGS=-fPIC CPPFLAGS=-fPIC CXXFLAGS=-fPIC</code></p></li>
-<li><p>Python language (recommended, necessary for the interface):<br /> <a href="http://www.python.org/">http://www.python.org/</a><br /> There is a good chance that Python is already installed.</p></li>
-<li><p><em>Cython</em>, a Python to C translator (recommended, necessary for the interface):<br /> <a href="http://cython.org/#download">http://cython.org/#download</a></p></li>
-<li><p><em>PyInstaller</em> package utility (optional, necessary to build a standalone executable)<br /> <a href="http://www.pyinstaller.org/">http://www.pyinstaller.org/</a></p></li>
-<li><p><em>gnuplot</em> plotting software (optional, necessary for graphical output)<br /> <a href="http://www.gnuplot.info/">http://www.gnuplot.info/</a></p></li>
+<li><p><em>Boost</em> libraries (required):<br /> <a href="http://www.boost.org/users/download/" class="uri">http://www.boost.org/users/download/</a></p></li>
+<li><p><em>filib++</em> interval library (required):<br /> <a href="http://www2.math.uni-wuppertal.de/~xsc/software/filib.html" class="uri">http://www2.math.uni-wuppertal.de/~xsc/software/filib.html</a><br /> This library should be configured with the following options before making and installing it:<br /> <code>./configure CFLAGS=-fPIC CPPFLAGS=-fPIC CXXFLAGS=-fPIC</code></p></li>
+<li><p>Python language (recommended, necessary for the interface):<br /> <a href="http://www.python.org/" class="uri">http://www.python.org/</a><br /> There is a good chance that Python is already installed.</p></li>
+<li><p><em>Cython</em>, a Python to C translator (recommended, necessary for the interface):<br /> <a href="http://cython.org/#download" class="uri">http://cython.org/#download</a></p></li>
+<li><p><em>PyInstaller</em> package utility (optional, necessary to build a standalone executable)<br /> <a href="http://www.pyinstaller.org/" class="uri">http://www.pyinstaller.org/</a></p></li>
+<li><p><em>gnuplot</em> plotting software (optional, necessary for graphical output)<br /> <a href="http://www.gnuplot.info/" class="uri">http://www.gnuplot.info/</a></p></li>
 </ul>
 <h3 id="build-library-and-examples">2. Build Library and Examples</h3>
 <p>If necessary, unzip the zip file in order to extract the files. The following files and directories should be present:</p>
@@ -166,5 +159,3 @@ file test.kdk # this is also a comment</code></pre>
 <p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
 <h2 id="version">Version</h2>
 <p><em>Kodiak</em> readme file, ver. Nov 2014</p>
-</body>
-</html>
