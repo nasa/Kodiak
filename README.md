@@ -80,7 +80,15 @@ The following software should firstly be installed, if not already
 present (please follow the links for instructions and support):
 
 * *Boost* libraries (required):  
-  [http://www.boost.org/users/download/](http://www.boost.org/users/download/)
+  [http://www.boost.org/users/download/](http://www.boost.org/users/download/)  
+  In addition to the headers, you need at least the library
+  `serialization`. This library can be installed using 
+  `
+  ./bootstrap.sh --with-libraries=serialization
+  `
+  and then `./b2 install`. Finally, you need to define the environment
+  variable `BOOST_ROOT` if Boost was installed in a nonstandard
+  directory.
 
 * *filib++* interval library (required):  
   [http://www2.math.uni-wuppertal.de/\~xsc/software/filib.html](http://www2.math.uni-wuppertal.de/~xsc/software/filib.html)  
