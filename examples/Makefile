@@ -18,7 +18,7 @@ KODIAK_LIB = $(KODIAK_DIR)/lib/$(myarch)
 CC = g++ 
 CFLAGS = -Wall -frounding-math -pedantic -Wextra -Wno-parentheses -g -O0 -DHAVE_BOOST -I/usr/local/include -I$(BOOST_ROOT)/include -I$(KODIAK_DIR)/src
 
-LDFLAGS = -L/usr/local/lib -L$(BOOST_ROOT)/lib -lprim -lboost_serialization-mt 
+LDFLAGS = -L/usr/local/lib -L$(BOOST_ROOT)/lib -lprim -lboost_serialization 
 
 all: minmax paving bifurcation
 

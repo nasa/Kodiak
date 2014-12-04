@@ -87,8 +87,8 @@ present (please follow the links for instructions and support):
   ./bootstrap.sh --with-libraries=serialization
   `
   and then `./b2 install`. Finally, you need to define the environment
-  variable `BOOST_ROOT` if Boost was installed in a nonstandard
-  directory.
+  variable `BOOST_ROOT` to point to the directory where Boost's
+  `include` and `lib` directories were installed, e.g., `/usr/local`.
 
 * *filib++* interval library (required):  
   [http://www2.math.uni-wuppertal.de/\~xsc/software/filib.html](http://www2.math.uni-wuppertal.de/~xsc/software/filib.html)  
