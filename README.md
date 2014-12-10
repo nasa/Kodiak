@@ -86,7 +86,7 @@ present (please follow the links for instructions and support):
   `
   ./bootstrap.sh --with-libraries=serialization
   `
-  and then `./b2 install`. Finally, you need to define the environment
+  and then `sudo ./b2 install`. Finally, you need to define the environment
   variable `BOOST_ROOT` to point to the directory where Boost's
   `include` and `lib` directories were installed, e.g., `/usr/local`.
 
