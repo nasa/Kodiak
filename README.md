@@ -1,3 +1,5 @@
+![](logo/Kodiak.jpeg "")
+
 *Kodiak*, a C++ Library for Rigorous Branch and Bound Computation
 =================================================================
 
@@ -500,3 +502,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ## Version
 
 *Kodiak* readme file, ver. Nov 2014
+
+## Logo
+The Kodiak logo was designed by 
+[Mahyar Malekpour](http://shemesh.larc.nasa.gov/people/mrm/publications.htm#ETC) (NASA).
+
