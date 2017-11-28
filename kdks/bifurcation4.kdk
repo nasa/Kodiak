@@ -1,9 +1,0 @@
-set name = CH_ia;
-set bp = false;
-var x in [0,1];
-var y in  [0,1];
-param a in [-1,1];
-dfeq x*(1+rat(1,4)*(a^2) - rat(1,4)*((x-1-a)^2) - y);
-dfeq y*(x-1);
-set precision = -3;
-bifurcation;

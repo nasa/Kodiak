@@ -1,6 +1,0 @@
-set bp = false;
-set resolution = 0;
-var x in [0,10];
-cnstr (x-1)^3*((x-2)^2)*(x-3) = 0;
-set precision = -3;
-pave;

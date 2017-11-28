@@ -1,5 +1,0 @@
-set bp = false;
-set precision = -2;
-var x in [0,1];
-objfn let y = 1-x in x*y;
-max;

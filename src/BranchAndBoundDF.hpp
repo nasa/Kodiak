@@ -3,155 +3,252 @@
 
 #include "types.hpp"
 
+#include <boost/graph/graph_traits.hpp>
+#include <boost/graph/adjacency_list.hpp>
+
 namespace kodiak {
 
-  template <typename Expression, typename Answer> class BranchAndBoundDF {
-  public:
-    nat splits() const { return splits_; }
-    nat depth() const { return depth_; }
-    nat maxdepth() const { return maxdepth_; }
-    nat debug() const { return debug_; }
-    clock_t time() const { return time_; }
-    void print_info(std::ostream &os=std::cout) const {
-      os << "Splits: " << splits() << ", Depth: " << depth() 
-	 << ", Time: " << (time()/1000.0)  << "s";
-    }
-    void set_maxdepth(nat maxdepth) { maxdepth_ = maxdepth; }
-    void set_debug(const nat debug = 1) { debug_ = debug; }
-    
-    const Expression &theExpr() const { return expr_; }
-    const Box &theBox() const { return box_; }
+    template <typename Expression, typename Answer, typename Environment> class BranchAndBoundDF {
+    public:
 
-  protected:
-    BranchAndBoundDF() : maxdepth_(0), depth_(0), splits_(0), time_(0), debug_(0) {}
-    
-    // Basic enclosure function
-    virtual void evaluate(Answer &, Expression &, Box &) = 0;
+#ifdef DEBUG
+        struct Vertex { Answer ans; Environment env; };
+        using Graph = typename boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS, Vertex>;
+        using Vertex_t = typename boost::graph_traits<Graph>::vertex_descriptor;
+#endif
 
-    // First answer was computed by first recursion.
-    virtual void combine(Answer &, const DirVar &, const Answer &) = 0;
-    // Second answer was computed by second recursion.
-    virtual void combine(Answer &, const DirVar &, const Answer &, const Answer &) = 0;
-    virtual void branch(Expression &, Box &) {}
-    virtual void unbranch(Expression &, Box &) {}
-    virtual void accumulate(const Answer &) {} 
-    virtual bool local_exit(const Answer &) { return false; }
-    virtual bool global_exit(const Answer &) { return false; }
-    virtual bool prune(const Answer &) { return false; }
-    virtual bool sound(const Answer &, const Expression &, const Box &) { 
-      return true; 
-    }
-    virtual void select(DirVar &dirvar, Expression &e, Box &box) {
-      round_robin(dirvar,e,box);
-    }
-    void round_robin(DirVar &dirvar, Expression &, Box &box) {
-      dirvar.init(box.size());
-      nat next_var;
-      if (dirvars_.empty())
-	next_var = 0;
-      else 
-	next_var = dirvars_.back().var+1;
-      for (nat round = 0; round < box.size(); round++) {
-	if (next_var >= box.size())
-	  next_var = 0;
-	if (box[next_var].isPoint())
-	  ++next_var;
-	else {
-	  dirvar.var = next_var;
-	  dirvar.dir = (dirvars_.size() % 2) == 0;
-	  break;
-	}
-      }
-    }
+        nat splits() const {
+            return splitCounter_;
+        }
 
-    virtual void split(const DirVar &dirvar, Box &box, const Interval &i, const real mid) {
-      if (dirvar.dir) 
-	box[dirvar.var] = Interval(i.inf(),mid);
-      else 
-	box[dirvar.var] = Interval(mid,i.sup());
-    }
+        nat depth() const {
+            return currentDepth_;
+        }
 
-    // Branch and bound algorithm
-    // e: expression
-    // box: box of variables (variables are indexed by nat)
-    void bandb(Answer &answer, const Expression &expr, const Box &box) {
-      expr_ = expr;
-      box_ = box;
-      dirvars_.clear();
-      splits_ = 0;
-      depth_ = 0;
-      global_exit_ = false;
-      
-      clock_ = clock();
-      Expression nexpr = expr;
-      Box nbox = box;
-      bandb_(answer,nexpr,nbox);
-      time_= 1000*(clock()-clock_)/CLOCKS_PER_SEC;
-      assert(debug_ == 0 || sound(answer,expr_,box_));
-    }
+        nat maxdepth() const {
+            return maximumDepth_;
+        }
 
-    const DirVars& dirvars() const { return dirvars_; }
-    DirVars& dirvars() { return dirvars_; }
+        nat debug() const {
+            return debug_;
+        }
+
+        clock_t time() const {
+            return timeInMls_;
+        }
+
+        void print_info(std::ostream &os = std::cout) const {
+            os << "Splits: " << splits() << ", Depth: " << depth()
+                    << ", Time: " << (time() / 1000.0) << "s";
+        }
+
+        void set_maxdepth(nat maxdepth) {
+            maximumDepth_ = maxdepth;
+        }
+
+        void set_debug(const nat debug = 1) {
+            debug_ = debug;
+        }
+
+        const Expression &theExpr() const {
+            return initialExpression_;
+        }
+
+        const Environment &initialBox() const {
+            return initialBox_;
+        }
+
+    protected:
+
+        BranchAndBoundDF() : maximumDepth_(0), currentDepth_(0), splitCounter_(0), timeInMls_(0), debug_(0) {
+#ifdef DEBUG
+            this->root = boost::add_vertex(this->graph);
+            this->current = this->root;
+#endif
+        }
+
+        // Basic enclosure function
+        virtual void evaluate(Answer &, Expression &, Environment &) = 0;
+
+        // First answer was computed by first recursion.
+        virtual void combine(Answer &, const DirVar &, const Answer &) = 0;
+        // Second answer was computed by second recursion.
+        virtual void combine(Answer &, const DirVar &, const Answer &, const Answer &) = 0;
+
+        virtual void branch(Expression &, Environment &) {
+        }
+
+        virtual void unbranch(Expression &, Environment &) {
+        }
+
+        virtual void accumulate(const Answer &) {
+        }
+
+        virtual bool local_exit(const Answer &) {
+            return false;
+        }
+
+        virtual bool global_exit(const Answer &) {
+            return false;
+        }
+
+        virtual bool prune(const Answer &) {
+            return false;
+        }
+
+        virtual bool isSound(const Answer &, const Expression &, const Environment &) {
+            return true;
+        }
+
+        virtual void select(DirVar &dirvar, Expression &e, Environment &box) {
+            round_robin(dirvar, e, box);
+        }
+
+        void round_robin(DirVar &dirvar, Expression &, Environment &box) {
+            dirvar.init(box.size());
+            nat next_var;
+            if (selectionsStack_.empty())
+                next_var = 0;
+            else
+                next_var = selectionsStack_.back().var + 1;
+            for (nat round = 0; round < box.size(); round++) {
+                if (next_var >= box.size())
+                    next_var = 0;
+                if (box[next_var].isPoint())
+                    ++next_var;
+                else {
+                    dirvar.var = next_var;
+                    dirvar.dir = (selectionsStack_.size() % 2) == 0;
+                    break;
+                }
+            }
+        }
+
+        virtual void split(const DirVar &dirvar, Environment &box, const Interval &i, const real mid) {
+            if (dirvar.dir)
+                box[dirvar.var] = Interval(i.inf(), mid);
+            else
+                box[dirvar.var] = Interval(mid, i.sup());
+        }
+
+        // Branch and bound algorithm
+        // e: expression
+        // box: box of variables (variables are indexed by nat)
+
+        void branchAndBound(Answer &answer, const Expression &expr, const Environment &box) {
+            initialExpression_ = expr;
+            initialBox_ = box;
+            selectionsStack_.clear();
+            splitCounter_ = 0;
+            currentDepth_ = 0;
+            globalExit_ = false;
+
+            clock_ = clock();
+            Expression nexpr = expr;
+            Environment nbox = box;
+            internalBranchAndBound(answer, nexpr, nbox);
+            timeInMls_ = 1000 * (clock() - clock_) / CLOCKS_PER_SEC;
+            assert(debug_ == 0 || isSound(answer, initialExpression_, initialBox_));
+        }
+
+        const DirVars& dirvars() const {
+            return selectionsStack_;
+        }
+
+        DirVars& dirvars() {
+            return selectionsStack_;
+        }
 
     private:
 
-    void bandb_(Answer &answer, const Expression &expr, Box &box) {	
-      nat depth = dirvars_.size();
-      if (depth > depth_) 
-	depth_ = depth;
-      Expression e = expr;
-      evaluate(answer,e,box);
-      accumulate(answer);
-      ++splits_;
-      global_exit_ = global_exit(answer);
-      if (box.empty() || (maxdepth_ > 0 && depth+1 >= maxdepth_) ||
-	  global_exit_ || local_exit(answer) || prune(answer))
-	return;
-      DirVar dirvar;
-      select(dirvar,e,box);
-      if (dirvar.var >= box.size())
-	return;
-      Interval i = box[dirvar.var];
-      real mid = i.mid();
-      split(dirvar,box,i,mid);
-      dirvars_.push_back(dirvar);
-      Answer ans1;
-      branch(e,box);
-      bandb_(ans1,e,box);
-      unbranch(e,box);
-      if (global_exit_) dirvar.onlyone = true;
-      if (dirvar.onlyone) {
-	dirvars_.pop_back();
-	box[dirvar.var] = i;
-	combine(answer,dirvar,ans1);
-	return;
-      }
-      dirvar.next();
-      dirvars_.pop_back();
-      split(dirvar,box,i,mid);
-      dirvars_.push_back(dirvar);
-      Answer ans2;
-      branch(e,box);
-      bandb_(ans2,e,box);
-      unbranch(e,box);
-      dirvars_.pop_back();
-      box[dirvar.var] = i;
-      combine(answer,dirvar,ans1,ans2);
-    }
-    
-    // Maxdepth 0 means loop until one leaf satisfies global exit or until all 
-    // the leaves satisfy either prune or local exit 
-    nat  maxdepth_;    // Maximum depth
-    nat  depth_;       // Current depth
-    nat  splits_;      // Current splits
-    DirVars dirvars_;  // Stack of direction and variable selection
-    clock_t clock_;    // Variable for timing
-    clock_t time_;     // Time in milliseconds
-    Expression expr_;  // Original expression
-    Box box_;          // Original box
-    nat debug_;        // If debug >= 0, assert sound predicate
-    bool global_exit_; // Global exit
-  };
+        void internalBranchAndBound(Answer &answer, const Expression &expr, Environment &box) {
+
+#ifdef DEBUG
+            auto previousNode = this->current;
+            auto thisNode = boost::add_vertex(this->graph);
+            this->current = thisNode;
+            boost::add_edge(previousNode, this->current, this->graph);
+            this->graph[this->current].env = box;
+#endif
+
+            nat depth = selectionsStack_.size();
+            if (depth > currentDepth_)
+                currentDepth_ = depth;
+            Expression e = expr;
+            evaluate(answer, e, box);
+            accumulate(answer);
+
+#ifdef DEBUG
+            this->graph[thisNode].ans = answer;
+#endif
+
+            ++splitCounter_;
+            globalExit_ = global_exit(answer);
+            if (box.empty() || (maximumDepth_ > 0 && depth + 1 >= maximumDepth_) ||
+                    globalExit_ || local_exit(answer) || prune(answer))
+                return;
+            DirVar dirvar;
+            select(dirvar, e, box);
+            if (dirvar.var >= box.size())
+                return;
+            Interval i = box[dirvar.var];
+            real mid = i.mid();
+            split(dirvar, box, i, mid);
+            selectionsStack_.push_back(dirvar);
+            Answer ans1;
+            branch(e, box);
+            internalBranchAndBound(ans1, e, box);
+            unbranch(e, box);
+            if (globalExit_) dirvar.onlyone = true;
+            if (dirvar.onlyone) {
+                selectionsStack_.pop_back();
+                box[dirvar.var] = i;
+                combine(answer, dirvar, ans1);
+                return;
+            }
+            dirvar.next();
+            selectionsStack_.pop_back();
+            split(dirvar, box, i, mid);
+            selectionsStack_.push_back(dirvar);
+            Answer ans2;
+            branch(e, box);
+#ifdef DEBUG
+            this->current = thisNode;
+#endif
+            internalBranchAndBound(ans2, e, box);
+            unbranch(e, box);
+            selectionsStack_.pop_back();
+            box[dirvar.var] = i;
+            combine(answer, dirvar, ans1, ans2);
+
+#ifdef DEBUG
+            this->current = previousNode;
+#endif
+        }
+
+        /* maximumDepth_
+         * Maxdepth 0 means loop until one leaf satisfies global exit or until
+         * all the leaves satisfy either prune or local exit
+         */
+        nat        maximumDepth_;
+
+        nat        currentDepth_;
+        nat        splitCounter_;
+        DirVars    selectionsStack_;
+        clock_t    clock_;
+        clock_t    timeInMls_;
+        Expression initialExpression_;
+        Environment        initialBox_;
+        nat        debug_; // If debug >= 0, assert sound predicate
+        bool       globalExit_;
+
+#ifdef DEBUG
+    public:
+        Vertex_t    current;
+        Vertex_t    root;
+        Graph       graph;
+#endif
+    };
 }
 
 #endif

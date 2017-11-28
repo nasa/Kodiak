@@ -1,5 +1,0 @@
-define x = 4;
-var y in [0,1];
-objfn x+y;
-minmax;
-

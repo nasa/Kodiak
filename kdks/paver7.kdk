@@ -1,6 +1,0 @@
-set bp = false;
-set resolution = 0;	
-set resolution x = 0;
-var x in [0,10];
-cnstr let y = x in y^2 - 5*y + 6 = 0;
-pave;
