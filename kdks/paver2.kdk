@@ -1,6 +1,0 @@
-set bp = false;
-set resolution = 0;
-var x in [approx(-1.4),approx(0.9)];
-cnstr sin(1/(x-1))*ln(rat(3,2)-abs(x)) = 0;
-set precision = -2;
-pave;

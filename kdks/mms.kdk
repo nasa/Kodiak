@@ -1,7 +1,0 @@
-set bp = false;
-set precision = -2;
-const z = 1;
-var x in [-1,1];
-objfn x*(z-x);
-cnstr x > 0;
-minmax;
