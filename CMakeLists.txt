@@ -125,4 +125,4 @@ set_target_properties(KodiakStatic PROPERTIES OUTPUT_NAME kodiak)
 ############################################################
 
 add_subdirectory(examples)
-add_subdirectory(tests)
+
