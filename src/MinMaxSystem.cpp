@@ -152,15 +152,6 @@ void MinMaxSystem::evaluate(MinMax &answer, Certainties &certs, Environment &box
                                 (le && min_or_max_.back() < 0))
                             dirvar_.dir = false;
                         // dir represents the lower (false) or upper (right) bound. 
-                        if (!d_it.contains(0)) {
-                            Where w = where(dirvars(), v);
-                            if (w == INTERIOR ||
-                                    min_or_max_.back() != 0 && w == LEFT_INTERIOR && dirvar_.dir ||
-                                    min_or_max_.back() != 0 && w == RIGHT_INTERIOR && !dirvar_.dir) {
-                                // The solution is necessarily found outside this box
-                                return;
-                            }
-                        }
                         dirvar_.var = v;
                         dirvar_.splitting = 1;
                         if (min_or_max_.back() != 0)
