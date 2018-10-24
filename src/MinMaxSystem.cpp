@@ -152,6 +152,15 @@ void MinMaxSystem::evaluate(MinMax &answer, Certainties &certs, Environment &box
                                 (le && min_or_max_.back() < 0))
                             dirvar_.dir = false;
                         // dir represents the lower (false) or upper (right) bound. 
+                        if (!d_it.contains(0)) {
+                            Where w = where(dirvars(), v);
+                            if (w == INTERIOR ||
+                                    min_or_max_.back() != 0 && w == LEFT_INTERIOR && dirvar_.dir ||
+                                    min_or_max_.back() != 0 && w == RIGHT_INTERIOR && !dirvar_.dir) {
+                                // The solution is necessarily found outside this box
+                                return;
+                            }
+                        }
                         dirvar_.var = v;
                         dirvar_.splitting = 1;
                         if (min_or_max_.back() != 0)
@@ -193,10 +202,9 @@ void MinMaxSystem::evaluate(MinMax &answer, Certainties &certs, Environment &box
 void MinMaxSystem::combine(MinMax &answer, const DirVar &dirvar,
         const MinMax &ans1) {
     if (dirvar.splitting == 1) {
-        // Neither answer nor ans1 are empty
         if (min_or_max_.back() <= 0)
             answer.mm_ = Interval(ans1.mm_.inf(), answer.mm_.sup());
-        else
+        else if (!ans1.mm_.empty())
             answer.mm_ = Interval(answer.mm_.inf(), ans1.mm_.sup());
     }
     if (!ans1.min_point_.empty()) {
@@ -223,12 +231,17 @@ void MinMaxSystem::combine(MinMax &answer, const DirVar &dirvar,
         else
             answer.mm_ = ans1.mm_.hull(ans2.mm_);
     } else if (dirvar.splitting == 1) {
-        // Neither answer ans1 nor ans2 are empty
         min_or_max_.pop_back();
-        if (min_or_max_.back() <= 0)
-            answer.mm_ = Interval(ans1.mm_.inf(), ans2.mm_.sup());
-        else
-            answer.mm_ = Interval(ans2.mm_.inf(), ans1.mm_.sup());
+        if (ans1.empty())
+            answer.mm_ = ans2.mm_;
+        else if (ans2.empty())
+            answer.mm_ = ans1.mm_;
+        else {
+            if (min_or_max_.back() <= 0)
+                answer.mm_ = Interval(ans1.mm_.inf(), ans2.mm_.sup());
+            else
+                answer.mm_ = Interval(ans2.mm_.inf(), ans1.mm_.sup());
+        }
     }
     if (!ans1.min_point_.empty() &&
             (ans2.min_point_.empty() || ans1.ub_of_min_ < ans2.ub_of_min_)) {
@@ -271,14 +284,27 @@ bool MinMaxSystem::prune(const MinMax &answer) {
 }
 
 bool MinMaxSystem::local_exit(const MinMax &answer) {
-    bool b = answer.empty() ||
-            (min_or_max_.back() > 0 ||
+    const bool isOptimizedBranch = answer.empty();
+    if (isOptimizedBranch) return true;
+
+#ifdef DEBUG
+    assert(answer.ub_of_min > answer.mm_.inf())
+    assert(answer.mm_.inf() < answer.lb_of_max_)
+#endif
+    const int &currentTarget = min_or_max_.back();
+    const bool isMaximizing = currentTarget > 0;
+    const bool lowerClosurePrecissionReached =
             !answer.min_point_.empty() &&
-            answer.ub_of_min_ - answer.mm_.inf() <= absoluteToleranceForStoppingBranchAndBound_) &&
-            (min_or_max_.back() < 0 ||
+            answer.ub_of_min_ > answer.mm_.inf() &&
+            answer.ub_of_min_ - answer.mm_.inf() <= absoluteToleranceForStoppingBranchAndBound_;
+    if (!isMaximizing && !lowerClosurePrecissionReached)
+        return false;
+    const bool isMinimizing = currentTarget < 0;
+    const bool upperClosurePrecissionReached =
             !answer.max_point_.empty() &&
-            answer.mm_.sup() - answer.lb_of_max_ <= absoluteToleranceForStoppingBranchAndBound_);
-    return b;
+            answer.mm_.sup() > answer.lb_of_max_ &&
+            answer.mm_.sup() - answer.lb_of_max_ <= absoluteToleranceForStoppingBranchAndBound_;
+    return (isMinimizing || upperClosurePrecissionReached);
 }
 
 void MinMaxSystem::select(DirVar &dirvar, Certainties &certs, Environment &box) {
