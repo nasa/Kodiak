@@ -288,8 +288,8 @@ bool MinMaxSystem::local_exit(const MinMax &answer) {
     if (isOptimizedBranch) return true;
 
 #ifdef DEBUG
-    assert(answer.ub_of_min > answer.mm_.inf())
-    assert(answer.mm_.inf() < answer.lb_of_max_)
+    assert(answer.ub_of_min_ >= answer.mm_.inf());
+    assert(answer.mm_.inf() <= answer.lb_of_max_);
 #endif
     const int &currentTarget = min_or_max_.back();
     const bool isMaximizing = currentTarget > 0;
