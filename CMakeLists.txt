@@ -26,9 +26,17 @@ project(kodiak)
 ############################################################
 
 set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
-add_definitions(-Wall -frounding-math -pedantic -Wextra -Wno-parentheses -g -O0)
 
+set(CMAKE_CXX_FLAGS "-std=c++14 -fPIC -frounding-math")
+add_compile_options(-Wall -pedantic -Wextra)
+
+if(${DEBUG})
+	message(WARNING "Building in DEBUGGING mode: all optimizations are disabled")
+	add_compile_definitions(DEBUG=1)
+	add_compile_options(-g -O0)
+else()
+	add_compile_options(-O3)
+endif()
 
 ############################################################
 #
@@ -125,4 +133,3 @@ set_target_properties(KodiakStatic PROPERTIES OUTPUT_NAME kodiak)
 ############################################################
 
 add_subdirectory(examples)
-
