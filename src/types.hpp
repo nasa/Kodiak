@@ -8,9 +8,7 @@
 
 #include <algorithm>
 #include <assert.h>
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/serialization/vector.hpp>
+#include <boost/serialization/nvp.hpp>
 #include <deque>
 #include <exception>
 #include <fstream>
@@ -156,8 +154,8 @@ namespace kodiak {
 
         template<class Archive>
         void serialize(Archive &ar, const unsigned int) {
-            ar &INF;
-            ar &SUP;
+            ar & BOOST_SERIALIZATION_NVP(INF);
+            ar & BOOST_SERIALIZATION_NVP(SUP);
         }
 
         Interval() : filib::interval<real>() {
@@ -278,8 +276,8 @@ namespace kodiak {
 
         template<class Archive>
         void serialize(Archive &ar, const unsigned int) {
-            ar &box_;
-            ar &names_;
+            ar & BOOST_SERIALIZATION_NVP(box_);
+            ar & BOOST_SERIALIZATION_NVP(names_);
         }
         // Push a new variable
 

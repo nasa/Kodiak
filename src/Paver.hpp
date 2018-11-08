@@ -5,6 +5,9 @@
 #include "BranchAndBoundDF.hpp"
 #include "System.hpp"
 #include "Environment.hpp"
+#include <boost/archive/xml_iarchive.hpp>
+#include <boost/archive/xml_oarchive.hpp>
+#include <boost/serialization/vector.hpp>
 
 namespace kodiak {
 
@@ -64,7 +67,6 @@ namespace kodiak {
 
     class PrePaving {
     public:
-
         PrePaving() : type_(-1) {
         }
 
@@ -133,9 +135,9 @@ namespace kodiak {
 
         template<class Archive>
         void serialize(Archive & ar, const unsigned int) {
-            ar & type_;
-            ar & varbox_;
-            ar & boxes_;
+            ar & BOOST_SERIALIZATION_NVP(type_);
+            ar & BOOST_SERIALIZATION_NVP(varbox_);
+            ar & BOOST_SERIALIZATION_NVP(boxes_);
         }
 
         void set_type(nat type) {

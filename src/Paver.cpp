@@ -388,17 +388,17 @@ void Paving::write(const std::string filename) {
     std::ostringstream os;
     os << filename << ".pav";
     std::ofstream ofs(os.str().c_str());
-    boost::archive::text_oarchive oa(ofs);
+    boost::archive::xml_oarchive oa(ofs);
     const Paving pav = (*this);
-    oa << pav;
+    oa << BOOST_SERIALIZATION_NVP(pav);
 }
 
 void Paving::read(const std::string filename) {
     std::ostringstream os;
     os << filename << ".pav";
     std::ifstream ifs(os.str().c_str());
-    boost::archive::text_iarchive ia(ifs);
-    ia >> (*this);
+    boost::archive::xml_iarchive ia(ifs);
+    ia >> BOOST_SERIALIZATION_NVP(*this);
 }
 
 // Compute the projection of a paving onto a smaller-dimensional space
