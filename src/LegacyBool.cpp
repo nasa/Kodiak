@@ -81,7 +81,7 @@ int RelExpr::eval(Box &box, NamedBox &constbox, const bool enclosure, const real
                 }
             }
         } catch (Growl growl) {
-            std::cout << "[GrowlException@RelExpr::eval]" << growl.what();
+            std::cout << "[GrowlException@RelExpr::eval]" << growl.what() << std::endl;
         }
         box[var] = initialVarEnclosure;
     }
