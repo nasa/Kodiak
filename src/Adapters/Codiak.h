@@ -53,10 +53,12 @@ EXTERNC CReal real_create_maximum(CRealVector);
 EXTERNC CReal real_create_absolute_value(CReal);
 EXTERNC CReal real_create_sine(CReal);
 EXTERNC CReal real_create_cosine(CReal);
+EXTERNC CReal real_create_arctangent(CReal);
 EXTERNC CReal real_create_eexponent(CReal);
 EXTERNC CReal real_create_elogarithm(CReal);
 EXTERNC CReal real_create_floor(CReal);
 EXTERNC CReal real_create_double_ulp(CReal);
+EXTERNC CReal real_create_single_ulp(CReal);
 EXTERNC CReal real_create_negation(CReal);
 EXTERNC CReal real_create_addition(CReal, CReal);
 EXTERNC CReal real_create_subtraction(CReal, CReal);
@@ -78,11 +80,27 @@ EXTERNC CReal real_create_error_division(CReal, CReal, CReal, CReal);
 EXTERNC CReal real_create_error_sine(CReal, CReal);
 EXTERNC CReal real_create_error_cosine(CReal, CReal);
 EXTERNC CReal real_create_error_arctangent(CReal, CReal);
+EXTERNC CReal real_create_error_arctangent_tight(CReal, CReal);
 EXTERNC CReal real_create_error_eexponent(CReal, CReal);
 EXTERNC CReal real_create_error_elogarithm(CReal, CReal);
 EXTERNC CReal real_create_error_floor(CReal, CReal);
 EXTERNC CReal real_create_error_floor_tight(CReal, CReal);
 EXTERNC CReal real_create_error_power_of_two_multiplication(CInt, CReal);
+
+EXTERNC CReal real_create_single_error_negation(CReal, CReal);
+EXTERNC CReal real_create_single_error_addition(CReal, CReal, CReal, CReal);
+EXTERNC CReal real_create_single_error_subtraction(CReal, CReal, CReal, CReal);
+EXTERNC CReal real_create_single_error_multiplication(CReal, CReal, CReal, CReal);
+EXTERNC CReal real_create_single_error_division(CReal, CReal, CReal, CReal);
+EXTERNC CReal real_create_single_error_sine(CReal, CReal);
+EXTERNC CReal real_create_single_error_cosine(CReal, CReal);
+EXTERNC CReal real_create_single_error_arctangent(CReal, CReal);
+EXTERNC CReal real_create_single_error_arctangent_tight(CReal, CReal);
+EXTERNC CReal real_create_single_error_eexponent(CReal, CReal);
+EXTERNC CReal real_create_single_error_elogarithm(CReal, CReal);
+EXTERNC CReal real_create_single_error_floor(CReal, CReal);
+EXTERNC CReal real_create_single_error_floor_tight(CReal, CReal);
+EXTERNC CReal real_create_single_error_power_of_two_multiplication(CInt, CReal);
 
 
 //////////////////////////////////////////////////////////////////////
