@@ -61,6 +61,38 @@ namespace kodiak {
             Real aebounddp_atn_t(Real, Real);
 
             Real aebounddp_mul_p2(int, Real);
+
+            Real aeboundsp_add(Real, Real, Real, Real);
+
+            Real aeboundsp_sub(Real, Real, Real, Real);
+
+            Real aeboundsp_mul(Real, Real, Real, Real);
+
+            Real aeboundsp_div(Real, Real, Real, Real);
+
+            Real aeboundsp_flr(Real, Real);
+
+            Real aeboundsp_sqt(Real, Real);
+
+            Real aeboundsp_neg(Real, Real);
+
+            Real aeboundsp_abs(Real, Real);
+
+            Real aeboundsp_ln(Real, Real);
+
+            Real aeboundsp_exp(Real, Real);
+
+            Real aeboundsp_sin(Real, Real);
+
+            Real aeboundsp_cos(Real, Real);
+
+            Real aeboundsp_atn(Real, Real);
+
+            Real aeboundsp_flr_t(Real, Real);
+
+            Real aeboundsp_atn_t(Real, Real);
+
+            Real aeboundsp_mul_p2(int, Real);
         }
     }
 }
