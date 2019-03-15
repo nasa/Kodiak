@@ -31,11 +31,11 @@ set(CMAKE_CXX_FLAGS "-std=c++14 -fPIC -frounding-math")
 add_compile_options(-Wall -pedantic -Wextra)
 
 if(${DEBUG})
-	message(WARNING "Building in DEBUGGING mode: all optimizations are disabled")
-	add_compile_definitions(DEBUG=1)
-	add_compile_options(-g -O0)
+    message(WARNING "Building in DEBUGGING mode: all optimizations are disabled")
+    add_definitions(-DDEBUG=1)
+    add_compile_options(-g -O0)
 else()
-	add_compile_options(-O3)
+    add_compile_options(-O3)
 endif()
 
 ############################################################
