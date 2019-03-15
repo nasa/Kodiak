@@ -126,6 +126,11 @@ CReal real_create_arctangent(CReal p) {
     return new Real(Atan(*pReal));
 }
 
+CReal real_create_sqrt(CReal p) {
+    Real *pReal = static_cast<Real *>(p);
+    return new Real(Sqrt(*pReal));
+}
+
 CReal real_create_eexponent(CReal p) {
     Real *pReal = static_cast<Real *>(p);
     return new Real(Exp(*pReal));
@@ -249,6 +254,12 @@ CReal real_create_error_floor_tight(CReal p, CReal pe){
     return new Real(aebounddp_flr_t(*pReal, *pErrorReal));
 }
 
+CReal real_create_error_sqrt(CReal p, CReal pe){
+    Real *pReal = static_cast<Real *>(p);
+    Real *pErrorReal = static_cast<Real *>(pe);
+    return new Real(aebounddp_sqt(*pReal, *pErrorReal));
+}
+
 CReal real_create_error_power_of_two_multiplication(CInt n, CReal pe) {
     Real *pErrorReal = static_cast<Real *>(pe);
     return new Real(aebounddp_mul_p2(n, *pErrorReal));
@@ -257,7 +268,7 @@ CReal real_create_error_power_of_two_multiplication(CInt n, CReal pe) {
 CReal real_create_single_error_negation(CReal p, CReal pe) {
     Real *pReal = static_cast<Real *>(p);
     Real *pErrorReal = static_cast<Real *>(pe);
-    return new Real(aebounddp_neg(*pReal, *pErrorReal));
+    return new Real(aeboundsp_neg(*pReal, *pErrorReal));
 }
 
 CReal real_create_single_error_addition(CReal pLeft, CReal peLeft, CReal pRight, CReal peRight) {
@@ -265,7 +276,7 @@ CReal real_create_single_error_addition(CReal pLeft, CReal peLeft, CReal pRight,
     Real *pLeftErrorReal = static_cast<Real *>(peLeft);
     Real *pRightReal = static_cast<Real *>(pRight);
     Real *pRightErrorReal = static_cast<Real *>(peRight);
-    return new Real(aebounddp_add(*pLeftReal, *pLeftErrorReal, *pRightReal, *pRightErrorReal));
+    return new Real(aeboundsp_add(*pLeftReal, *pLeftErrorReal, *pRightReal, *pRightErrorReal));
 }
 
 CReal real_create_single_error_subtraction(CReal pLeft, CReal peLeft, CReal pRight, CReal peRight) {
@@ -273,7 +284,7 @@ CReal real_create_single_error_subtraction(CReal pLeft, CReal peLeft, CReal pRig
     Real *pLeftErrorReal = static_cast<Real *>(peLeft);
     Real *pRightReal = static_cast<Real *>(pRight);
     Real *pRightErrorReal = static_cast<Real *>(peRight);
-    return new Real(aebounddp_sub(*pLeftReal, *pLeftErrorReal, *pRightReal, *pRightErrorReal));
+    return new Real(aeboundsp_sub(*pLeftReal, *pLeftErrorReal, *pRightReal, *pRightErrorReal));
 }
 
 CReal real_create_single_error_multiplication(CReal pLeft, CReal peLeft, CReal pRight, CReal peRight) {
@@ -281,7 +292,7 @@ CReal real_create_single_error_multiplication(CReal pLeft, CReal peLeft, CReal p
     Real *pLeftErrorReal = static_cast<Real *>(peLeft);
     Real *pRightReal = static_cast<Real *>(pRight);
     Real *pRightErrorReal = static_cast<Real *>(peRight);
-    return new Real(aebounddp_mul(*pLeftReal, *pLeftErrorReal, *pRightReal, *pRightErrorReal));
+    return new Real(aeboundsp_mul(*pLeftReal, *pLeftErrorReal, *pRightReal, *pRightErrorReal));
 }
 
 CReal real_create_single_error_division(CReal pLeft, CReal peLeft, CReal pRight, CReal peRight) {
@@ -289,60 +300,66 @@ CReal real_create_single_error_division(CReal pLeft, CReal peLeft, CReal pRight,
     Real *pLeftErrorReal = static_cast<Real *>(peLeft);
     Real *pRightReal = static_cast<Real *>(pRight);
     Real *pRightErrorReal = static_cast<Real *>(peRight);
-    return new Real(aebounddp_div(*pLeftReal, *pLeftErrorReal, *pRightReal, *pRightErrorReal));
+    return new Real(aeboundsp_div(*pLeftReal, *pLeftErrorReal, *pRightReal, *pRightErrorReal));
 }
 
 CReal real_create_single_error_sine(CReal p, CReal pe) {
     Real *pReal = static_cast<Real *>(p);
     Real *pErrorReal = static_cast<Real *>(pe);
-    return new Real(aebounddp_sin(*pReal, *pErrorReal));
+    return new Real(aeboundsp_sin(*pReal, *pErrorReal));
 }
 
 CReal real_create_single_error_cosine(CReal p, CReal pe) {
     Real *pReal = static_cast<Real *>(p);
     Real *pErrorReal = static_cast<Real *>(pe);
-    return new Real(aebounddp_cos(*pReal, *pErrorReal));
+    return new Real(aeboundsp_cos(*pReal, *pErrorReal));
 }
 
 CReal real_create_single_error_arctangent(CReal p, CReal pe) {
     Real *pReal = static_cast<Real *>(p);
     Real *pErrorReal = static_cast<Real *>(pe);
-    return new Real(aebounddp_atn(*pReal, *pErrorReal));
+    return new Real(aeboundsp_atn(*pReal, *pErrorReal));
 }
 
 CReal real_create_single_error_arctangent_tight(CReal p, CReal pe) {
     Real *pReal = static_cast<Real *>(p);
     Real *pErrorReal = static_cast<Real *>(pe);
-    return new Real(aebounddp_atn_t(*pReal, *pErrorReal));
+    return new Real(aeboundsp_atn_t(*pReal, *pErrorReal));
 }
 
 CReal real_create_single_error_eexponent(CReal p, CReal pe) {
     Real *pReal = static_cast<Real *>(p);
     Real *pErrorReal = static_cast<Real *>(pe);
-    return new Real(aebounddp_exp(*pReal, *pErrorReal));
+    return new Real(aeboundsp_exp(*pReal, *pErrorReal));
 }
 
 CReal real_create_single_error_elogarithm(CReal p, CReal pe) {
     Real *pReal = static_cast<Real *>(p);
     Real *pErrorReal = static_cast<Real *>(pe);
-    return new Real(aebounddp_ln(*pReal, *pErrorReal));
+    return new Real(aeboundsp_ln(*pReal, *pErrorReal));
 }
 
 CReal real_create_single_error_floor(CReal p, CReal pe){
     Real *pReal = static_cast<Real *>(p);
     Real *pErrorReal = static_cast<Real *>(pe);
-    return new Real(aebounddp_flr(*pReal, *pErrorReal));
+    return new Real(aeboundsp_flr(*pReal, *pErrorReal));
 }
 
 CReal real_create_single_error_floor_tight(CReal p, CReal pe){
     Real *pReal = static_cast<Real *>(p);
     Real *pErrorReal = static_cast<Real *>(pe);
-    return new Real(aebounddp_flr_t(*pReal, *pErrorReal));
+    return new Real(aeboundsp_flr_t(*pReal, *pErrorReal));
+}
+
+CReal real_create_single_error_sqrt(CReal p, CReal pe){
+    Real *pReal = static_cast<Real *>(p);
+    Real *pErrorReal = static_cast<Real *>(pe);
+    return new Real(aeboundsp_sqt(*pReal, *pErrorReal));
 }
 
 CReal real_create_single_error_power_of_two_multiplication(CInt n, CReal pe) {
     Real *pErrorReal = static_cast<Real *>(pe);
-    return new Real(aebounddp_mul_p2(n, *pErrorReal));
+    return new Real(aeboundsp_mul_p2(n, *pErrorReal));
 }
 
 //////////////////////////////////////////////////////////////////////
