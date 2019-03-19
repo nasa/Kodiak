@@ -54,6 +54,7 @@ EXTERNC CReal real_create_absolute_value(CReal);
 EXTERNC CReal real_create_sine(CReal);
 EXTERNC CReal real_create_cosine(CReal);
 EXTERNC CReal real_create_arctangent(CReal);
+EXTERNC CReal real_create_sqrt(CReal);
 EXTERNC CReal real_create_eexponent(CReal);
 EXTERNC CReal real_create_elogarithm(CReal);
 EXTERNC CReal real_create_floor(CReal);
@@ -85,6 +86,7 @@ EXTERNC CReal real_create_error_eexponent(CReal, CReal);
 EXTERNC CReal real_create_error_elogarithm(CReal, CReal);
 EXTERNC CReal real_create_error_floor(CReal, CReal);
 EXTERNC CReal real_create_error_floor_tight(CReal, CReal);
+EXTERNC CReal real_create_error_sqrt(CReal, CReal);
 EXTERNC CReal real_create_error_power_of_two_multiplication(CInt, CReal);
 
 EXTERNC CReal real_create_single_error_negation(CReal, CReal);
@@ -100,6 +102,7 @@ EXTERNC CReal real_create_single_error_eexponent(CReal, CReal);
 EXTERNC CReal real_create_single_error_elogarithm(CReal, CReal);
 EXTERNC CReal real_create_single_error_floor(CReal, CReal);
 EXTERNC CReal real_create_single_error_floor_tight(CReal, CReal);
+EXTERNC CReal real_create_single_error_sqrt(CReal, CReal);
 EXTERNC CReal real_create_single_error_power_of_two_multiplication(CInt, CReal);
 
 
