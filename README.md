@@ -19,13 +19,13 @@ Cesar A. Munoz (cesar.a.munoz@nasa.gov), NASA Langley Research Center
 
 Marco A. Feliu (marco.feliu@nianet.org), National Institute of Aerospace
 
-Andrew P. Smith, National Institute of Aerospace
+### Other Contributors
 
-Anthony Narkawicz, NASA Langley Research Center
+Andrew P. Smith, formerly at National Institute of Aerospace, US.
 
-### Contributors
+Anthony Narkawicz, formerly at NASA Langley Research Center, US. 
 
-Mantas Markevicius (mm1080@york.ac.uk), University of York, UK
+Mantas Markevicius, formerly at University of York, UK.
 
 ### Documentation
 
