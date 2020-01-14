@@ -83,8 +83,8 @@ present (please follow the links for instructions and support):
   variable `BOOST_ROOT` to point to the directory where Boost's
   `include` and `lib` directories were installed, e.g., `/usr/local`.
 
-* *filib++* interval library (required):  
-  [http://www2.math.uni-wuppertal.de/\~xsc/software/filib.html](http://www2.math.uni-wuppertal.de/~xsc/software/filib.html)  
+* *filib++* interval library (required):
+  [http://www2.math.uni-wuppertal.de/wrswt/software/filib.html](http://www2.math.uni-wuppertal.de/wrswt/software/filib.html)
   This library should be configured with the following options before making (`make` command)
   and installing it (maybe `sudo` will be needed preppended to the `make install` command in order to
   install the files in `/usr/local`):
