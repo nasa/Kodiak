@@ -1,5 +1,5 @@
-#ifndef _MINMAX_
-#define _MINMAX_
+#ifndef KODIAK_MINMAX
+#define KODIAK_MINMAX
 
 #include "Real.hpp"
 
@@ -103,4 +103,4 @@ namespace kodiak {
 
 }
 
-#endif
+#endif // KODIAK_MINMAX

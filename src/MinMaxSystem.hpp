@@ -1,5 +1,5 @@
-#ifndef _MINMAXSYSTEM_
-#define _MINMAXSYSTEM_
+#ifndef KODIAK_MINMAXSYSTEM
+#define KODIAK_MINMAXSYSTEM
 
 #include "BranchAndBoundDF.hpp"
 #include "Environment.hpp"
@@ -79,4 +79,4 @@ namespace kodiak {
 
 }
 
-#endif
+#endif // KODIAK_MINMAX_SYSTEM
