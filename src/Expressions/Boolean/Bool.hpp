@@ -1,5 +1,5 @@
-#ifndef _BOOL_
-#define _BOOL_
+#ifndef KODIAK_BOOL
+#define KODIAK_BOOL
 
 #include "types.hpp"
 #include "Environment.hpp"
@@ -76,4 +76,4 @@ namespace kodiak {
     }
 }
 
-#endif
+#endif // KODIAK_BOOL

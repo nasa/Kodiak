@@ -1,5 +1,5 @@
-#ifndef _NODE_
-#define _NODE_
+#ifndef KODIAK_NODE
+#define KODIAK_NODE
 
 #include "Real.hpp"
 
@@ -475,6 +475,4 @@ variable x(n-1): { ...            ...                  }
 
     std::ostream &operator<<(std::ostream &, const kodiak::MonoInfo);
 }
-#endif
-
-
+#endif // KODIAK_NODE

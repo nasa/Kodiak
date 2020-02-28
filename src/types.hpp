@@ -1,5 +1,5 @@
-#ifndef _TYPES_
-#define _TYPES_
+#ifndef KODIAK_TYPES
+#define KODIAK_TYPES
 
 #define K_MAXFACT   13 // Not to be changed unless definition of nat is changed
 #define K_MAXCHOOSE 35 // Not to be changed unless definition of nat is changed
@@ -570,4 +570,4 @@ namespace kodiak {
 
     Box &operator<<(Box &, const Interval &);
 }
-#endif
+#endif // KODIAK_TYPES

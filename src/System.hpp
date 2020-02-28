@@ -1,5 +1,5 @@
-#ifndef _SYSTEM_
-#define _SYSTEM_
+#ifndef KODIAK_SYSTEM
+#define KODIAK_SYSTEM
 
 #include "LegacyBool.hpp"
 
@@ -338,4 +338,4 @@ namespace kodiak {
 
     std::ostream& operator<<(std::ostream &, const Certainties &);
 }
-#endif
+#endif // KODIAK_SYSTEM

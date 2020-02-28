@@ -1,5 +1,5 @@
-#ifndef _BRANCHANDBOUNDDF_
-#define _BRANCHANDBOUNDDF_
+#ifndef KODIAK_BRANCH_AND_BOUND
+#define KODIAK_BRANCH_AND_BOUND
 
 #include "types.hpp"
 
@@ -251,4 +251,4 @@ namespace kodiak {
     };
 }
 
-#endif
+#endif // KODIAK_BRANCH_AND_BOUND

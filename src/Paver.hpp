@@ -1,5 +1,5 @@
-#ifndef _PAVER_
-#define _PAVER_
+#ifndef KODIAK_PAVER
+#define KODIAK_PAVER
 
 #include "LegacyBool.hpp"
 #include "BranchAndBoundDF.hpp"
@@ -267,4 +267,4 @@ namespace kodiak {
     };
 }
 
-#endif
+#endif // KODIAK_PAVER

@@ -1,5 +1,5 @@
-#ifndef _REAL_
-#define _REAL_
+#ifndef KODIAK_REAL
+#define KODIAK_REAL
 
 #include "types.hpp"
 
@@ -330,5 +330,5 @@ namespace kodiak {
 #define Ee val(exp(Interval::ONE()))
 
 
-#endif
+#endif // KODIAK_REAL
 

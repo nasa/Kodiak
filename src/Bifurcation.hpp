@@ -1,5 +1,5 @@
-#ifndef _BIFURCATION_
-#define _BIFURCATION_
+#ifndef KODIAK_BIFURCATION
+#define KODIAK_BIFURCATION
 
 #include "Paver.hpp"
 
@@ -72,4 +72,4 @@ namespace kodiak {
 
 }
 
-#endif
+#endif // KODIAK_BIFURCATION
