@@ -158,6 +158,15 @@ void MinMaxSystem::evaluate(MinMax &answer, Certainties &certs, Environment &box
                                     (min_or_max_.back() != 0 && w == LEFT_INTERIOR && dirvar_.dir) ||
                                     (min_or_max_.back() != 0 && w == RIGHT_INTERIOR && !dirvar_.dir)) {
                                 // The solution is necessarily found outside this box
+                                if (ge) {
+                                    answer.mm_ = Interval(lb_it.inf(),ub_it.sup());
+                                    answer.lb_of_max_ = ub_it.inf();
+                                    answer.ub_of_min_ = lb_it.sup();
+                                } else {
+                                    answer.mm_ = Interval(ub_it.inf(),lb_it.sup());
+                                    answer.lb_of_max_ = lb_it.inf();
+                                    answer.ub_of_min_ = ub_it.sup();
+                                }
                                 return;
                             }
                         }
