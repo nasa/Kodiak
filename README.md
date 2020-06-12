@@ -138,14 +138,9 @@ Be aware that care must be taken with the order in which commands
 are invoked. All variables should be declared before any variable
 resolutions are set.
 
-## Copyright Notices
-
-See the files `LICENSES/Kodiak-NOSA.pdf` and `LICENSES/Kodiak-BooleanChecker-NOSA.pdf`
-for the license and copyright of the *Kodiak* library.
-
 ## Version
 
-*Kodiak* readme file, ver. Jun 2020
+*Kodiak* ver. 2.0.1,  June 2020
 
 ## Logo
 The Kodiak logo was designed by 
