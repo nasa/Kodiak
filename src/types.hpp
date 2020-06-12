@@ -8,7 +8,6 @@
 
 #include <algorithm>
 #include <assert.h>
-#include <boost/serialization/nvp.hpp>
 #include <deque>
 #include <exception>
 #include <fstream>
@@ -21,6 +20,10 @@
 #include <string>
 #include <time.h>
 #include <vector>
+
+#ifdef DEBUG
+#include <boost/serialization/nvp.hpp>
+#endif
 
 #include "Value.hpp"
 
@@ -148,8 +151,9 @@ namespace kodiak {
         EQ, LE, LT, GE, GT
     };
 
-    class Interval : public filib::interval<real>, public Value {
+    class Interval : public filib::interval<real> {
     public:
+#ifdef DEBUG
         friend class boost::serialization::access;
 
         template<class Archive>
@@ -157,6 +161,7 @@ namespace kodiak {
             ar & BOOST_SERIALIZATION_NVP(INF);
             ar & BOOST_SERIALIZATION_NVP(SUP);
         }
+#endif
 
         Interval() : filib::interval<real>() {
         }
@@ -171,7 +176,7 @@ namespace kodiak {
         Interval(const real lb, const real ub) : filib::interval<real>(lb, ub) {
         }
 
-        void print(std::ostream &ostream) const override;
+        void print(std::ostream &ostream) const;
 
         Interval approximatedMidpoint() const {
             real mid = this->mid();
@@ -233,7 +238,6 @@ namespace kodiak {
 
         static const T infinity = numeric_limits<T>::infinity();
         static const T minusInfinity = -infinity;
-        static const T zero = 0;
 
         if (signbit(fpNumber)) {
             const T nextNumberTowardsInfinity = nextafter(fpNumber, infinity);
@@ -272,6 +276,7 @@ namespace kodiak {
 
         NamedBox() {
         };
+#ifdef DEBUG
         friend class boost::serialization::access;
 
         template<class Archive>
@@ -279,6 +284,7 @@ namespace kodiak {
             ar & BOOST_SERIALIZATION_NVP(box_);
             ar & BOOST_SERIALIZATION_NVP(names_);
         }
+#endif
         // Push a new variable
 
         nat push(const std::string id) {
@@ -544,6 +550,11 @@ namespace kodiak {
     };
 
     Where where(const DirVars &, const nat);
+
+    enum class Enclosure {
+        IA = 0,
+        BERNSTEIN
+    };
 
     template <typename T>
     std::ostream &operator<<(std::ostream &os, const std::vector<T> &vector) {

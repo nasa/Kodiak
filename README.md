@@ -23,7 +23,7 @@ Marco A. Feliu (marco.feliu@nianet.org), National Institute of Aerospace
 
 Andrew P. Smith, formerly at National Institute of Aerospace, US.
 
-Anthony Narkawicz, formerly at NASA Langley Research Center, US. 
+Anthony Narkawicz, formerly at NASA Langley Research Center, US.
 
 Mantas Markevicius, formerly at University of York, UK.
 
@@ -86,7 +86,7 @@ present (please follow the links for instructions and support):
 * *filib++* interval library (required):
   [http://www2.math.uni-wuppertal.de/wrswt/software/filib.html](http://www2.math.uni-wuppertal.de/wrswt/software/filib.html)
   This library should be configured with the following options before making (`make` command)
-  and installing it (maybe `sudo` will be needed preppended to the `make install` command in order to
+  and installing it (maybe `sudo` will be needed prepended to the `make install` command in order to
   install the files in `/usr/local`):
   `
   ./configure CFLAGS=-fPIC CPPFLAGS=-fPIC CXXFLAGS=-fPIC
@@ -138,9 +138,14 @@ Be aware that care must be taken with the order in which commands
 are invoked. All variables should be declared before any variable
 resolutions are set.
 
+## Copyright Notices
+
+See the files `LICENSES/Kodiak-NOSA.pdf` and `LICENSES/Kodiak-BooleanChecker-NOSA.pdf`
+for the license and copyright of the *Kodiak* library.
+
 ## Version
 
-*Kodiak v-2.0* (November 2017)
+*Kodiak* readme file, ver. Jun 2020
 
 ## Logo
 The Kodiak logo was designed by 

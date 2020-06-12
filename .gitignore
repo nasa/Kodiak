@@ -1,0 +1,16 @@
+.cproject
+.project
+examples/*
+lib/*
+nbproject/
+*.pyc
+.depend
+*.o
+test/test
+test/bugs/*
+**/*.dSYM/*
+.DS_Store
+.idea/
+bin/*
+*build*
+.vscode/

@@ -12,13 +12,13 @@ namespace kodiak {
 
     class NewPaver : public Paver {
     public:
-        using Paver::Paver;
+        NewPaver(const std::string name = "") : Paver(name),booleanExpression_(Bool()) {}
 
-        nat numberOfRelationalFormulas() const {
-            return this->booleanExpression_ != nullptr ? 1 : 0;
+        nat numberOfRelationalFormulas() const override {
+            return this->booleanExpression_.isNaB() ? 0 : 1;
         }
 
-        void print(std::ostream &os) const {
+        void print(std::ostream &os) const override {
             os << "System: " << ID << std::endl;
             os << "Vars: ";
             variablesEnclosures_.print(os);
@@ -29,13 +29,17 @@ namespace kodiak {
                 os << std::endl;
             }
             os << "Formula: ";
-            this->booleanExpression_->print(os);
+            this->booleanExpression_.print(os);
             os << std::endl;
             for (nat i = 0; i < paving_.ntypes(); i++)
                 os << style.title(i) << ": " << paving_.size(i) << " boxes" << std::endl;
             print_info(os);
             os << std::endl;
             paving_.save(ID, style.titles());
+        }
+
+        void save(const std::string &filename) const {
+            paving_.save(filename, style.titles(),false);
         }
 
     protected:
@@ -64,7 +68,7 @@ namespace kodiak {
 //                }
                 evalGlobalDefinitions(); // TODO: Take out from the loop, since it should be constant or, if not, it would be asymmetric
                 certainties[i] = CertaintyClass::certainty2Int(
-                        this->booleanExpression_->eval(box, this->defaultEnclosureMethodTrueBernsteinFalseInterval_,
+                        this->booleanExpression_.eval(box, this->defaultEnclosureMethodTrueBernsteinFalseInterval_,
                                                        this->absoluteToleranceForStoppingBranchAndBound_));
                 // if i-th formula is certainly not true, conjunction of formulas is certainly not true
                 if (certainties[i] == 0) {
@@ -83,27 +87,22 @@ namespace kodiak {
                 paving.push_box(std::abs(currentBoxCertainty_), aBox); // Whole interval (possibly)
         }
 
-        virtual void select(DirVar &dirvar, Ints &certainties, Environment &box) {
+        virtual void select(DirVar &dirvar, Ints &certainties, Environment &box) override {
             round_robin(dirvar, certainties, box);
         }
 
     public:
-        void setBooleanExpression(const kodiak::BooleanExpressions::Node &expr) {
+        void setBooleanExpression(Bool const & expr) {
             // TODO: Index expression
-            this->booleanExpression_ = expr.clone();
+            this->booleanExpression_ = expr;
         }
 
-        void setBooleanExpression(const std::unique_ptr<kodiak::BooleanExpressions::Node> expr) {
-            // TODO: Index expression
-            this->booleanExpression_ = expr->clone();
-        }
-
-        const kodiak::BooleanExpressions::Node &getBooleanExpression() const {
-            return *(this->booleanExpression_);
+        const Bool &getBooleanExpression() const {
+            return this->booleanExpression_;
         }
 
     private:
-        std::unique_ptr<kodiak::BooleanExpressions::Node> booleanExpression_;
+        Bool booleanExpression_;
     };
 
 }

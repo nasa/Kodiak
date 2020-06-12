@@ -29,6 +29,10 @@ namespace kodiak {
                 return doClone();
             }
 
+            bool isNaB() const {
+                return doIsNaB();
+            }
+
         private:
             virtual Certainty doEvaluate(const Environment &, const bool, const real) const = 0;
 
@@ -37,6 +41,10 @@ namespace kodiak {
             virtual bool equals(const Node &) const = 0;
 
             virtual std::unique_ptr<Node> doClone() const = 0;
+
+            virtual bool doIsNaB() const {
+                return false;
+            }
         };
 
         std::ostream& operator<<(std::ostream &os, const Node &node);

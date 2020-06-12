@@ -688,7 +688,6 @@ Interval kodiak::DoubleUlp(const Interval &interval) {
     using std::signbit;
 
     static const real minulp = std::nextafter(0,std::numeric_limits<double>::infinity()) - 0;
-    static const real infinity = ::std::numeric_limits<double>::infinity();
 
     const real &supremum = interval.sup();
     const real &infimum = interval.inf();

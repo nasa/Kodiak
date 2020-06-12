@@ -16,6 +16,8 @@ namespace kodiak {
             virtual bool equals(const Node &) const override;
 
             virtual unique_ptr<Node> doClone() const override;
+
+            virtual bool doIsNaB() const override { return true; }
         };
     }
 }

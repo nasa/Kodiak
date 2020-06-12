@@ -3,8 +3,10 @@
 
 #include "types.hpp"
 
+#ifdef DEBUG
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
+#endif
 
 namespace kodiak {
 

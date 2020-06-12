@@ -3,6 +3,8 @@
 
 #include "Real.hpp"
 
+#include <typeinfo>
+
 namespace kodiak {
 
     class Max_Node;
@@ -16,23 +18,13 @@ namespace kodiak {
     public:
         virtual ~Node() = default;
 
-        virtual bool operator== (const Node &) const {
-            return false;
-        }
-        virtual bool operator==(const Error_Node &) const {
-            return false;
-        }
-        virtual bool operator==(const Floor_Node &) const {
-            return false;
-        }
-        virtual bool operator==(const Max_Node &) const {
-            return false;
-        }
-        virtual bool operator==(const Min_Node &) const {
-            return false;
+        bool operator==(const Node &other) const {
+            return typeid(*this) == typeid(other) && isEqual(other);
         }
 
     protected:
+
+        virtual bool isEqual(Node const &) const { return false; }
 
         Node() : numOfVariables(0), use_(0) {
         }
@@ -101,6 +93,8 @@ namespace kodiak {
         virtual Real subs(const Substitution &, Names &) const = 0;
         virtual void print(std::ostream & = std::cout) const = 0;
 
+        std::string toString() const;
+
         VarBag variableIndexes_;
         nat numOfVariables;
         NameSet localVariables_;
@@ -116,13 +110,19 @@ namespace kodiak {
     public:
         RealVal_Node(const Interval &);
 
-        bool isVal() const {
+        bool isVal() const override {
             return true;
         }
-        Real deriv(const nat) const;
-        Interval eval(const Box &, NamedBox &, const bool);
-        Real subs(const Substitution &, Names &) const;
-        void print(std::ostream & = std::cout) const;
+        Real deriv(const nat) const override;
+        Interval eval(const Box &, NamedBox &, const bool) override;
+        Real subs(const Substitution &, Names &) const override;
+        void print(std::ostream & = std::cout) const override;
+
+    protected:
+        bool isEqual(Node const &other) const override {
+            return this->val_ == static_cast<RealVal_Node const &>(other).val_;
+        }
+
     private:
         Interval val_; // value
     };
@@ -132,14 +132,20 @@ namespace kodiak {
     public:
         RealVar_Node(const nat, const std::string = "");
 
-        bool isVar() const {
+        bool isVar() const override {
             return true;
         }
-        Real deriv(const nat) const;
-        Interval eval(const Box &, NamedBox &, const bool);
-        Real subs(const Substitution &, Names &) const;
+        Real deriv(const nat) const override;
+        Interval eval(const Box &, NamedBox &, const bool) override;
+        Real subs(const Substitution &, Names &) const override;
         std::string name() const;
-        void print(std::ostream & = std::cout) const;
+        void print(std::ostream & = std::cout) const override;
+
+    protected:
+        bool isEqual(Node const &other) const override {
+            return this->var_ == static_cast<RealVar_Node const &>(other).var_;
+        }
+
     private:
         nat var_; // variable index
         std::string name_; // variable name (for printing only)
@@ -150,13 +156,19 @@ namespace kodiak {
     public:
         RealName_Node(const std::string, const bool = true);
 
-        bool isName() const {
+        bool isName() const override {
             return true;
         }
-        Real deriv(const nat) const;
-        Interval eval(const Box &, NamedBox &, const bool);
-        Real subs(const Substitution &, Names &) const;
-        void print(std::ostream & = std::cout) const;
+        Real deriv(const nat) const override;
+        Interval eval(const Box &, NamedBox &, const bool) override;
+        Real subs(const Substitution &, Names &) const override;
+        void print(std::ostream & = std::cout) const override;
+
+    protected:
+        bool isEqual(Node const &other) const override {
+             return this->name_ == static_cast<RealName_Node const &>(other).name_;
+        };
+
     private:
         std::string name_; // variable name
         nat db_; // De Bruijn index 
@@ -168,13 +180,21 @@ namespace kodiak {
     public:
         RealUnary_Node(const OpType, const Real &);
 
-        bool isUnary() const {
+        bool isUnary() const override{
             return true;
         }
-        Real deriv(const nat) const;
-        Interval eval(const Box &, NamedBox &, const bool);
-        Real subs(const Substitution &, Names &) const;
-        void print(std::ostream & = std::cout) const;
+        Real deriv(const nat) const override;
+        Interval eval(const Box &, NamedBox &, const bool) override;
+        Real subs(const Substitution &, Names &) const override;
+        void print(std::ostream & = std::cout) const override;
+
+    protected:
+        bool isEqual(Node const &other) const override {
+            auto &otherUnaryNode = static_cast<RealUnary_Node const &>(other);
+            return this->op_  == otherUnaryNode.op_
+                && this->ope_ == otherUnaryNode.ope_;
+        }
+
     private:
         OpType op_; // operator
         Real ope_; // operand operand
@@ -193,8 +213,9 @@ namespace kodiak {
         const Real &getError() const;
         bool isError() const override;
 
-        virtual bool operator==(const Error_Node &) const override;
-        virtual bool operator==(const Node &      ) const override;
+    protected:
+        bool isEqual(Node const &) const override;
+
     private:
         const Real value_;
         const Real error_;
@@ -212,8 +233,9 @@ namespace kodiak {
         const Real &getOperand() const;
         bool isFloor() const override;
 
-        virtual bool operator==(const Floor_Node &) const override;
-        virtual bool operator==(const Node &      ) const override;
+    protected:
+        bool isEqual(Node const & other) const override;
+
     private:
         const Real operand_;
     };
@@ -224,15 +246,16 @@ namespace kodiak {
         Max_Node(std::vector<Real>&);
         ~Max_Node() = default;
 
-        Real deriv(const nat) const;
-        Interval eval(const Box &, NamedBox &, const bool);
-        Real subs(const Substitution &, Names &) const;
-        void print(std::ostream & = std::cout) const;
+        Real deriv(const nat) const override;
+        Interval eval(const Box &, NamedBox &, const bool) override;
+        Real subs(const Substitution &, Names &) const override;
+        void print(std::ostream & = std::cout) const override;
         const std::vector<Real> &getOperands() const;
         bool isMax() const override;
 
-        virtual bool operator==(const Max_Node &) const override;
-        virtual bool operator==(const Node &) const override;
+    protected:
+        bool isEqual(Node const &) const override;
+
     private:
         std::vector<Real> operands_; // operand operand
     };
@@ -245,15 +268,16 @@ namespace kodiak {
         Min_Node(std::vector<Real>&);
         ~Min_Node() = default;
 
-        Real deriv(const nat) const;
-        Interval eval(const Box &, NamedBox &, const bool);
-        Real subs(const Substitution &, Names &) const;
-        void print(std::ostream & = std::cout) const;
+        Real deriv(const nat) const override;
+        Interval eval(const Box &, NamedBox &, const bool) override;
+        Real subs(const Substitution &, Names &) const override;
+        void print(std::ostream & = std::cout) const override;
         const std::vector<Real> &getOperands() const;
         bool isMin() const override;
 
-        virtual bool operator==(const Min_Node &) const override;
-        virtual bool operator==(const Node &) const override;
+    protected:
+        bool isEqual(Node const & other) const override;
+
     private:
         std::vector<Real> operands_; // operand operand
     };
@@ -263,13 +287,22 @@ namespace kodiak {
     public:
         RealBinary_Node(const OpType, const Real &, const Real &);
 
-        bool isBinary() const {
+        bool isBinary() const override {
             return true;
         }
-        Real deriv(const nat) const;
-        Interval eval(const Box &, NamedBox &, const bool);
-        Real subs(const Substitution &, Names &) const;
-        void print(std::ostream & = std::cout) const;
+        Real deriv(const nat) const override;
+        Interval eval(const Box &, NamedBox &, const bool) override;
+        Real subs(const Substitution &, Names &) const override;
+        void print(std::ostream & = std::cout) const override;
+
+    protected:
+        bool isEqual(Node const &other) const override {
+            auto &otherBinaryNode = static_cast<RealBinary_Node const &>(other);
+            return this->op_   == otherBinaryNode.op_
+                && this->ope1_ == otherBinaryNode.ope1_
+                && this->ope2_ == otherBinaryNode.ope2_;
+        }
+
     private:
         OpType op_; // operator
         Real ope1_; // operand first operand
@@ -281,13 +314,17 @@ namespace kodiak {
     public:
         RealPower_Node(const Real &, const nat);
 
-        bool isPower() const {
+        bool isPower() const override {
             return true;
         }
-        Real deriv(const nat) const;
-        Interval eval(const Box &, NamedBox &, const bool);
-        Real subs(const Substitution &, Names &) const;
-        void print(std::ostream & = std::cout) const;
+        Real deriv(const nat) const override;
+        Interval eval(const Box &, NamedBox &, const bool) override;
+        Real subs(const Substitution &, Names &) const override;
+        void print(std::ostream & = std::cout) const override;
+
+    protected:
+        bool isEqual(Node const &) const override { return false; }
+
     private:
         Real ope_; // operand
         nat n_; // exponent
@@ -298,13 +335,22 @@ namespace kodiak {
     public:
         RealLetin_Node(const std::string, const Real &, const Real &);
 
-        bool isLetin() const {
+        bool isLetin() const override {
             return true;
         }
-        Real deriv(const nat) const;
-        Interval eval(const Box &, NamedBox &, const bool);
-        Real subs(const Substitution &, Names &) const;
-        void print(std::ostream & = std::cout) const;
+        Real deriv(const nat) const override;
+        Interval eval(const Box &, NamedBox &, const bool) override;
+        Real subs(const Substitution &, Names &) const override;
+        void print(std::ostream & = std::cout) const override;
+
+    protected:
+        bool isEqual(Node const &node) const override {
+            auto other = static_cast<RealLetin_Node const &>(node);
+            return this->name_ == other.name_ &&
+                this->let_ == other.let_ &&
+                this->in_ == other.in_;
+        }
+
     private:
         std::string name_; // local variable
         Real let_; // let expression
@@ -316,13 +362,17 @@ namespace kodiak {
     public:
         RealIfnz_Node(const Real&, const Real &, const Real &);
 
-        bool isIfnz() const {
+        bool isIfnz() const override {
             return true;
         }
-        Real deriv(const nat) const;
-        Interval eval(const Box &, NamedBox &, const bool);
-        Real subs(const Substitution &, Names &) const;
-        void print(std::ostream & = std::cout) const;
+        Real deriv(const nat) const override;
+        Interval eval(const Box &, NamedBox &, const bool) override;
+        Real subs(const Substitution &, Names &) const override;
+        void print(std::ostream & = std::cout) const override;
+
+    protected:
+        bool isEqual(Node const &) const override { return false; }
+
     private:
         Real cond_; // condition
         Real lt_; // return lt_ when cond_ < 0
@@ -343,18 +393,25 @@ namespace kodiak {
         }
         Polynomial_Node(const Monomials &, const Names &);
 
-        bool isPolynomial() const {
+        bool isPolynomial() const override {
             return true;
         }
-        Real deriv(const nat) const;
-        Interval eval(const Box &, NamedBox &, const bool);
-        Real subs(const Substitution &, Names &) const;
-        void print(std::ostream & = std::cout) const;
+        Real deriv(const nat) const override;
+        Interval eval(const Box &, NamedBox &, const bool) override;
+        Real subs(const Substitution &, Names &) const override;
+        void print(std::ostream & = std::cout) const override;
 
         nat nterms() const {
             return monoms_.size();
         } // number of monomials
         void print_metadata(std::ostream & = std::cout) const;
+
+    protected:
+        bool isEqual(Node const &other) const override {
+            auto &otherPolynomialNode = static_cast<Polynomial_Node const &>(other);
+            return this->monoms_ == otherPolynomialNode.monoms_;
+        }
+
     private:
         Names names_;
 
@@ -418,13 +475,13 @@ variable x(n-1): { ...            ...                  }
         }
         Rational_Node(const Monomials &, const Monomials &, const Names &);
 
-        bool isRational() const {
+        bool isRational() const override {
             return true;
         }
-        Real deriv(const nat) const;
-        Interval eval(const Box &, NamedBox &, const bool);
-        Real subs(const Substitution &, Names &) const;
-        void print(std::ostream & = std::cout) const;
+        Real deriv(const nat) const override;
+        Interval eval(const Box &, NamedBox &, const bool) override;
+        Real subs(const Substitution &, Names &) const override;
+        void print(std::ostream & = std::cout) const override;
         void print_metadata(std::ostream & = std::cout) const;
 
         nat numnterms() const {
@@ -434,6 +491,10 @@ variable x(n-1): { ...            ...                  }
         nat dennterms() const {
             return den_monoms_.size();
         }
+
+    protected:
+        bool isEqual(Node const &) const override { return false; }
+
     private:
         Names names_;
 

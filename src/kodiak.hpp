@@ -20,7 +20,9 @@
 
 #include "System.hpp"
 #include "MinMaxSystem.hpp"
+#include "NewMinMaxSystem.hpp"
 #include "Paver.hpp"
+#include "NewPaver.hpp"
 #include "Bifurcation.hpp"
 
 #endif // KODIAK

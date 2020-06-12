@@ -12,10 +12,10 @@ MinMaxSystem::MinMaxSystem(const std::string id) {
 bool MinMaxSystem::isSound(const MinMax &minmax, const Certainties &, const Environment &box) {
     Box b = box.box;
     int cert = evalSystem(b);
-    return (cert == 0 || !minmax.empty()) && minmax.isSound() &&
+    return cert == 0 || (!minmax.empty() && minmax.isSound() &&
             (cert <= 0 ||
-            (minmax.min_or_max() > MINMAX || !minmax.min_point().empty()) &&
-            (minmax.min_or_max() < MINMAX || !minmax.max_point().empty()));
+            ((minmax.min_or_max() > MINMAX || !minmax.min_point().empty()) &&
+            (minmax.min_or_max() < MINMAX || !minmax.max_point().empty()))));
 }
 
 void MinMaxSystem::minmax(const Real &e, const MinMaxType min_or_max) {
@@ -155,8 +155,8 @@ void MinMaxSystem::evaluate(MinMax &answer, Certainties &certs, Environment &box
                         if (!d_it.contains(0)) {
                             Where w = where(dirvars(), v);
                             if (w == INTERIOR ||
-                                    min_or_max_.back() != 0 && w == LEFT_INTERIOR && dirvar_.dir ||
-                                    min_or_max_.back() != 0 && w == RIGHT_INTERIOR && !dirvar_.dir) {
+                                    (min_or_max_.back() != 0 && w == LEFT_INTERIOR && dirvar_.dir) ||
+                                    (min_or_max_.back() != 0 && w == RIGHT_INTERIOR && !dirvar_.dir)) {
                                 // The solution is necessarily found outside this box
                                 return;
                             }
@@ -170,6 +170,9 @@ void MinMaxSystem::evaluate(MinMax &answer, Certainties &certs, Environment &box
                         break;
                     }
                 } catch (Growl growl) {
+                    if (Kodiak::debug()) {
+                        std::cout << "[GrowlException@MinMaxSystem::evaluate]" << growl.what() << std::endl;
+                    }
                 }
             }
             if (varselect_ > 0) {
@@ -276,10 +279,10 @@ void MinMaxSystem::accumulate(const MinMax &answer) {
 
 bool MinMaxSystem::prune(const MinMax &answer) {
     bool b =
-            (min_or_max_.back() > 0 || !answer.empty() && !acc_.min_point_.empty() &&
-            acc_.ub_of_min_ <= answer.mm_.inf()) &&
-            (min_or_max_.back() < 0 || !answer.empty() && !acc_.max_point_.empty() &&
-            answer.mm_.sup() <= acc_.lb_of_max_);
+            (min_or_max_.back() > 0 || (!answer.empty() && !acc_.min_point_.empty() &&
+            acc_.ub_of_min_ <= answer.mm_.inf())) &&
+            (min_or_max_.back() < 0 || (!answer.empty() && !acc_.max_point_.empty() &&
+            answer.mm_.sup() <= acc_.lb_of_max_));
     return b;
 }
 
@@ -289,7 +292,7 @@ bool MinMaxSystem::local_exit(const MinMax &answer) {
 
 #ifdef DEBUG
     assert(answer.ub_of_min_ >= answer.mm_.inf());
-    assert(answer.mm_.inf() <= answer.lb_of_max_);
+    assert(answer.mm_.sup() >= answer.lb_of_max_);
 #endif
     const int &currentTarget = min_or_max_.back();
     const bool isMaximizing = currentTarget > 0;

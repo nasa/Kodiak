@@ -11,12 +11,15 @@
 #include "Expressions/Boolean/OrNode.hpp"
 #include "Expressions/Boolean/ImplicationNode.hpp"
 #include "Expressions/Boolean/RelationNode.hpp"
+#include "Expressions/Boolean/InvalidBooleanNode.hpp"
 
 namespace kodiak {
     namespace BooleanExpressions {
 
         class Bool {
         public:
+            Bool() : Bool(ConstantNode{POSSIBLY}) {}
+
             Bool(const unique_ptr<Node> &aNode) : node_(aNode->clone()) {}
 
             Bool(unique_ptr<Node> &&aNode) : node_(std::move(aNode)) {}
@@ -26,6 +29,11 @@ namespace kodiak {
             Bool(const Node &&aNode) : node_(aNode.clone()) {}
 
             Bool(const Bool &src) : node_(src.node_->clone()) {}
+
+            Bool & operator=(Bool tmp) {
+                std::swap(node_,tmp.node_);
+                return *this;
+            }
 
             Certainty eval(const Environment &env, const bool bernsteinEnclosure, const real eps) const {
                 return this->node_->eval(env, bernsteinEnclosure, eps);
@@ -41,6 +49,10 @@ namespace kodiak {
 
             Node const &getNode() const {
                 return *this->node_;
+            }
+
+            bool isNaB() const {
+                return this->node_->isNaB();
             }
 
         private:

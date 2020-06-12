@@ -60,6 +60,8 @@ namespace kodiak {
     };
 
     std::ostream &operator<<(std::ostream &out, const Certainty c);
+
+    Certainty operator&&(Certainty const, Certainty const);
 }
 
 #endif //KODIAK_CERTAINTY_HPP

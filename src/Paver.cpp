@@ -188,6 +188,7 @@ void Paving::gnuplot(const std::string filename,
         f2 << "[" << varbox_.box()[var3].inf() << ":" << varbox_.box()[var3].sup() << "] ";
     }
     f2 << osf.str() << std::endl;
+    f2 << "pause mouse keypress" << std::endl;
     //if (terminal != "") {
     //  f2 << "print 'File " << os.str() << "." << terminal
     //     << " has been generated'" << std::endl;
@@ -339,6 +340,43 @@ void Paving::gnuplot_3D(const std::string filename,
             << " and data files have been generated" << std::endl;
 }
 
+void Paving::save(const std::string filename, const Names &titles, const bool debug) const {
+    if (empty()) return;
+    Tuple vs;
+    if (vs.empty()) {
+        vs.resize(varbox_.size());
+        for (nat v = 0; v < varbox_.size(); ++v)
+            vs[v] = v;
+    }
+    std::ofstream f;
+    f.open(filename.c_str(), std::ofstream::out);
+    f << "## File: " << filename << std::endl;
+    f << "## Type: " << type_ << std::endl;
+    f << "## Vars:" << std::endl;
+    nat width = 2 * Kodiak::precision();
+    for (nat i = 0; i < vs.size(); ++i)
+        f << std::setw(width) << varbox_.name(vs[i]);
+    f << std::endl;
+    for (nat i = 0; i < vs.size(); ++i)
+        f << std::setw(width) << varbox_.box()[vs[i]].inf();
+    f << std::endl;
+    for (nat i = 0; i < vs.size(); ++i)
+        f << std::setw(width) << varbox_.box()[vs[i]].sup();
+    f << std::endl;
+    f << std::endl;
+    for (nat i = 0; i < titles.size(); ++i) {
+        f << "## " << titles[i] << ": " << size(i) << " boxes " << std::endl;
+        if (i < boxes_.size() && boxes_[i].size() > 0)
+            save_boxes(f, boxes_[i], vs, width);
+        else
+            f << std::endl;
+    }
+    f.close();
+    if (debug) {
+        std::cout << "Kodiak (save): Boxes were saved in file " << filename << std::endl;
+    }
+}
+
 void Paving::save(const std::string filename, const Names &titles, const Names &names) const {
     if (empty()) return;
     Tuple vs;
@@ -384,6 +422,7 @@ void Paving::save(const std::string filename, const Names &titles, const Names &
     std::cout << "Kodiak (save): Boxes were saved in file " << os.str() << std::endl;
 }
 
+#ifdef DEBUG
 void Paving::write(const std::string filename) {
     std::ostringstream os;
     os << filename << ".pav";
@@ -400,6 +439,7 @@ void Paving::read(const std::string filename) {
     boost::archive::xml_iarchive ia(ifs);
     ia >> BOOST_SERIALIZATION_NVP(*this);
 }
+#endif
 
 // Compute the projection of a paving onto a smaller-dimensional space
 // (restricted list of variables). After eliminating the redundant
@@ -509,8 +549,8 @@ void Paver::evaluate(PrePaving &paving, Ints &certainties, Environment &env) {
             Real currentFormulaLHS = relationalFormulas_[i].ope();
             nat mostRecentSelectionVariable = dirvars().back().var;
             if (not currentFormulaLHS.hasVar(mostRecentSelectionVariable)
-                    /* TODO: Remove the following line and other users trivially true 
-                     * that seems useless: 
+                    /* TODO: Remove the following line and other users trivially true
+                     * that seems useless:
                      * && where(dirvars(), dirvars().back().var) != EXTERIOR */
                     ) {
                 // top variable doesn't appear in i-th formula, don't check it again
@@ -557,7 +597,7 @@ real Paver::minimumDiameterConsideredForNthVar(nat n) const {
 void Paver::select(DirVar &dirvar, Ints &certainties, Environment &env) {
     Box aBox = env.box;
     const nat numberOfVariables = aBox.size();
-    for (nat variable = 0; variable < numberOfVariables; ++variable) {        
+    for (nat variable = 0; variable < numberOfVariables; ++variable) {
         temp_.box[variable] = env.box[variable].approximatedMidpoint();
     }
     dirvar.init(numberOfVariables);

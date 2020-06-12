@@ -16,7 +16,7 @@ namespace kodiak {
                 MinMaxSystem(id),
                 booleanExpression_(std::make_unique<ConstantNode>(TRUE)) {}
 
-        nat numberOfRelationalFormulas() const {
+        nat numberOfRelationalFormulas() const override {
             return this->booleanExpression_ != nullptr ? 1 : 0;
         }
 
@@ -34,7 +34,7 @@ namespace kodiak {
             return *(this->booleanExpression_);
         }
 
-        void evaluate(MinMax &answer, Certainties &certs, Environment &env) {
+        void evaluate(MinMax &answer, Certainties &certs, Environment &env) override {
             if (debug() > 1) {
                 std::cout << "-- " << splits() << " (" << dirvars().size() << ") --" << std::endl;
                 std::cout << "Dirvars: " << dirvars() << std::endl;
@@ -130,8 +130,8 @@ namespace kodiak {
                                 if (!d_it.contains(0)) {
                                     Where w = where(dirvars(), v);
                                     if (w == INTERIOR ||
-                                        min_or_max_.back() != 0 && w == LEFT_INTERIOR && dirvar_.dir ||
-                                        min_or_max_.back() != 0 && w == RIGHT_INTERIOR && !dirvar_.dir) {
+                                        (min_or_max_.back() != 0 && w == LEFT_INTERIOR && dirvar_.dir) ||
+                                        (min_or_max_.back() != 0 && w == RIGHT_INTERIOR && !dirvar_.dir)) {
                                         // The solution is necessarily found outside this env
                                         return;
                                     }
@@ -145,6 +145,9 @@ namespace kodiak {
                                 break;
                             }
                         } catch (Growl growl) {
+                            if (Kodiak::debug()) {
+                                std::cout << "[GrowlException@NewMinMaxSystem::evaluate]" << growl.what() << std::endl;
+                            }
                         }
                     }
                     if (varselect_ > 0) {
@@ -187,7 +190,7 @@ namespace kodiak {
             return this->evalSystem(env.box, certs, dirvars);
         }
 
-        int evalSystem(Box &box, Certainties &certs, const DirVars &dirvars) {
+        int evalSystem(Box &box, Certainties &certs, const DirVars &) override {
             evalGlobalDefinitions();
             Environment env{EmptyBBox, box, EmptyNamedBox};
             if (certs.get() > 0) return certs.get();

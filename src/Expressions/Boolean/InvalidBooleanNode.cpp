@@ -3,7 +3,7 @@
 using namespace kodiak;
 using namespace kodiak::BooleanExpressions;
 
-Certainty InvalidBooleanNode::doEvaluate(const Environment &env, const bool i, const real eps) const {
+Certainty InvalidBooleanNode::doEvaluate(const Environment &, const bool, const real) const {
     return POSSIBLY;
 }
 

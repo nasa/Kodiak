@@ -5,9 +5,12 @@
 #include "BranchAndBoundDF.hpp"
 #include "System.hpp"
 #include "Environment.hpp"
+
+#ifdef DEBUG
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
 #include <boost/serialization/vector.hpp>
+#endif
 
 namespace kodiak {
 
@@ -108,7 +111,7 @@ namespace kodiak {
         }
 
         friend std::ostream& operator<< (std::ostream& stream, const PrePaving& paving) {
-            stream << paving.boxes_; // "TODO:PrePaving";
+            return stream << paving.boxes_; // "TODO:PrePaving";
         }
 
     protected:
@@ -120,17 +123,18 @@ namespace kodiak {
          *   that will be used, i.e., every index represents a type of box as in
          *   "Certainly", "Possibly", "Almost Certainly", "Certainly Not" types.
          *
-         *  Index meaning: 
+         *  Index meaning:
          *  [0] Certainly true
          *  [1] Possibly true
          *  [2] Possibly true within eps
-         *  [3] Certainly not (for FULL_SEARCH) 
+         *  [3] Certainly not (for FULL_SEARCH)
          */
         std::vector<Boxes> boxes_; // Collection of boxes
     };
 
     class Paving : public PrePaving {
     public:
+#ifdef DEBUG
         friend class boost::serialization::access;
 
         template<class Archive>
@@ -139,6 +143,7 @@ namespace kodiak {
             ar & BOOST_SERIALIZATION_NVP(varbox_);
             ar & BOOST_SERIALIZATION_NVP(boxes_);
         }
+#endif
 
         void set_type(nat type) {
             type_ = type;
@@ -170,8 +175,12 @@ namespace kodiak {
                 const Names &, const Names &,
                 const bool = false) const;
         void save(const std::string, const Names &, const Names & = EmptyNames) const;
+        void save(const std::string, const Names &, const bool) const;
+
+#ifdef DEBUG
         void write(const std::string);
         void read(const std::string);
+#endif
         Paving projection(const Names &);
     private:
         NamedBox varbox_;

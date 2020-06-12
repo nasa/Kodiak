@@ -75,16 +75,18 @@ namespace kodiak {
         friend std::ostream &operator<<(std::ostream &os, const MinMax &mm) {
             MinMaxType maxType = mm.getStrategy();
             os.precision(20);
-            if (maxType == MIN || maxType == MINMAX)
+            if (maxType == MIN || maxType == MINMAX) {
                 if (mm.mm_.inf() > mm.ub_of_min_)
                     os << "Min: []";
                 else
                     os << "Min:[" << mm.mm_.inf() << "," << mm.ub_of_min_ << "]";
-            if (maxType == MAX || maxType == MINMAX)
+            }
+            if (maxType == MAX || maxType == MINMAX) {
                 if (mm.mm_.sup() < mm.lb_of_max_)
                     os << "Max: []";
                 else
                     os << "Max:[" << mm.lb_of_max_ << "," << mm.mm_.sup() << "]";
+            }
             return os;
         }
     protected:

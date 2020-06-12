@@ -53,11 +53,11 @@ namespace kodiak {
                 return Sqrt(e1) + DUlp(Sqrt(r1 + e1)) / kodiak::val(2);
             }
 
-            Real aebounddp_neg(Real r1, Real e1) {
+            Real aebounddp_neg(Real, Real e1) {
                 return e1;
             }
 
-            Real aebounddp_abs(Real r1, Real e1) {
+            Real aebounddp_abs(Real, Real e1) {
                 return e1;
             }
 
@@ -126,11 +126,11 @@ namespace kodiak {
                 return Sqrt(e1) + SUlp(Sqrt(r1 + e1)) / kodiak::val(2);
             }
 
-            Real aeboundsp_neg(Real r1, Real e1) {
+            Real aeboundsp_neg(Real, Real e1) {
                 return e1;
             }
 
-            Real aeboundsp_abs(Real r1, Real e1) {
+            Real aeboundsp_abs(Real, Real e1) {
                 return e1;
             }
 

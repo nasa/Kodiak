@@ -692,8 +692,11 @@ Real kodiak::let(const std::string name, const Real &let, const Real &in) {
         os << "Kodiak (let): name \"" << name << "\" occurs as variable and constant name";
         throw Growl(os.str());
     }
-    if (in.locals().find(name) == in.locals().end())
-        return in;
+    if (in.locals().find(name) == in.locals().end()) {
+        std::ostringstream os;
+        os << "Kodiak (let): name \"" << name << "\" is not used in the \"in\" the body of the expression";
+        throw Growl(os.str());
+    }
     if (let.notAReal())
         return let;
     if (let.isVal()) {
@@ -1084,6 +1087,10 @@ void Real::print(std::ostream &os) const {
         os << "?";
 }
 
+std::string Real::toString() const {
+    return !notAReal() ? node_->toString() : "?";
+}
+
 Real::~Real() {
     if (!notAReal()) {
         --node_->use_;
@@ -1165,6 +1172,10 @@ void Monomial::print(std::ostream &os, const Names &names) const {
             }
         }
     }
+}
+
+bool kodiak::operator==(Monomial const &left,Monomial const &right) {
+    return left.expo_ == right.expo_ && left.coeff_ == right.coeff_;
 }
 
 Real kodiak::mk_poly(const Real &e) {
@@ -1291,9 +1302,6 @@ std::ostream &kodiak::operator<<(std::ostream &os, const Monomial &monom) {
 bool Real::operator==(const Real &anotherReal) const {
     if (this->notAReal() || anotherReal.notAReal()) {
         throw Growl("Kodiak (==): trying to compare NotAReal");
-    }
-    if (this->isName() && anotherReal.isName() && this->name() == anotherReal.name()) {
-        return true;
     }
     if (this->node_ == anotherReal.node_) {
         return true;

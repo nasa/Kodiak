@@ -34,8 +34,8 @@ int RelExpr::eval(Box &box, NamedBox &constbox, const bool enclosure, const real
             Interval derivative = derivativeForVariable(var).eval(box, constbox, enclosure);
             bool isIncreasing = derivative.cge(0);
             bool isDecreasing = derivative.cle(0);
-            if (isIncreasing && (op_ == LE || op_ == LT)
-                    || isDecreasing && (op_ == GE || op_ == GT)) {
+            if ((isIncreasing && (op_ == LE || op_ == LT))
+                    || (isDecreasing && (op_ == GE || op_ == GT))) {
                 box[var] = initialVarEnclosure.supremum();
                 Interval sup = ope_.eval(box, constbox);
                 int dly = sup.rel0(op_);
@@ -50,8 +50,8 @@ int RelExpr::eval(Box &box, NamedBox &constbox, const bool enclosure, const real
                     box[var] = initialVarEnclosure;
                     return dly;
                 }
-            } else if (isIncreasing && (op_ == GE || op_ == GT) ||
-                    isDecreasing && (op_ == LE || op_ == LT)) {
+            } else if ((isIncreasing && (op_ == GE || op_ == GT)) ||
+                    (isDecreasing && (op_ == LE || op_ == LT))) {
                 box[var] = initialVarEnclosure.infimum();
                 Interval inf = ope_.eval(box, constbox);
                 int dly = inf.rel0(op_);
@@ -69,19 +69,21 @@ int RelExpr::eval(Box &box, NamedBox &constbox, const bool enclosure, const real
             } else   if ((isIncreasing || isDecreasing) && op_ == EQ) {
                 box[var] = initialVarEnclosure.infimum();
                 Interval inf = ope_.eval(box, constbox);
-                if (isIncreasing && inf.cgt(0) || isDecreasing && inf.clt(0)) {
+                if ((isIncreasing && inf.cgt(0)) || (isDecreasing && inf.clt(0))) {
                     box[var] = initialVarEnclosure;
                     return 0;
                 }
                 box[var] = initialVarEnclosure.supremum();
                 Interval sup = ope_.eval(box, constbox);
-                if (isIncreasing && sup.clt(0) || isDecreasing && sup.cgt(0)) {
+                if ((isIncreasing && sup.clt(0)) || (isDecreasing && sup.cgt(0))) {
                     box[var] = initialVarEnclosure;
                     return 0;
                 }
             }
         } catch (Growl growl) {
-            std::cout << "[GrowlException@RelExpr::eval]" << growl.what() << std::endl;
+            if (Kodiak::debug()) {
+                std::cout << "[GrowlException@RelExpr::eval]" << growl.what() << std::endl;
+            }
         }
         box[var] = initialVarEnclosure;
     }

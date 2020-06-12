@@ -4,6 +4,8 @@ using namespace kodiak;
 
 MinMax::MinMax() : morm_(0) {
     mm_ = Interval::Empty();
+    ub_of_min_ = filib::fp_traits<real>::max();
+    lb_of_max_ = -filib::fp_traits<real>::max();
 }
 
 void MinMax::init(const int morm) {
@@ -70,12 +72,17 @@ MinMaxType MinMax::min_or_max() const {
 }
 
 void MinMax::print(std::ostream &os) const {
+    int max_base10_precision = std::numeric_limits<real>::max_digits10;
     if (morm_ <= 0) {
-        os << "min in " << min() << ". Diameter: " << min().diam() << std::endl;
+        const Interval &minimum = min();
+        minimum.precision(max_base10_precision);
+        os << "min in " << minimum << ". Diameter: " << minimum.diam() << std::endl;
         os << "ub_of_min point: " << min_point() << std::endl;
     }
     if (morm_ >= 0) {
-        os << "max in " << max() << ". Diameter: " << max().diam() << std::endl;
+        const Interval &maximum = max();
+        maximum.precision(max_base10_precision);
+        os << "max in " << maximum << ". Diameter: " << maximum.diam() << std::endl;
         os << "lb_of_max point: " << max_point() << std::endl;
     }
     if (morm_ == 0) {

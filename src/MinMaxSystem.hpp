@@ -18,7 +18,7 @@ namespace kodiak {
 
         // min_or_max     : MINMAX, MIN, or MAX
 
-        const MinMax &answer() {
+        const MinMax &answer() const {
             return minmax_;
         }
 

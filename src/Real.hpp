@@ -120,6 +120,8 @@ namespace kodiak {
             return subs(sigma, names);
         }
         void print(std::ostream &) const;
+        std::string toString() const;
+
         const VarBag &vars() const;
         VarBag &vars();
 
@@ -247,6 +249,7 @@ namespace kodiak {
     // by the tuple <3,2>. The size of the tuple is the number of variables.
 
     class Monomial {
+        friend bool operator==(Monomial const &,Monomial const &);
     public:
         // constructors/destructor
 
@@ -305,6 +308,8 @@ namespace kodiak {
         NameSet locals_; // set of local variables
         NameSet consts_; // set of constants
     };
+
+    bool operator==(Monomial const &,Monomial const &);
 
     Real rational(const Real &);
     Real poly_div(const Real &, const Real &);

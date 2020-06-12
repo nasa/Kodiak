@@ -16,8 +16,20 @@
 # FROM, RECIPIENT'S USE OF THE SUBJECT SOFTWARE, RECIPIENT SHALL INDEMNIFY AND HOLD HARMLESS THE UNITED STATES GOVERNMENT, ITS CONTRACTORS AND SUBCONTRACTORS, AS WELL AS ANY PRIOR RECIPIENT, TO THE EXTENT PERMITTED BY LAW.  RECIPIENT'S SOLE REMEDY FOR ANY SUCH
 # MATTER SHALL BE THE IMMEDIATE, UNILATERAL TERMINATION OF THIS AGREEMENT.
 
-cmake_minimum_required(VERSION 3.5)
-project(kodiak)
+cmake_minimum_required(VERSION 3.12)
+project(Kodiak)
+
+
+############################################################
+#
+# Import FILIB
+#
+############################################################
+
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake" ${CMAKE_MODULE_PATH})
+
+find_package(FILIB REQUIRED)
+
 
 ############################################################
 #
@@ -25,104 +37,119 @@ project(kodiak)
 #
 ############################################################
 
-set(CMAKE_CXX_STANDARD 14)
+add_compile_options("-std=c++14" "-fPIC")
+add_compile_options("-Wno-unused-command-line-argument")
 
-set(CMAKE_CXX_FLAGS "-std=c++14 -fPIC -frounding-math")
-add_compile_options(-Wall -pedantic -Wextra)
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    message(STATUS "GCC detected: adding specific flags")
+    add_compile_options("-frounding-math")
+endif()
 
 if(${DEBUG})
     message(WARNING "Building in DEBUGGING mode: all optimizations are disabled")
     add_definitions(-DDEBUG=1)
-    add_compile_options(-g -O0)
+    add_compile_options("-Wall" "-pedantic" "-Wextra")
+    add_compile_options("-g" "-O0" "-fsanitize=undefined")
+    add_link_options("-fsanitize=undefined")
 else()
-    add_compile_options(-O3)
+    add_compile_options("-O3")
 endif()
 
+if("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
+    message(STATUS "OS X found: adding specific linker options")
+    add_link_options("-undefined" "dynamic_lookup" ${CXXLNFLAGS})
+endif()
+
+
 ############################################################
 #
-# Include and source files
+# Kodiak
 #
 ############################################################
 
-include_directories(
+add_library(KodiakObjects OBJECT
+	src/Bifurcation.cpp
+	src/Bifurcation.hpp
+	src/Expressions/Boolean/Bool.cpp
+	src/Expressions/Boolean/Bool.hpp
+	src/BranchAndBoundDF.hpp
+	src/kodiak.hpp
+	src/MinMax.cpp
+	src/MinMax.hpp
+	src/MinMaxSystem.cpp
+	src/MinMaxSystem.hpp
+	src/Node.cpp
+	src/Node.hpp
+	src/Paver.cpp
+	src/Paver.hpp
+	src/Real.cpp
+	src/Real.hpp
+	src/System.cpp
+	src/System.hpp
+	src/types.cpp
+	src/types.hpp
+	src/Expressions/Boolean/LegacyCertainty.cpp
+	src/Expressions/Boolean/LegacyCertainty.hpp
+	src/Expressions/Boolean/ConstantNode.cpp
+	src/Expressions/Boolean/ConstantNode.hpp
+	src/Expressions/Boolean/Node.cpp
+	src/Expressions/Boolean/Node.hpp
+	src/Expressions/Boolean/Certainty.cpp
+	src/Expressions/Boolean/Certainty.hpp
+	src/LegacyBool.cpp
+	src/LegacyBool.hpp
+	src/Value.hpp
+	src/Environment.cpp
+	src/Environment.hpp
+	src/NewPaver.cpp
+	src/NewPaver.hpp
+	src/NewMinMaxSystem.cpp
+	src/NewMinMaxSystem.hpp
+	src/Adapters/PRECiSA.cpp
+	src/Adapters/PRECiSA.hpp
+	src/Adapters/Codiak.h
+	src/Adapters/Codiak.cpp
+	src/Expressions/Boolean/NotNode.cpp
+	src/Expressions/Boolean/NotNode.hpp
+	src/Expressions/Boolean/RelationNode.cpp
+	src/Expressions/Boolean/RelationNode.hpp
+	src/Expressions/Boolean/AndNode.cpp
+	src/Expressions/Boolean/AndNode.hpp
+	src/Expressions/Boolean/OrNode.cpp
+	src/Expressions/Boolean/OrNode.hpp
+	src/Expressions/Boolean/ImplicationNode.cpp
+	src/Expressions/Boolean/ImplicationNode.hpp
+	src/Expressions/Boolean/InvalidBooleanNode.cpp
+	src/Expressions/Boolean/InvalidBooleanNode.hpp
+	src/Expressions/Boolean/VariableNode.cpp
+	src/Expressions/Boolean/VariableNode.hpp
+	src/BooleanChecker.cpp
+	src/BooleanChecker.hpp
+)
+target_include_directories(KodiakObjects
+	PUBLIC
 		src
 		src/Adapters
 )
-
-set(SOURCE_FILES
-		src/Bifurcation.cpp
-		src/Bifurcation.hpp
-		src/Expressions/Boolean/Bool.cpp
-		src/Expressions/Boolean/Bool.hpp
-		src/BranchAndBoundDF.hpp
-		src/kodiak.hpp
-		src/MinMax.cpp
-		src/MinMax.hpp
-		src/MinMaxSystem.cpp
-		src/MinMaxSystem.hpp
-		src/Node.cpp
-		src/Node.hpp
-		src/Paver.cpp
-		src/Paver.hpp
-		src/Real.cpp
-		src/Real.hpp
-		src/System.cpp
-		src/System.hpp
-		src/types.cpp
-		src/types.hpp
-		src/Expressions/Boolean/LegacyCertainty.cpp
-		src/Expressions/Boolean/LegacyCertainty.hpp
-		src/Expressions/Boolean/ConstantNode.cpp
-		src/Expressions/Boolean/ConstantNode.hpp
-		src/Expressions/Boolean/Node.cpp
-		src/Expressions/Boolean/Node.hpp
-		src/Expressions/Boolean/Certainty.cpp
-		src/Expressions/Boolean/Certainty.hpp
-		src/LegacyBool.cpp
-		src/LegacyBool.hpp
-		src/Value.cpp
-		src/Value.hpp
-		src/Environment.cpp
-		src/Environment.hpp
-		src/NewPaver.cpp
-		src/NewPaver.hpp
-		src/NewMinMaxSystem.cpp
-		src/NewMinMaxSystem.hpp
-		src/Adapters/PRECiSA.cpp
-		src/Adapters/PRECiSA.hpp
-		src/Adapters/Codiak.h
-		src/Adapters/Codiak.cpp
-		src/Expressions/Boolean/NotNode.cpp
-		src/Expressions/Boolean/NotNode.hpp
-		src/Expressions/Boolean/RelationNode.cpp
-		src/Expressions/Boolean/RelationNode.hpp
-		src/Expressions/Boolean/AndNode.cpp
-		src/Expressions/Boolean/AndNode.hpp
-		src/Expressions/Boolean/OrNode.cpp
-		src/Expressions/Boolean/OrNode.hpp
-		src/Expressions/Boolean/ImplicationNode.cpp
-		src/Expressions/Boolean/ImplicationNode.hpp
-		src/Expressions/Boolean/InvalidBooleanNode.cpp
-		src/Expressions/Boolean/InvalidBooleanNode.hpp
-		src/Expressions/Boolean/VariableNode.cpp
-		src/Expressions/Boolean/VariableNode.hpp
-		)
+target_link_libraries(KodiakObjects
+    PUBLIC
+	    FILIB::filib++
+	    $<$<BOOL:${DEBUG}>:boost_serialization>
+)
 
 
 ############################################################
 #
-# Kodiak Library
+# Kodiak Libraries
 #
 ############################################################
 
-add_library(KodiakDynamic SHARED ${SOURCE_FILES})
-target_link_libraries(KodiakDynamic prim)
-target_link_libraries(KodiakDynamic boost_serialization)
+add_library(KodiakDynamic SHARED $<TARGET_OBJECTS:KodiakObjects>)
+target_link_libraries(KodiakDynamic PUBLIC KodiakObjects)
 set_target_properties(KodiakDynamic PROPERTIES OUTPUT_NAME kodiak)
 
-add_library(KodiakStatic STATIC ${SOURCE_FILES})
-target_link_libraries(KodiakStatic prim)
-target_link_libraries(KodiakStatic boost_serialization)
+add_library(KodiakStatic STATIC $<TARGET_OBJECTS:KodiakObjects>)
+target_link_libraries(KodiakStatic PUBLIC KodiakObjects)
 set_target_properties(KodiakStatic PROPERTIES OUTPUT_NAME kodiak)
 
 
@@ -133,3 +160,7 @@ set_target_properties(KodiakStatic PROPERTIES OUTPUT_NAME kodiak)
 ############################################################
 
 add_subdirectory(examples)
+
+if(EXISTS tests)
+  add_subdirectory(tests)
+endif()

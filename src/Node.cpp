@@ -2,6 +2,12 @@
 
 using namespace kodiak;
 
+std::string Node::toString() const {
+    std::ostringstream strstream;
+    print(strstream);
+    return strstream.str();
+}
+
 // --- RealVal_Node ---
 
 RealVal_Node::RealVal_Node(const Interval &i) : val_(i) {
@@ -317,12 +323,9 @@ bool Error_Node::isError() const {
     return true;
 }
 
-bool Error_Node::operator==(const Node &other) const {
-    return other == *this;
-}
-
-bool Error_Node::operator==(const Error_Node &other) const {
-    return this->value_ == other.value_ && this->error_ == other.error_;
+bool Error_Node::isEqual(Node const & other) const {
+    Error_Node const & otherErrorNode = static_cast<Error_Node const &>(other);
+    return this->value_ == otherErrorNode.value_ && this->error_ == otherErrorNode.error_;
 }
 
 // --- Floor_Node ---
@@ -365,12 +368,9 @@ bool Floor_Node::isFloor() const {
     return true;
 }
 
-bool Floor_Node::operator==(const Node &other) const {
-    return other == *this;
-}
-
-bool Floor_Node::operator==(const Floor_Node &other) const {
-    return this->operand_ == other.operand_;
+bool Floor_Node::isEqual(Node const & other) const {
+    Floor_Node const & otherFloorNode = static_cast<Floor_Node const &>(other);
+    return this->operand_ == otherFloorNode.operand_;
 }
 
 
@@ -393,7 +393,7 @@ Max_Node::Max_Node(std::vector<Real> &listOfReals) {
     }
 }
 
-Real Max_Node::deriv(const nat varIndex) const {
+Real Max_Node::deriv(const nat) const {
     return NotAReal;
 }
 
@@ -446,12 +446,9 @@ bool Max_Node::isMax() const {
     return true;
 }
 
-bool Max_Node::operator==(const Node &other) const {
-    return other == *this;
-}
-
-bool Max_Node::operator==(const Max_Node &other) const {
-    return this->operands_ == other.operands_;
+bool Max_Node::isEqual(Node const & other) const {
+    Max_Node const & otherMaxNode = static_cast<Max_Node const &>(other);
+    return this->operands_ == otherMaxNode.operands_;
 }
 
 
@@ -542,12 +539,9 @@ bool Min_Node::isMin() const {
     return true;
 }
 
-bool Min_Node::operator==(const Node &other) const {
-    return other == *this;
-}
-
-bool Min_Node::operator==(const Min_Node &other) const {
-    return this->operands_ == other.operands_;
+bool Min_Node::isEqual(Node const & other) const {
+    Min_Node const & otherMinNode = static_cast<Min_Node const &>(other);
+    return this->operands_ == otherMinNode.operands_;
 }
 
 // --- RealBinary_Node ---
@@ -706,6 +700,9 @@ Interval RealLetin_Node::eval(const Box &box, NamedBox &constbox, const bool enc
         constbox.pop();
         return in;
     } catch (Growl growl) {
+        if (Kodiak::debug()) {
+            std::cerr << "[GrowlException@RealLetin_Node::eval]" << growl.what() << std::endl;
+        }
         constbox.pop();
         throw growl;
     }

@@ -2,11 +2,14 @@
 #include <iostream>
 #include "Codiak.h"
 #include "Real.hpp"
+#include "Expressions/Boolean/Bool.hpp"
 #include "MinMaxSystem.hpp"
+#include "NewPaver.hpp"
 #include "Adapters/PRECiSA.hpp"
 
 using namespace kodiak;
 using namespace kodiak::Adapters::PRECiSA;
+using namespace kodiak::BooleanExpressions;
 
 CInterval interval_create(double lb, double ub) {
     return new Interval(lb,ub);
@@ -23,6 +26,12 @@ void interval_print(CInterval p) {
     std::cout << std::endl;
 }
 
+int real_equal_to(CReal pLeft, CReal pRight) {
+    Real *pLeftBool = static_cast<Real *>(pLeft);
+    Real *pRightBool = static_cast<Real *>(pRight);
+    return pLeftBool->operator==(*pRightBool) ? 1 : 0;
+}
+
 CReal real_create_value(CInterval p) {
     const Interval interval = *static_cast<Interval *>(p);
     return new Real(val(interval));
@@ -31,6 +40,18 @@ CReal real_create_value(CInterval p) {
 CReal real_create_variable(CUInt index, CString name) {
     std::string castedName = static_cast<const char*>(name);
     return new Real(var(index, castedName));
+}
+
+CReal real_create_local_variable(CString name) {
+    std::string castedName = static_cast<const char*>(name);
+    return new Real(var(castedName));
+}
+
+CReal real_create_letin(CString name, CReal cpLet, CReal cpIn) {
+    std::string castedName = static_cast<const char*>(name);
+    Real *pLet = static_cast<Real *>(cpLet);
+    Real *pIn = static_cast<Real *>(cpIn);
+    return new Real(let(castedName, *pLet, *pIn));
 }
 
 void real_print(CReal p) {
@@ -159,6 +180,96 @@ CReal real_create_single_ulp(CReal p) {
 CReal real_create_negation(CReal p) {
     Real *pReal = static_cast<Real *>(p);
     return new Real(-(*pReal));
+}
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// Boolean Expressions
+//
+//////////////////////////////////////////////////////////////////////
+
+int bool_equal_to(CBool pLeft, CBool pRight) {
+    Bool *pLeftBool = static_cast<Bool *>(pLeft);
+    Bool *pRightBool = static_cast<Bool *>(pRight);
+    return *pLeftBool == *pRightBool ? 1 : 0;
+}
+
+CBool bool_create_true() {
+    return new Bool(True);
+}
+
+CBool bool_create_false() {
+    return new Bool(False);
+}
+
+CBool bool_create_possibly() {
+    return new Bool(Possibly);
+}
+
+CBool bool_create_within_eps() {
+    return new Bool(EPSTrue);
+}
+
+void  bool_print(CBool p) {
+    Bool *pBool = static_cast<Bool *>(p);
+    std::cout << "Bool(";
+    std::cout << *pBool;
+    std::cout << ")";
+    std::cout << std::endl;
+}
+
+CBool bool_create_not(CBool p) {
+    Bool *pBool = static_cast<Bool *>(p);
+    return new Bool(! *pBool);
+}
+
+CBool bool_create_and(CBool pLeft, CBool pRight) {
+    Bool *pLeftBool = static_cast<Bool *>(pLeft);
+    Bool *pRightBool = static_cast<Bool *>(pRight);
+    return new Bool(*pLeftBool && *pRightBool);
+}
+
+CBool bool_create_or(CBool pLeft, CBool pRight) {
+    Bool *pLeftBool = static_cast<Bool *>(pLeft);
+    Bool *pRightBool = static_cast<Bool *>(pRight);
+    return new Bool(*pLeftBool || *pRightBool);
+}
+
+CBool bool_create_implies(CBool pLeft, CBool pRight) {
+    Bool *pLeftBool = static_cast<Bool *>(pLeft);
+    Bool *pRightBool = static_cast<Bool *>(pRight);
+    return new Bool(*pLeftBool |= *pRightBool);
+}
+
+CBool bool_create_equal_to(CReal pLeft, CReal pRight) {
+    Real *pLeftReal = static_cast<Real *>(pLeft);
+    Real *pRightReal = static_cast<Real *>(pRight);
+    return new Bool(kodiak::BooleanExpressions::operator==(*pLeftReal, *pRightReal));
+}
+
+CBool bool_create_less_than(CReal pLeft, CReal pRight) {
+    Real *pLeftReal = static_cast<Real *>(pLeft);
+    Real *pRightReal = static_cast<Real *>(pRight);
+    return new Bool(*pLeftReal < *pRightReal);
+}
+
+CBool bool_create_less_than_or_equal_to(CReal pLeft, CReal pRight) {
+    Real *pLeftReal = static_cast<Real *>(pLeft);
+    Real *pRightReal = static_cast<Real *>(pRight);
+    return new Bool(*pLeftReal <= *pRightReal);
+}
+
+CBool bool_create_greater_than(CReal pLeft, CReal pRight) {
+    Real *pLeftReal = static_cast<Real *>(pLeft);
+    Real *pRightReal = static_cast<Real *>(pRight);
+    return new Bool(*pLeftReal > *pRightReal);
+}
+
+CBool bool_create_greater_than_or_equal_to(CReal pLeft, CReal pRight) {
+    Real *pLeftReal = static_cast<Real *>(pLeft);
+    Real *pRightReal = static_cast<Real *>(pRight);
+    return new Bool(*pLeftReal >= *pRightReal);
 }
 
 
@@ -404,3 +515,48 @@ double minmax_system_maximum_lower_bound(CMinMaxSystem p) {
 double minmax_system_maximum_upper_bound(CMinMaxSystem p) {
     return static_cast<MinMaxSystem *>(p)->answer().ub_of_max();
 }
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// Paver
+//
+//////////////////////////////////////////////////////////////////////
+
+CPaver paver_create(CString name) {
+    std::string castedName = static_cast<const char*>(name);
+    return new NewPaver(castedName);
+}
+
+void paver_print(CPaver p) {
+    static_cast<NewPaver *>(p)->print(std::cout);
+}
+
+void paver_register_variable(CPaver p, CString name, CInterval plb, CInterval pub) {
+    std::string stringName = static_cast<const char*>(name);
+    Interval *lowerBound = static_cast<Interval *>(plb);
+    Interval *upperBound = static_cast<Interval *>(pub);
+    static_cast<NewPaver *>(p)->var(stringName, *lowerBound, *upperBound);
+}
+
+void paver_set_maxdepth(CPaver p, CUInt depth) {
+    static_cast<NewPaver *>(p)->set_maxdepth(depth);
+}
+
+void paver_set_precision(CPaver p, CInt precision) {
+    static_cast<NewPaver *>(p)->set_precision(precision);
+}
+
+void paver_pave(CPaver pcPaver, CBool pExp) {
+    Bool *pBool = static_cast<Bool *>(pExp);
+    NewPaver *pPaver = static_cast<NewPaver *>(pcPaver);
+    pPaver->setBooleanExpression(*pBool);
+    pPaver->pave(FULL);
+}
+
+void paver_save_paving(CPaver pcPaver, CString pFilename) {
+    std::string filename = static_cast<const char *>(pFilename);
+    NewPaver *pPaver = static_cast<NewPaver *>(pcPaver);
+    pPaver->save(filename);
+}
+
