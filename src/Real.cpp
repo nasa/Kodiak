@@ -693,9 +693,7 @@ Real kodiak::let(const std::string name, const Real &let, const Real &in) {
         throw Growl(os.str());
     }
     if (in.locals().find(name) == in.locals().end()) {
-        std::ostringstream os;
-        os << "Kodiak (let): name \"" << name << "\" is not used in the \"in\" the body of the expression";
-        throw Growl(os.str());
+      return in;
     }
     if (let.notAReal())
         return let;
