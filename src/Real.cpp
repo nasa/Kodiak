@@ -693,7 +693,7 @@ Real kodiak::let(const std::string name, const Real &let, const Real &in) {
         throw Growl(os.str());
     }
     if (in.locals().find(name) == in.locals().end()) {
-      return in;
+        return in;
     }
     if (let.notAReal())
         return let;

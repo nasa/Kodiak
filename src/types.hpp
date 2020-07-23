@@ -35,9 +35,15 @@ namespace kodiak {
     template <typename T>
     class Bag {
     public:
-
         Bag() : linear_(true) {
         }
+
+        Bag(std::initializer_list<T> reals) : Bag() {
+            for (auto &r : reals) {
+                this->insert(r);
+            }
+        }
+
         typedef typename std::map<T, nat>::const_iterator iterator;
 
         bool empty() const {
@@ -90,6 +96,11 @@ namespace kodiak {
                 }
             return result;
         }
+
+        bool operator==(const Bag &other) const {
+            return this->linear_ == other.linear_ && this->bag_ == other.bag_;
+        }
+
     private:
         std::map<T, nat> bag_;
         bool linear_;

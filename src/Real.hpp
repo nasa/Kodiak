@@ -135,10 +135,10 @@ namespace kodiak {
 
         nat numberOfVariables() const;
         const NameSet &locals() const;
-        NameSet &locals();
         const NameSet &consts() const;
         NameSet &consts();
         RealType type() const;
+        RealType getType() const { return this->type(); }
 
         bool closed() const {
             return locals().empty();

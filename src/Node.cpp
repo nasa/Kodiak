@@ -279,11 +279,14 @@ void RealUnary_Node::print(std::ostream &os) const {
 // --- Error_Node ---
 
 Error_Node::Error_Node(const Real &value, const Real &error) : value_(value), error_(error) {
-
-    variableIndexes_ = value.vars();
-    variableIndexes_.insert(error.vars());
     realExpressionType_ = REAL;
-    numOfVariables = std::max({value.numberOfVariables(), error.numberOfVariables()});
+    this->numOfVariables = std::max({value.numberOfVariables(), error.numberOfVariables()});
+    this->globalConstants_.insert(value.consts().begin(),value.consts().end());
+    this->globalConstants_.insert(error.consts().begin(),error.consts().end());
+    this->localVariables_.insert(value.locals().begin(),value.locals().end());
+    this->localVariables_.insert(error.locals().begin(),error.locals().end());
+    this->variableIndexes_.insert(value.vars());
+    this->variableIndexes_.insert(error.vars());
 }
 
 Real Error_Node::deriv(const nat) const {
@@ -331,11 +334,11 @@ bool Error_Node::isEqual(Node const & other) const {
 // --- Floor_Node ---
 
 Floor_Node::Floor_Node(const Real &expr) : operand_(expr) {
-    variableIndexes_ = expr.vars();
-    localVariables_ = expr.locals();
-    globalConstants_ = expr.consts();
     realExpressionType_ = REAL;
     numOfVariables = expr.numberOfVariables();
+    globalConstants_ = expr.consts();
+    localVariables_ = expr.locals();
+    variableIndexes_ = expr.vars();
 }
 
 Real Floor_Node::deriv(const nat) const {
@@ -376,20 +379,17 @@ bool Floor_Node::isEqual(Node const & other) const {
 
 // --- Max_Node ---
 
-Max_Node::Max_Node(std::vector<Real> &listOfReals) {
+Max_Node::Max_Node(std::vector<Real> const &listOfReals) {
     if (listOfReals.size() <= 0) {
         throw Growl("Kodiak (Max_Node[ctor]): a Max_Node cannot be created with an empty list of expressions");
     }
-    for (auto r : listOfReals) {
-        this->operands_.push_back(r);
-    }
+    this->realExpressionType_ = REAL;
+    this->operands_ = listOfReals;
     for (auto r : this->operands_) {
-        const VarBag &b2 = r.vars();
-        variableIndexes_.insert(b2);
-    }
-    realExpressionType_ = REAL;
-    for (auto r : this->operands_) {
-        numOfVariables = std::max({numOfVariables, r.numberOfVariables()});
+        this->numOfVariables = std::max({numOfVariables, r.numberOfVariables()});
+        this->globalConstants_.insert(r.consts().begin(),r.consts().end());
+        this->localVariables_.insert(r.locals().begin(),r.locals().end());
+        this->variableIndexes_.insert(r.vars());
     }
 }
 
@@ -454,35 +454,17 @@ bool Max_Node::isEqual(Node const & other) const {
 
 // --- Min_Node ---
 
-Min_Node::Min_Node(std::initializer_list<const Real> listOfReals) {
+Min_Node::Min_Node(std::vector<Real> const &listOfReals) {
     if (listOfReals.size() <= 0) {
         throw Growl("Kodiak (Min_Node[ctor]): a Min_Node cannot be created with an empty list of expressions");
     }
-    for (auto r : listOfReals) {
-        this->operands_.push_back(r);
-    }
+    this->realExpressionType_ = REAL;
+    this->operands_ = listOfReals;
     for (auto r : this->operands_) {
-        variableIndexes_.insert(r.vars());
-    }
-    realExpressionType_ = REAL;
-    for (auto r : this->operands_) {
-        numOfVariables = std::max({numOfVariables, r.numberOfVariables()});
-    }
-}
-
-Min_Node::Min_Node(std::vector<Real> &listOfReals) {
-    if (listOfReals.size() <= 0) {
-        throw Growl("Kodiak (Min_Node[ctor]): a Min_Node cannot be created with an empty list of expressions");
-    }
-    for (auto r : listOfReals) {
-        this->operands_.push_back(r);
-    }
-    for (auto r : this->operands_) {
-        variableIndexes_.insert(r.vars());
-    }
-    realExpressionType_ = REAL;
-    for (auto r : this->operands_) {
-        numOfVariables = std::max({numOfVariables, r.numberOfVariables()});
+        this->numOfVariables = std::max({numOfVariables, r.numberOfVariables()});
+        this->globalConstants_.insert(r.consts().begin(),r.consts().end());
+        this->localVariables_.insert(r.locals().begin(),r.locals().end());
+        this->variableIndexes_.insert(r.vars());
     }
 }
 

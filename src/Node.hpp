@@ -22,6 +22,26 @@ namespace kodiak {
             return typeid(*this) == typeid(other) && isEqual(other);
         }
 
+        NameSet const &getLocals() const {
+            return this->localVariables_;
+        }
+
+        NameSet const &getConsts() const {
+            return this->globalConstants_;
+        }
+
+        VarBag const &getVars() const {
+            return this->variableIndexes_;
+        }
+
+        RealType getType() const {
+            return this->realExpressionType_;
+        }
+
+        nat getNumberOfVariables() const {
+            return this->numOfVariables;
+        }
+
     protected:
 
         virtual bool isEqual(Node const &) const { return false; }
@@ -243,7 +263,8 @@ namespace kodiak {
     class Max_Node : public Node {
         friend class Real;
     public:
-        Max_Node(std::vector<Real>&);
+        Max_Node(std::initializer_list<Real> const reals) : Max_Node(std::vector<Real>{reals}) {}
+        Max_Node(std::vector<Real> const &);
         ~Max_Node() = default;
 
         Real deriv(const nat) const override;
@@ -264,8 +285,8 @@ namespace kodiak {
     class Min_Node : public Node {
         friend class Real;
     public:
-        Min_Node(std::initializer_list<const Real>);
-        Min_Node(std::vector<Real>&);
+        Min_Node(std::initializer_list<Real> const reals) : Min_Node(std::vector<Real>{reals}) {}
+        Min_Node(std::vector<Real> const &);
         ~Min_Node() = default;
 
         Real deriv(const nat) const override;
