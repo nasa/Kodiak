@@ -60,6 +60,34 @@ if("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
     add_link_options("-undefined" "dynamic_lookup" ${CXXLNFLAGS})
 endif()
 
+############################################################
+#
+# CPM Package Manager
+#
+############################################################
+
+set(CPM_DOWNLOAD_VERSION 0.27.2)
+set(CPM_DOWNLOAD_LOCATION "${CMAKE_BINARY_DIR}/cmake/CPM_${CPM_DOWNLOAD_VERSION}.cmake")
+
+if(NOT (EXISTS ${CPM_DOWNLOAD_LOCATION} AND CPM_VERSION STREQUAL CPM_DOWNLOAD_VERSION))
+    message(STATUS "Downloading CPM.cmake")
+    file(DOWNLOAD https://github.com/TheLartians/CPM.cmake/releases/download/v${CPM_DOWNLOAD_VERSION}/CPM.cmake ${CPM_DOWNLOAD_LOCATION})
+endif()
+
+include(${CPM_DOWNLOAD_LOCATION})
+
+############################################################
+#
+# Third Party libraries
+#
+############################################################
+
+CPMFindPackage(
+    NAME Boost
+    GITHUB_REPOSITORY Orphis/boost-cmake
+    VERSION 1.67.0
+	FIND_PACKAGE_ARGUMENTS "COMPONENTS system thread"
+)
 
 ############################################################
 #
@@ -134,7 +162,7 @@ target_include_directories(KodiakObjects
 target_link_libraries(KodiakObjects
     PUBLIC
 	    FILIB::filib++
-	    $<$<BOOL:${DEBUG}>:boost_serialization>
+		Boost::system
 )
 
 
