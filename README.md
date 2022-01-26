@@ -8,18 +8,20 @@ algorithm for rigorous numerical approximations. Particular instances
 of the branch and bound algorithm allow the user to refine and
 isolate solutions to systems of nonlinear equations and inequalities,
 global optimization problems, and bifurcation sets for systems of
-ODEs. Kodiak utilizes interval arithmetic (via the *filib++* library)
+ODEs. Kodiak utilizes interval arithmetic (via the [filib++](www2.math.uni-wuppertal.de/wrswt/software/filib.html) library)
 and Bernstein enclosure (for polynomials and rational functions) as
 self-validating enclosure methods. Symbolic operations support
 procedures such as automatic partial differentiation.
 
-### Authors
-
-Cesar A. Munoz (cesar.a.munoz@nasa.gov), NASA Langley Research Center
+### Maintainers
 
 Marco A. Feliu (marco.feliu@nianet.org), National Institute of Aerospace
 
-### Other Contributors
+Aaron M. Dutle (aaron.m.dutle@nasa.gov), NASA Langley Research Center, US.
+
+### Previous Contributors
+
+Cesar A. Munoz, formerly at NASA Langley Research Center, US.
 
 Andrew P. Smith, formerly at National Institute of Aerospace, US.
 
@@ -69,28 +71,23 @@ running the software on Windows or any other system.
 The following software should firstly be installed, if not already
 present (please follow the links for instructions and support):
 
-* *CMake* build tool (required):
-  [https://cmake.org](https://cmake.org)
+* **C++** compiler (standard `>=C++14` required)
+* [CMake](https://cmake.org) build tool (version `>=3.12` required)
+* [filib++](http://www2.math.uni-wuppertal.de/wrswt/software/filib.html) interval library (version `3.0.2` required) configured with the following options:
+  ```
+  $ ./configure CFLAGS=-fPIC CPPFLAGS=-fPIC CXXFLAGS=-fPIC
+  ```
+  before invoking the `make` commands:
+  ```
+  $ make
+  $ make install
+  ```
 
-* *Boost* libraries (required):  
-  [http://www.boost.org/users/download/](http://www.boost.org/users/download/)  
+* *Boost* libraries (only for debugging):
+  [http://www.boost.org/users/download/](http://www.boost.org/users/download/)
   In addition to the headers, you need at least the library
-  `serialization`. This library can be installed using 
-  `
-  ./bootstrap.sh --with-libraries=serialization
-  `
-  and then `sudo ./b2 install`. Finally, you need to define the environment
-  variable `BOOST_ROOT` to point to the directory where Boost's
-  `include` and `lib` directories were installed, e.g., `/usr/local`.
+  `serialization`.
 
-* *filib++* interval library (required):
-  [http://www2.math.uni-wuppertal.de/wrswt/software/filib.html](http://www2.math.uni-wuppertal.de/wrswt/software/filib.html)
-  This library should be configured with the following options before making (`make` command)
-  and installing it (maybe `sudo` will be needed prepended to the `make install` command in order to
-  install the files in `/usr/local`):
-  `
-  ./configure CFLAGS=-fPIC CPPFLAGS=-fPIC CXXFLAGS=-fPIC
-  `
 
 ### 2. Build Library and Examples
 
@@ -117,6 +114,10 @@ Now, run *CMake* for creating the build scripts:
 ```
 $ cmake ..
 ```
+If this command fails because *CMake* cannot find *FILIB*, add the `FILIB_ROOT` environment variable with the path to the *FILIB* source code directory used during the installation.
+```
+$ FILIB_ROOT=<FILIB-directory> cmake ..
+```
 
 Finally, build all targets by invoking the *CMake* build command:
 ```
@@ -140,10 +141,10 @@ resolutions are set.
 
 ## Version
 
-*Kodiak* ver. 2.0.2,  June 2020
+*Kodiak* ver. 2.0.3,  January 2022
 
 ## Logo
-The Kodiak logo was designed by 
+The Kodiak logo was designed by
 [Mahyar Malekpour](http://shemesh.larc.nasa.gov/people/mrm/publications.htm#ETC) (NASA).
 
 ## License and Copyright Notice
@@ -152,7 +153,6 @@ The code in this repository is released under NASA's Open Source
 Agreement.  See the directory [`LICENSES`](LICENSES).
 
 <pre>
-
 Notices:
 
 Copyright 2017 United States Government as represented by the
@@ -187,5 +187,4 @@ STATES GOVERNMENT, ITS CONTRACTORS AND SUBCONTRACTORS, AS WELL AS ANY
 PRIOR RECIPIENT, TO THE EXTENT PERMITTED BY LAW.  RECIPIENT'S SOLE
 REMEDY FOR ANY SUCH MATTER SHALL BE THE IMMEDIATE, UNILATERAL
 TERMINATION OF THIS AGREEMENT.
-
 </pre>

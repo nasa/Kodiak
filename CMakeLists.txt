@@ -37,27 +37,39 @@ find_package(FILIB REQUIRED)
 #
 ############################################################
 
-add_compile_options("-std=c++14" "-fPIC")
+if (DEFINED ENV{CXXFLAGS})
+  message(WARNING "\$ENV{CXXFLAGS} exists: using it for extra compilation options")
+  set(CXXFLAGS $ENV{CXXFLAGS})
+  separate_arguments(CXXFLAGS)
+endif()
+
+if (DEFINED ENV{CXXLNFLAGS})
+  message(WARNING "\$ENV{CXXLNFLAGS} exists: using it for extra linking options")
+  set(CXXLNFLAGS $ENV{CXXLNFLAGS})
+  separate_arguments(CXXLNFLAGS)
+endif()
+
+add_compile_options("-std=c++14" "-fPIC" ${CXXFLAGS})
 add_compile_options("-Wno-unused-command-line-argument")
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    message(STATUS "GCC detected: adding specific flags")
-    add_compile_options("-frounding-math")
+  message(STATUS "GCC detected: adding specific flags")
+  add_compile_options("-frounding-math")
 endif()
 
 if(${DEBUG})
     message(WARNING "Building in DEBUGGING mode: all optimizations are disabled")
     add_definitions(-DDEBUG=1)
-    add_compile_options("-Wall" "-pedantic" "-Wextra")
-    add_compile_options("-g" "-O0" "-fsanitize=undefined")
-    add_link_options("-fsanitize=undefined")
+  add_compile_options("-Wall" "-pedantic" "-Wextra")
+  add_compile_options("-g" "-O0" "-fsanitize=undefined")
+  add_link_options("-fsanitize=undefined")
 else()
-    add_compile_options("-O3")
+  add_compile_options("-O3")
 endif()
 
 if("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
-    message(STATUS "OS X found: adding specific linker options")
-    add_link_options("-undefined" "dynamic_lookup" ${CXXLNFLAGS})
+  message(STATUS "OS X found: adding specific linker options")
+  add_link_options("-undefined" "dynamic_lookup" ${CXXLNFLAGS})
 endif()
 
 
@@ -68,73 +80,73 @@ endif()
 ############################################################
 
 add_library(KodiakObjects OBJECT
-	src/Bifurcation.cpp
-	src/Bifurcation.hpp
-	src/Expressions/Boolean/Bool.cpp
-	src/Expressions/Boolean/Bool.hpp
-	src/BranchAndBoundDF.hpp
-	src/kodiak.hpp
-	src/MinMax.cpp
-	src/MinMax.hpp
-	src/MinMaxSystem.cpp
-	src/MinMaxSystem.hpp
-	src/Node.cpp
-	src/Node.hpp
-	src/Paver.cpp
-	src/Paver.hpp
-	src/Real.cpp
-	src/Real.hpp
-	src/System.cpp
-	src/System.hpp
-	src/types.cpp
-	src/types.hpp
-	src/Expressions/Boolean/LegacyCertainty.cpp
-	src/Expressions/Boolean/LegacyCertainty.hpp
-	src/Expressions/Boolean/ConstantNode.cpp
-	src/Expressions/Boolean/ConstantNode.hpp
-	src/Expressions/Boolean/Node.cpp
-	src/Expressions/Boolean/Node.hpp
-	src/Expressions/Boolean/Certainty.cpp
-	src/Expressions/Boolean/Certainty.hpp
-	src/LegacyBool.cpp
-	src/LegacyBool.hpp
-	src/Value.hpp
-	src/Environment.cpp
-	src/Environment.hpp
-	src/NewPaver.cpp
-	src/NewPaver.hpp
-	src/NewMinMaxSystem.cpp
-	src/NewMinMaxSystem.hpp
-	src/Adapters/PRECiSA.cpp
-	src/Adapters/PRECiSA.hpp
-	src/Adapters/Codiak.h
-	src/Adapters/Codiak.cpp
-	src/Expressions/Boolean/NotNode.cpp
-	src/Expressions/Boolean/NotNode.hpp
-	src/Expressions/Boolean/RelationNode.cpp
-	src/Expressions/Boolean/RelationNode.hpp
-	src/Expressions/Boolean/AndNode.cpp
-	src/Expressions/Boolean/AndNode.hpp
-	src/Expressions/Boolean/OrNode.cpp
-	src/Expressions/Boolean/OrNode.hpp
-	src/Expressions/Boolean/ImplicationNode.cpp
-	src/Expressions/Boolean/ImplicationNode.hpp
-	src/Expressions/Boolean/InvalidBooleanNode.cpp
-	src/Expressions/Boolean/InvalidBooleanNode.hpp
-	src/Expressions/Boolean/VariableNode.cpp
-	src/Expressions/Boolean/VariableNode.hpp
-	src/BooleanChecker.cpp
-	src/BooleanChecker.hpp
+  src/Bifurcation.cpp
+  src/Bifurcation.hpp
+  src/Expressions/Boolean/Bool.cpp
+  src/Expressions/Boolean/Bool.hpp
+  src/BranchAndBoundDF.hpp
+  src/kodiak.hpp
+  src/MinMax.cpp
+  src/MinMax.hpp
+  src/MinMaxSystem.cpp
+  src/MinMaxSystem.hpp
+  src/Node.cpp
+  src/Node.hpp
+  src/Paver.cpp
+  src/Paver.hpp
+  src/Real.cpp
+  src/Real.hpp
+  src/System.cpp
+  src/System.hpp
+  src/types.cpp
+  src/types.hpp
+  src/Expressions/Boolean/LegacyCertainty.cpp
+  src/Expressions/Boolean/LegacyCertainty.hpp
+  src/Expressions/Boolean/ConstantNode.cpp
+  src/Expressions/Boolean/ConstantNode.hpp
+  src/Expressions/Boolean/Node.cpp
+  src/Expressions/Boolean/Node.hpp
+  src/Expressions/Boolean/Certainty.cpp
+  src/Expressions/Boolean/Certainty.hpp
+  src/LegacyBool.cpp
+  src/LegacyBool.hpp
+  src/Value.hpp
+  src/Environment.cpp
+  src/Environment.hpp
+  src/NewPaver.cpp
+  src/NewPaver.hpp
+  src/NewMinMaxSystem.cpp
+  src/NewMinMaxSystem.hpp
+  src/Adapters/PRECiSA.cpp
+  src/Adapters/PRECiSA.hpp
+  src/Adapters/Codiak.h
+  src/Adapters/Codiak.cpp
+  src/Expressions/Boolean/NotNode.cpp
+  src/Expressions/Boolean/NotNode.hpp
+  src/Expressions/Boolean/RelationNode.cpp
+  src/Expressions/Boolean/RelationNode.hpp
+  src/Expressions/Boolean/AndNode.cpp
+  src/Expressions/Boolean/AndNode.hpp
+  src/Expressions/Boolean/OrNode.cpp
+  src/Expressions/Boolean/OrNode.hpp
+  src/Expressions/Boolean/ImplicationNode.cpp
+  src/Expressions/Boolean/ImplicationNode.hpp
+  src/Expressions/Boolean/InvalidBooleanNode.cpp
+  src/Expressions/Boolean/InvalidBooleanNode.hpp
+  src/Expressions/Boolean/VariableNode.cpp
+  src/Expressions/Boolean/VariableNode.hpp
+  src/BooleanChecker.cpp
+  src/BooleanChecker.hpp
 )
 target_include_directories(KodiakObjects
-	PUBLIC
-		src
-		src/Adapters
+  PUBLIC
+    src
+    src/Adapters
 )
 target_link_libraries(KodiakObjects
     PUBLIC
-	    FILIB::filib++
-	    $<$<BOOL:${DEBUG}>:boost_serialization>
+      FILIB::filib++
+      $<$<BOOL:${DEBUG}>:boost_serialization>
 )
 
 
@@ -161,6 +173,6 @@ set_target_properties(KodiakStatic PROPERTIES OUTPUT_NAME kodiak)
 
 add_subdirectory(examples)
 
-if(EXISTS tests)
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/tests)
   add_subdirectory(tests)
 endif()

@@ -137,9 +137,24 @@ CReal real_create_sine(CReal p) {
     return new Real(Sin(*pReal));
 }
 
+CReal real_create_arcsine(CReal p) {
+    Real *pReal = static_cast<Real *>(p);
+    return new Real(Asin(*pReal));
+}
+
 CReal real_create_cosine(CReal p) {
     Real *pReal = static_cast<Real *>(p);
     return new Real(Cos(*pReal));
+}
+
+CReal real_create_arccosine(CReal p) {
+    Real *pReal = static_cast<Real *>(p);
+    return new Real(Acos(*pReal));
+}
+
+CReal real_create_tangent(CReal p) {
+    Real *pReal = static_cast<Real *>(p);
+    return new Real(Tan(*pReal));
 }
 
 CReal real_create_arctangent(CReal p) {
@@ -323,10 +338,28 @@ CReal real_create_error_sine(CReal p, CReal pe) {
     return new Real(aebounddp_sin(*pReal, *pErrorReal));
 }
 
+CReal real_create_error_arcsine(CReal p, CReal pe) {
+    Real *pReal = static_cast<Real *>(p);
+    Real *pErrorReal = static_cast<Real *>(pe);
+    return new Real(aebounddp_asin(*pReal, *pErrorReal));
+}
+
 CReal real_create_error_cosine(CReal p, CReal pe) {
     Real *pReal = static_cast<Real *>(p);
     Real *pErrorReal = static_cast<Real *>(pe);
     return new Real(aebounddp_cos(*pReal, *pErrorReal));
+}
+
+CReal real_create_error_arccosine(CReal p, CReal pe) {
+    Real *pReal = static_cast<Real *>(p);
+    Real *pErrorReal = static_cast<Real *>(pe);
+    return new Real(aebounddp_acos(*pReal, *pErrorReal));
+}
+
+CReal real_create_error_tangent(CReal p, CReal pe) {
+    Real *pReal = static_cast<Real *>(p);
+    Real *pErrorReal = static_cast<Real *>(pe);
+    return new Real(aebounddp_tan(*pReal, *pErrorReal));
 }
 
 CReal real_create_error_arctangent(CReal p, CReal pe) {

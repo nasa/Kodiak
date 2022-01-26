@@ -74,9 +74,22 @@ namespace kodiak {
                        DUlp(Abs(Sin(r1)) + kodiak::Min({kodiak::val(2), e1})) / kodiak::val(2);
             }
 
+            Real aebounddp_asin(Real r1, Real e1) {
+                return DUlp(Asin(Abs(r1) + e1)) / kodiak::val(2) + e1;
+            }
+
             Real aebounddp_cos(Real r1, Real e1) {
                 return kodiak::Min({kodiak::val(2), e1}) +
                        DUlp(Abs(Cos(r1)) + kodiak::Min({kodiak::val(2), e1})) / kodiak::val(2);
+            }
+
+            Real aebounddp_acos(Real r1, Real e1) {
+                return DUlp(Acos(Abs(r1) + e1)) / kodiak::val(2) + e1;
+            }
+
+            Real aebounddp_tan(Real r1, Real e1) {
+                return kodiak::Min({kodiak::val(2), e1}) +
+                       DUlp(Abs(Tan(r1)) + kodiak::Min({kodiak::val(2), e1})) / kodiak::val(2);
             }
 
             Real aebounddp_atn(Real r1, Real e1) {

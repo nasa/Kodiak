@@ -52,7 +52,13 @@ namespace kodiak {
 
             Real aebounddp_sin(Real, Real);
 
+            Real aebounddp_asin(Real, Real);
+
             Real aebounddp_cos(Real, Real);
+
+            Real aebounddp_acos(Real, Real);
+
+            Real aebounddp_tan(Real, Real);
 
             Real aebounddp_atn(Real, Real);
 
