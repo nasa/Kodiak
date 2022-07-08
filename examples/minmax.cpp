@@ -287,7 +287,7 @@ int main(int, char *[]) {
         hdp(true);
         luis(true);
         pete(true);
-    } catch (Growl growl) {
+    } catch (Growl const & growl) {
         cout << growl.what() << endl;
     }
 }

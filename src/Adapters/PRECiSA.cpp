@@ -74,8 +74,9 @@ namespace kodiak {
                        DUlp(Abs(Sin(r1)) + kodiak::Min({kodiak::val(2), e1})) / kodiak::val(2);
             }
 
-            Real aebounddp_asin(Real r1, Real e1) {
-                return DUlp(Asin(Abs(r1) + e1)) / kodiak::val(2) + e1;
+            Real aebounddp_asin(Real r, Real e) {
+                Real error = (e / Sqrt(1 - Sq(r))) + (Sq(e) * (Abs(r) + e)) / (2 * Sqrt((1 - Sq(Abs(r) + e))^3));
+                return DUlp(Asin(Abs(r) + error)) / kodiak::val(2) + error;
             }
 
             Real aebounddp_cos(Real r1, Real e1) {
@@ -83,8 +84,9 @@ namespace kodiak {
                        DUlp(Abs(Cos(r1)) + kodiak::Min({kodiak::val(2), e1})) / kodiak::val(2);
             }
 
-            Real aebounddp_acos(Real r1, Real e1) {
-                return DUlp(Acos(Abs(r1) + e1)) / kodiak::val(2) + e1;
+            Real aebounddp_acos(Real r, Real e) {
+                Real error = (e / Sqrt(1 - Sq(r))) + (Sq(e) * (Abs(r) + e)) / (2 * Sqrt((1 - Sq(Abs(r) + e))^3));
+                return DUlp(Acos(Abs(r) + error)) / kodiak::val(2) + error;
             }
 
             Real aebounddp_tan(Real r1, Real e1) {

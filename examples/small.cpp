@@ -51,8 +51,8 @@ int main(int, char *[]) {
 
     try {
         test(true);
-    } catch (Growl growl) {
+    } catch (Growl const & growl) {
         cout << growl.what() << endl;
     }
-} 
+}
 

@@ -14,7 +14,7 @@ namespace kodiak {
 
     class Node {
         friend class Real;
-    
+
     public:
         virtual ~Node() = default;
 
@@ -46,8 +46,7 @@ namespace kodiak {
 
         virtual bool isEqual(Node const &) const { return false; }
 
-        Node() : numOfVariables(0), use_(0) {
-        }
+        Node() : numOfVariables(0), realExpressionType_(kodiak::REAL), use_(0) {}
 
         virtual bool isVal() const {
             return false;
@@ -120,7 +119,7 @@ namespace kodiak {
         NameSet localVariables_;
         NameSet globalConstants_;
         RealType realExpressionType_;
-    
+
     private:
         int use_;
     };

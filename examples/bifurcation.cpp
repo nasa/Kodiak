@@ -183,7 +183,7 @@ int main(int, char *[]) {
         cusp(true);
         CH(true);
         lorenz(true);
-    } catch (Growl growl) {
+    } catch (Growl const & growl) {
         cout << growl.what() << endl;
     }
 }

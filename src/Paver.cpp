@@ -601,7 +601,7 @@ void Paver::select(DirVar &dirvar, Ints &certainties, Environment &env) {
         temp_.box[variable] = env.box[variable].approximatedMidpoint();
     }
     dirvar.init(numberOfVariables);
-    real max_diff;
+    real max_diff = 0;
     Interval d_it;
     for (nat variable = 0; variable < numberOfVariables; ++variable) {
         if (not env[variable].isPoint() && (

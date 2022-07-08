@@ -6,7 +6,7 @@ using namespace kodiak;
 // > 0 : relation wrt 0 is certainly true
 // = 0 : relation wrt 0 is certainly false
 // = -1 : relation wrt 0 is possibly true
-// = -2 : relation wrt 0 is possibly true within eps (a positive small number). 
+// = -2 : relation wrt 0 is possibly true within eps (a positive small number).
 // Value of -2 is only possible for equality and non-strict inequalities
 
 int Interval::rel0(const RelType rel, const real eps) const {
@@ -282,6 +282,10 @@ Interval kodiak::approx(const real val) {
     if (Kodiak::safe_input()) {
         throw Growl("Kodiak (approx): approximated inputs are not allowed when safe_input is set to true");
     }
+    return Interval(val, val);
+}
+
+Interval kodiak::exact(const real val) {
     return Interval(val, val);
 }
 

@@ -80,7 +80,7 @@ int RelExpr::eval(Box &box, NamedBox &constbox, const bool enclosure, const real
                     return 0;
                 }
             }
-        } catch (Growl growl) {
+        } catch (Growl const & growl) {
             if (Kodiak::debug()) {
                 std::cout << "[GrowlException@RelExpr::eval]" << growl.what() << std::endl;
             }

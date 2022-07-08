@@ -68,10 +68,10 @@ namespace kodiak {
                 answer.lb_of_max_ = Mid.inf();
             }
             nat var_min = env.size();
-            real var_min_point;
+            real var_min_point = 0;
             nat var_max = env.size();
-            real var_max_point;
-            real max_diff;
+            real var_max_point = 0;
+            real max_diff = 0;
             Interval d_it;
             for (VarBag::iterator it = expr_.vars().begin(); it != expr_.vars().end(); ++it) {
                 nat v = it->first;
@@ -144,7 +144,7 @@ namespace kodiak {
                                     dirvar_.dir = false; // Begin with the min
                                 break;
                             }
-                        } catch (Growl growl) {
+                        } catch (Growl const & growl) {
                             if (Kodiak::debug()) {
                                 std::cout << "[GrowlException@NewMinMaxSystem::evaluate]" << growl.what() << std::endl;
                             }

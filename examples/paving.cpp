@@ -159,8 +159,8 @@ int main(int, char *[]) {
     try {
         test(true);
         luis(true);
-    } catch (Growl growl) {
+    } catch (Growl const & growl) {
         cout << growl.what() << endl;
     }
-} 
+}
 

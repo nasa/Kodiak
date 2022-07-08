@@ -94,10 +94,10 @@ void MinMaxSystem::evaluate(MinMax &answer, Certainties &certs, Environment &box
         answer.lb_of_max_ = Mid.inf();
     }
     nat var_min = box.size();
-    real var_min_point;
     nat var_max = box.size();
-    real var_max_point;
-    real max_diff;
+    real var_min_point = 0;
+    real var_max_point = 0;
+    real max_diff = 0;
     Interval d_it;
     for (VarBag::iterator it = expr_.vars().begin(); it != expr_.vars().end(); ++it) {
         nat v = it->first;
@@ -178,7 +178,7 @@ void MinMaxSystem::evaluate(MinMax &answer, Certainties &certs, Environment &box
                             dirvar_.dir = false; // Begin with the min
                         break;
                     }
-                } catch (Growl growl) {
+                } catch (Growl const & growl) {
                     if (Kodiak::debug()) {
                         std::cout << "[GrowlException@MinMaxSystem::evaluate]" << growl.what() << std::endl;
                     }

@@ -164,6 +164,7 @@ add_library(KodiakStatic STATIC $<TARGET_OBJECTS:KodiakObjects>)
 target_link_libraries(KodiakStatic PUBLIC KodiakObjects)
 set_target_properties(KodiakStatic PROPERTIES OUTPUT_NAME kodiak)
 
+install(TARGETS KodiakDynamic KodiakStatic)
 
 ############################################################
 #

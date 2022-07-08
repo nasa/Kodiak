@@ -32,6 +32,8 @@ namespace kodiak {
                 case kodiak::TRUE_WITHIN_EPS:
                     cout << "TRUE_WITHIN_EPS";
                     break;
+                default:
+                    throw std::invalid_argument("incorrect certainty value of " + std::to_string(static_cast<int>(certainty_)));
             }
         };
 
@@ -53,6 +55,8 @@ namespace kodiak {
                     return -1;
                 case kodiak::TRUE_WITHIN_EPS:
                     return -2;
+                default:
+                    throw std::invalid_argument("incorrect certainty value of " + std::to_string(static_cast<int>(c)));
             }
         }
     private:

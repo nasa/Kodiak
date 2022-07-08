@@ -1,5 +1,8 @@
-#include <types.hpp>
+#include <memory>
+#include <cstring>
 #include <iostream>
+
+#include "types.hpp"
 #include "Codiak.h"
 #include "Real.hpp"
 #include "Expressions/Boolean/Bool.hpp"
@@ -95,7 +98,10 @@ CString real_to_string(CReal p) {
     os << *pReal;
     os << ")";
     os << std::endl;
-    return os.str().c_str();
+    std::string str = os.str();
+    size_t c_str_length = str.length() + 1;
+    char *c_str = static_cast<char *>(malloc(c_str_length));
+    return strncpy(c_str, str.c_str(), c_str_length);
 }
 
 CReal real_create_maximum(CRealVector p) {

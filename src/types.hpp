@@ -14,6 +14,7 @@
 #include <interval/interval.hpp>
 #include <iostream>
 #include <iomanip>
+#include <limits>
 #include <map>
 #include <set>
 #include <sstream>
@@ -480,6 +481,7 @@ namespace kodiak {
     // Poing interval close to number (recall that not all decimal numbers
     // can be written as floating point numbers), e.g, approx(n) = [f,f],
     // where f is a floating point number close to n
+    Interval exact(const real);
     Interval approx(const real);
     Interval approx(const real, const real);
     // Inject a hexidecimal precise floating point number from interval to

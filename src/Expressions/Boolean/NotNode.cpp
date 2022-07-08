@@ -16,6 +16,8 @@ Certainty NotNode::doEvaluate(const Environment &env,
             return POSSIBLY;
         case TRUE_WITHIN_EPS:
             return POSSIBLY;
+        default:
+            throw std::invalid_argument("incorrect certainty value of " + std::to_string(static_cast<int>(operandResult)));
     }
 }
 

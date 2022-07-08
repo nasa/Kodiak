@@ -681,7 +681,7 @@ Interval RealLetin_Node::eval(const Box &box, NamedBox &constbox, const bool enc
         Interval in = in_.eval(box, constbox, enclosure);
         constbox.pop();
         return in;
-    } catch (Growl growl) {
+    } catch (Growl const & growl) {
         if (Kodiak::debug()) {
             std::cerr << "[GrowlException@RealLetin_Node::eval]" << growl.what() << std::endl;
         }
