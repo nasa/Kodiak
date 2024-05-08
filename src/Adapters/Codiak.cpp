@@ -104,6 +104,11 @@ CString real_to_string(CReal p) {
     return strncpy(c_str, str.c_str(), c_str_length);
 }
 
+CReal real_create_minimum(CRealVector p) {
+    std::vector<Real> *pReals = static_cast<std::vector<Real> *>(p);
+    return new Real(Min(*pReals));
+}
+
 CReal real_create_maximum(CRealVector p) {
     std::vector<Real> *pReals = static_cast<std::vector<Real> *>(p);
     return new Real(Max(*pReals));
@@ -542,9 +547,27 @@ void minmax_system_set_precision(CMinMaxSystem p, CInt precision) {
     static_cast<MinMaxSystem *>(p)->set_precision(precision);
 }
 
+void minmax_system_minimize(CMinMaxSystem pSys, CReal pExp) {
+    Real *pRealExpression = static_cast<Real *>(pExp);
+    static_cast<MinMaxSystem *>(pSys)->min(*pRealExpression);
+}
+
 void minmax_system_maximize(CMinMaxSystem pSys, CReal pExp) {
     Real *pRealExpression = static_cast<Real *>(pExp);
     static_cast<MinMaxSystem *>(pSys)->max(*pRealExpression);
+}
+
+void minmax_system_minmax(CMinMaxSystem pSys, CReal pExp) {
+    Real *pRealExpression = static_cast<Real *>(pExp);
+    static_cast<MinMaxSystem *>(pSys)->minmax(*pRealExpression);
+}
+
+double minmax_system_minimum_lower_bound(CMinMaxSystem p) {
+    return static_cast<MinMaxSystem *>(p)->answer().lb_of_min();
+}
+
+double minmax_system_minimum_upper_bound(CMinMaxSystem p) {
+    return static_cast<MinMaxSystem *>(p)->answer().ub_of_min();
 }
 
 double minmax_system_maximum_lower_bound(CMinMaxSystem p) {

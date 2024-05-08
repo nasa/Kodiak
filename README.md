@@ -141,7 +141,7 @@ resolutions are set.
 
 ## Version
 
-*Kodiak* ver. 2.0.4,  July 2022
+*Kodiak* ver. 2.0.5,  May 2024
 
 ## Logo
 The Kodiak logo was designed by
