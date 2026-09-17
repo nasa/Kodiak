@@ -17,7 +17,7 @@
 # MATTER SHALL BE THE IMMEDIATE, UNILATERAL TERMINATION OF THIS AGREEMENT.
 
 cmake_minimum_required(VERSION 3.12)
-project(Kodiak)
+project(Kodiak VERSION 2.1.0)
 
 
 ############################################################
@@ -121,6 +121,7 @@ add_library(KodiakObjects OBJECT
   src/Adapters/PRECiSA.hpp
   src/Adapters/Codiak.h
   src/Adapters/Codiak.cpp
+  src/Adapters/Codiak_guarded.cpp
   src/Expressions/Boolean/NotNode.cpp
   src/Expressions/Boolean/NotNode.hpp
   src/Expressions/Boolean/RelationNode.cpp

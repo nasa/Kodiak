@@ -30,3 +30,6 @@ target_link_libraries(pavingExample KodiakStatic)
 add_executable(smallExample small.cpp)
 target_link_libraries(smallExample KodiakStatic)
 
+add_executable(guardedApiTest test_guarded_api.cpp)
+target_link_libraries(guardedApiTest KodiakStatic)
+

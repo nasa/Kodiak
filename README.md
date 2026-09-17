@@ -141,7 +141,12 @@ resolutions are set.
 
 ## Version
 
-*Kodiak* ver. 2.0.5,  May 2024
+*Kodiak* ver. 2.1.0,  September 2026
+
+### Version 2.1.0 Changes
+- Added `*_guarded` variants to C API for safe exception handling across FFI boundaries
+- Status codes distinguish between legitimate mathematical outcomes (DIV_BY_ZERO) and real errors
+- Backward compatible: existing throwing functions remain unchanged
 
 ## Logo
 The Kodiak logo was designed by

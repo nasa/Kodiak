@@ -24,6 +24,17 @@
 #ifndef KODIAK_CODIAK_H
 #define KODIAK_CODIAK_H
 
+//////////////////////////////////////////////////////////////////////
+//
+// Status codes for guarded API functions (v2.1.0+)
+//
+//////////////////////////////////////////////////////////////////////
+
+// Status codes returned by *_guarded functions
+#define KODIAK_OK          0  // Success
+#define KODIAK_DIV_BY_ZERO 1  // Division by interval containing zero (legitimate unbounded result)
+#define KODIAK_ERROR       2  // Real failure (domain violation, allocation error, etc.)
+
 typedef void* CInterval;
 typedef void* CReal;
 typedef void* CBool;
@@ -174,5 +185,52 @@ EXTERNC void paver_set_maxdepth(CPaver p, CUInt depth);
 EXTERNC void paver_set_precision(CPaver p, CInt precision);
 EXTERNC void paver_pave(CPaver p, CBool pExpression);
 EXTERNC void paver_save_paving(CPaver p, CString filename);
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// Guarded API (v2.1.0+) - Exception-safe variants for FFI usage
+//
+// These functions catch C++ exceptions and return status codes instead
+// of throwing. Use these from foreign function interfaces (FFI) where
+// C++ exception unwinding is not supported (Haskell, Python ctypes, etc.)
+//
+// Return values:
+//   KODIAK_OK (0)          - Success
+//   KODIAK_DIV_BY_ZERO (1) - Division by interval containing zero (legitimate unbounded result)
+//   KODIAK_ERROR (2)       - Real failure (error message in errbuf)
+//
+// Error buffer (errbuf/errbuflen):
+//   - Pass NULL/0 if you don't need the error message
+//   - Always NUL-terminated when errbuf != NULL && errbuflen > 0
+//   - Truncated to fit if message is longer than buffer
+//
+//////////////////////////////////////////////////////////////////////
+
+// MinMaxSystem guarded operations
+EXTERNC int minmax_system_maximize_guarded(CMinMaxSystem p, CReal pExpression,
+                                          char *errbuf, int errbuflen);
+EXTERNC int minmax_system_minmax_guarded(CMinMaxSystem pSys, CReal pExp,
+                                        char *errbuf, int errbuflen);
+
+// Real expression construction (guarded)
+EXTERNC int real_create_division_guarded(CReal num, CReal den, CReal *out,
+                                        char *errbuf, int errbuflen);
+
+// MinMaxSystem bound getters (guarded)
+EXTERNC int minmax_system_maximum_lower_bound_guarded(CMinMaxSystem p, double *out,
+                                                     char *errbuf, int errbuflen);
+EXTERNC int minmax_system_maximum_upper_bound_guarded(CMinMaxSystem p, double *out,
+                                                     char *errbuf, int errbuflen);
+EXTERNC int minmax_system_minimum_lower_bound_guarded(CMinMaxSystem p, double *out,
+                                                     char *errbuf, int errbuflen);
+EXTERNC int minmax_system_minimum_upper_bound_guarded(CMinMaxSystem p, double *out,
+                                                     char *errbuf, int errbuflen);
+
+// Paver guarded operations
+EXTERNC int paver_pave_guarded(CPaver p, CBool pExpression,
+                              char *errbuf, int errbuflen);
+EXTERNC int paver_save_paving_guarded(CPaver p, CString filename,
+                                     char *errbuf, int errbuflen);
 
 #endif //KODIAK_CODIAK_H
